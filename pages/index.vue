@@ -1,6 +1,7 @@
 <template>
   <div class="homepage">
     <div class="banner has-text-white">
+      <canvas id="star-canvas" width="100%" height="100%"></canvas>
       <Rocket class="rocket" :class="{'land': !fly}" />
       <div class="container">
         <div class="has-text-white is-size-5 has-text-weight-light">AN <span class="has-text-weight-normal is-size-2">EFFECT.AI</span> COMPANY</div>
@@ -11,7 +12,6 @@
         <br><br>
         <button class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Learn More</button>
       </div>
-      <canvas id="canvas" width="100%" height="100%" style="position: absolute; top: 0; left: 0; height: 100%; width: 100%;z-index:3"></canvas>
     </div>
     <div class="clouds">
       <div class="container has-background-white">
@@ -96,6 +96,13 @@ export default {
 </script>
 
 <style lang="scss">
+  #star-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
   .banner {
     background: rgb(37,89,205);
     background: linear-gradient(-45deg, rgba(37,89,205,1) 0%, rgba(15,56,193,1) 100%);
