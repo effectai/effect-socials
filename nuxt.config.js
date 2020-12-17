@@ -1,5 +1,11 @@
-export default {
+const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
+  router: {
+    base: '/effective/'
+  }
+} : {};
 
+export default {
+  ...routerBase,
   // Target (https://go.nuxtjs.dev/config-target)
   target: 'static',
 
