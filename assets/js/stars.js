@@ -1,8 +1,10 @@
 "use strict";
+let interval;
 var stars = {
   start()
   {
-
+    clearInterval(interval);
+    interval = 0;
     //Helpers
     function lineToAngle(x1, y1, length, radians) {
       var x2 = x1 + length * Math.cos(radians),
@@ -80,7 +82,7 @@ var stars = {
       },
       shootingStarOpacityDelta = 0.01,
       trailLengthDelta = 0.01,
-      shootingStarEmittingInterval = 2000,
+      shootingStarEmittingInterval = 5000,
       shootingStarLifeTime = 500,
       maxTrailLength = 300,
       starBaseRadius = 2,
@@ -229,19 +231,10 @@ var stars = {
     update();
 
     //Shooting stars
-    setInterval(function () {
+    interval = setInterval(function () {
       if (paused) return;
       createShootingStar();
     }, shootingStarEmittingInterval);
-
-    window.onfocus = function () {
-      paused = false;
-    };
-
-    window.onblur = function () {
-      paused = true;
-    };
-
   }
 };
 export default stars;
