@@ -1,7 +1,7 @@
 <template>
   <div class="homepage">
     <div class="banner has-text-white">
-        <Rocket class="rocket" :class="{'land': !fly}" />
+      <Rocket class="rocket" :class="{'land': !fly}" />
       <div class="container">
         <div class="has-text-white is-size-5 has-text-weight-light">AN <span class="has-text-weight-normal is-size-2">EFFECT.AI</span> COMPANY</div>
         <div id="title-big" class="has-text-white">EFFECT.IVE</div>
@@ -14,7 +14,7 @@
     </div>
     <div class="clouds">
       <div class="container has-background-white">
-        <div class="columns is-variable is-8">
+        <div class="columns">
           <div class="column">
             <div class="media">
               <div class="media-left">
@@ -108,7 +108,7 @@ export default {
     left: calc(65% - 220px);
     top: 175px;
     position: absolute;
-    max-width: 100%;
+    max-width: calc(100% - 1.5rem);
     &.land {
       transform: translate(-500px, 700px) rotate(-30deg);
     }
