@@ -1,8 +1,8 @@
-const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
+const routerBase = {
   router: {
     base: '/effective/'
   }
-} : {};
+};
 
 export default {
   ...routerBase,
