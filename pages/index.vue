@@ -11,6 +11,7 @@
         <br><br>
         <button class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Learn More</button>
       </div>
+      <canvas id="canvas" width="100%" height="100%" style="position: absolute; top: 0; left: 0; height: 100%; width: 100%;z-index:3"></canvas>
     </div>
     <div class="clouds">
       <div class="container has-background-white">
@@ -68,6 +69,7 @@
 </template>
 
 <script>
+import stars from '@/assets/js/stars.js'
 export default {
   data () {
     return {
@@ -75,9 +77,20 @@ export default {
     }
   },
   mounted () {
+    stars.start();
     setTimeout(() => {
       this.fly = true
     }, 500);
+    window.addEventListener('resize', this.onResize)
+  },
+  beforeDestroy() {
+    // Unregister the event listener before destroying this Vue instance
+    window.removeEventListener('resize', this.onResize)
+  },
+  methods: {
+    onResize(event) {
+      stars.start()
+    }
   }
 }
 </script>
