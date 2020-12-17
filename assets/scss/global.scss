@@ -1,0 +1,33 @@
+/* Import the rest of Bulma */
+@import '~bulma';
+
+.button {
+  &.is-wide {
+    min-width: 200px;
+  }
+  &.is-small {
+    &.is-wide {
+      min-width: 150px;
+    }
+  }
+  &.is-medium {
+    &.is-wide {
+      min-width: 250px;
+    }
+  }
+  &.is-large {
+    &.is-wide {
+      min-width: 300px;
+    }
+  }
+}
+
+.icon-circle {
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  font-size: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
