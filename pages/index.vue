@@ -86,7 +86,7 @@ export default {
   .banner {
     background: rgb(37,89,205);
     background: linear-gradient(-45deg, rgba(37,89,205,1) 0%, rgba(15,56,193,1) 100%);
-    background-image: url('/images/socials-and-stars_bg.png'), linear-gradient(-45deg, rgba(37,89,205,1) 0%, rgba(15,56,193,1) 100%);
+    background-image: url('~assets/images/socials-and-stars_bg.png'), linear-gradient(-45deg, rgba(37,89,205,1) 0%, rgba(15,56,193,1) 100%);
     background-size: cover;
     min-height: 700px;
     padding-bottom: calc(10% + 50px);
@@ -116,7 +116,7 @@ export default {
 
   .clouds {
     margin-top: -10%;
-    background: url('/images/clouds.png') no-repeat;
+    background: url('~assets/images/clouds.png') no-repeat;
     background-size: 100% auto;
     background-position: top left;
     padding-top: 13%;
