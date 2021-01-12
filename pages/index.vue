@@ -4,11 +4,12 @@
       <canvas id="star-canvas" width="100%" height="100%"></canvas>
       <Rocket class="rocket" :class="{'land': !fly}" />
       <div class="container">
-        <div class="has-text-white is-size-5 has-text-weight-light">AN <span class="has-text-weight-normal is-size-2">EFFECT.AI</span> COMPANY</div>
-        <div id="title-big" class="has-text-white">EFFECT.IVE</div>
-        <div class="slogan is-size-1 has-text-white"><b>I</b>nnovative</div>
-        <div class="slogan is-size-1 has-text-white"><b>V</b>iral</div>
-        <div class="slogan is-size-1 has-text-white"><b>E</b>ngagement</div>
+        <div class="has-text-white is-size-6 has-text-weight-light">AN <span class="has-text-weight-normal is-size-4">EFFECT.AI</span> COMPANY</div>
+        <div id="title-big" class="has-text-white">EFFECT&#xb7;IVE</div>
+        <span class="is-size-3 has-text-white"><b>I</b>nnovative</span>
+        <span class="is-size-3 has-text-white"><b>V</b>iral</span>
+        <span class="is-size-3 has-text-white"><b>E</b>ngagement</span>
+        <div class="is-size-5 has-text-white">For Your Social Media Success</div>
         <br><br>
         <a href="mailto:ive@effect.ai" target="_blank" class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Learn More</a>
       </div>
@@ -113,17 +114,14 @@ export default {
     z-index: 1;
     padding-top: 50px;
     #title-big {
-      font-size: 90px;
+      font-size: 80px;
       margin-top: 50px;
       word-break: break-word;
-    }
-    .slogan {
-      line-height: 50px;
     }
   }
 
   .rocket {
-    transition: all 1s;
+    transition: all 1.5s;
     left: calc(65% - 220px);
     top: 175px;
     position: absolute;

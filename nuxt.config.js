@@ -1,7 +1,7 @@
 const routerBase = {
-  router: {
-    base: '/effective/'
-  }
+  // router: {
+  //   base: '/effective/'
+  // }
 };
 
 export default {
