@@ -4,12 +4,16 @@
       <canvas id="star-canvas" width="100%" height="100%"></canvas>
       <Rocket class="rocket" :class="{'land': !fly}" />
       <div class="container">
-        <div class="has-text-white is-size-6 has-text-weight-light">AN <span class="has-text-weight-normal is-size-4">EFFECT.AI</span> COMPANY</div>
+        <div class="has-text-white is-size-6 has-text-weight-light is-flex is-align-items-center">
+          <span class="">AN </span>
+          <span class="mx-2 has-text-weight-normal is-size-4"> EFFECT.AI </span>
+          <span>COMPANY</span>
+        </div>
         <div id="title-big" class="has-text-white">EFFECT&#xb7;IVE</div>
-        <span class="is-size-3 has-text-white"><b>I</b>nnovative</span>
-        <span class="is-size-3 has-text-white"><b>V</b>iral</span>
-        <span class="is-size-3 has-text-white"><b>E</b>ngagement</span>
-        <div class="is-size-5 has-text-white">For Your Social Media Success</div>
+        <span class="is-size-3 has-text-white has-text-weight-light"><b>I</b>nnovative</span>
+        <span class="is-size-3 has-text-white has-text-weight-light"><b>V</b>iral</span>
+        <span class="is-size-3 has-text-white has-text-weight-light"><b>E</b>ngagement</span>
+        <div class="is-size-5 has-text-white has-text-weight-light">For <b>Your</b> Social Media <b>Success</b></div>
         <br><br>
         <a href="mailto:ive@effect.ai" target="_blank" class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Learn More</a>
       </div>
