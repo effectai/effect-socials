@@ -17,8 +17,12 @@
         <br><br>
         <button @click.prevent="scrollToElement('why')" class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Learn More</button>
       </div>
-      <Why ref="why" />
-      <How ref="how" />
+      <div ref="why">
+        <Why />
+      </div>
+      <div ref="how">
+        <How />
+      </div>
     </div>
   </div>
 </template>
