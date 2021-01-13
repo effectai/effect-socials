@@ -17,56 +17,57 @@
         <br><br>
         <a href="mailto:ive@effect.ai" target="_blank" class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Learn More</a>
       </div>
-    </div>
-    <div class="clouds">
-      <div class="container has-background-white">
-        <div class="columns">
-          <div class="column">
-            <div class="media">
-              <div class="media-left">
-                <div class="icon-circle has-background-accent has-text-white">
-                  <img :src="require('@/assets/images/icons/ai.png')" />
+      <div class="clouds mt-6">
+        <div class="has-background-white py-6">
+          <div class="container py-6">
+            <div class="columns">
+              <div class="column">
+                <div class="media">
+                  <div class="media-left">
+                    <div class="icon-circle has-background-accent has-text-white">
+                      <img :src="require('@/assets/images/icons/ai.png')" />
+                    </div>
+                  </div>
+                  <div class="media-content has-text-primary">
+                    <h3>HUMANS AND AI TOGETHER</h3>
+                    <div>
+                      We combine the power of AI with the expert knowledge of real humans to ensure the most high-quality content, tailored to your brand and community, is placed within your online channels.                </div>
+                  </div>
                 </div>
               </div>
-              <div class="media-content has-text-primary">
-                <h3>HUMANS AND AI TOGETHER</h3>
-                <div>
-                  We combine the power of AI with the expert knowledge of real humans to ensure the most high-quality content, tailored to your brand and community, is placed within your online channels.                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column">
-            <div class="media">
-              <div class="media-left">
-                <div class="icon-circle has-background-accent has-text-white">
-                  <img :src="require('@/assets/images/icons/social-media.png')" />
+              <div class="column">
+                <div class="media">
+                  <div class="media-left">
+                    <div class="icon-circle has-background-accent has-text-white">
+                      <img :src="require('@/assets/images/icons/social-media.png')" />
+                    </div>
+                  </div>
+                  <div class="media-content has-text-primary">
+                    <h3>QUALITY ENGAGEMENT</h3>
+                    <div>
+                      With nearly 5 million tasks completed on our platform by real humans, our proven workforce is dedicated to helping you reach your goals. Our influencers add and enhance interaction across your channels, not detract from it.                 </div>
+                  </div>
                 </div>
               </div>
-              <div class="media-content has-text-primary">
-                <h3>QUALITY ENGAGEMENT</h3>
-                <div>
-                  With nearly 5 million tasks completed on our platform by real humans, our proven workforce is dedicated to helping you reach your goals. Our influencers add and enhance interaction across your channels, not detract from it.                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="column">
-            <div class="media">
-              <div class="media-left">
-                <div class="icon-circle has-background-accent has-text-white">
-                  <img :src="require('@/assets/images/icons/worldwide.png')" />
+              <div class="column">
+                <div class="media">
+                  <div class="media-left">
+                    <div class="icon-circle has-background-accent has-text-white">
+                      <img :src="require('@/assets/images/icons/worldwide.png')" />
 
-                </div>
-              </div>
-              <div class="media-content has-text-primary">
-                <h3>INTERNATIONAL COVERAGE</h3>
-                <div>
-                  We go beyond borders and enrich your content in more than 10 languages.
+                    </div>
+                  </div>
+                  <div class="media-content has-text-primary">
+                    <h3>INTERNATIONAL COVERAGE</h3>
+                    <div>
+                      We go beyond borders and enrich your content in more than 10 languages.
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <br><br><br><br><br><br><br><br>
       </div>
     </div>
   </div>
@@ -111,7 +112,7 @@ export default {
     background: rgb(37,89,205);
     background: linear-gradient(-45deg, rgba(37,89,205,1) 0%, rgba(15,56,193,1) 100%);
     background-image: url('~assets/images/socials-and-stars_bg.png'), linear-gradient(-45deg, rgba(37,89,205,1) 0%, rgba(15,56,193,1) 100%);
-    background-size: cover;
+    background-size: 100% auto;
     min-height: 700px;
     padding-bottom: calc(10% + 50px);
     position: relative;
@@ -136,13 +137,22 @@ export default {
   }
 
   .clouds {
-    margin-top: -10%;
     background: url('~assets/images/clouds.png') no-repeat;
     background-size: 100% auto;
     background-position: top left;
     padding-top: 13%;
     position: relative;
     z-index: 2;
+    &:after {
+      content: "";
+      margin-top: -1px;
+      display: block;
+      background: url('~assets/images/clouds.png') no-repeat;
+      background-size: 100% auto;
+      background-position: top left;
+      transform: scaleY(-1);
+      padding-bottom: 13%;
+    }
   }
   .media-left {
     .icon-circle {
