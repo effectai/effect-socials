@@ -105,6 +105,7 @@
                   <h3 class="has-text-white">MIXING THE ROCKET FUEL</h3>
                   <div class="has-text-justified">
                     Effect&#8226;ive will enhance and grow your social media presence across all your social media platforms. We are experts at connecting your social media accounts with passionate people who deliver top quality social content.
+                  </div>
                 </div>
               </div>
             </div>
