@@ -15,9 +15,9 @@
         <span class="is-size-3 has-text-white has-text-weight-light"><b>E</b>ngagement</span>
         <div class="is-size-5 has-text-white has-text-weight-light">For <b>Your</b> Social Media <b>Success</b></div>
         <br><br>
-        <a href="mailto:ive@effect.ai" target="_blank" class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Learn More</a>
+        <button @click.prevent="scrollToElement('why')" class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Learn More</button>
       </div>
-      <div class="clouds mt-6">
+      <div class="clouds mt-6" ref="why">
         <div class="has-background-white">
           <div class="container">
             <h1 class="has-text-centered is-size-1 mb-6">Why Effect&#8226;ive?</h1>
@@ -76,7 +76,7 @@
         </div>
       </div>
       <div class="mt-6">
-        <div class="container has-background-primary box has-text-white">
+        <div class="container has-background-primary box has-text-white" ref="how">
           <h1 class="has-text-centered is-size-1 mb-6 has-text-accent">How it Works</h1>
           <div class="columns">
             <div class="column">
@@ -156,6 +156,14 @@ export default {
   methods: {
     onResize(event) {
       stars.start()
+    },
+    scrollToElement(ref) {
+      const el = this.$refs[ref];
+
+      if (el) {
+        // Use el.scrollIntoView() to instantly scroll to the element
+        el.scrollIntoView({behavior: 'smooth'});
+      }
     }
   }
 }
