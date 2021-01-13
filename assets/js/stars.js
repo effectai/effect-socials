@@ -66,8 +66,9 @@ var stars = {
     //Canvas and settings
     var canvas = document.getElementById("star-canvas"),
       context = canvas.getContext("2d"),
-      width = canvas.width = window.innerWidth,
-      height = canvas.height = window.innerHeight,
+
+      width = canvas.width = canvas.clientWidth,
+      height = canvas.height = canvas.clientHeight,
       stars = [],
       shootingStars = [],
       layers = [
