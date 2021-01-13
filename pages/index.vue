@@ -13,123 +13,12 @@
         <span class="is-size-3 has-text-white has-text-weight-light"><b>I</b>nnovative</span>
         <span class="is-size-3 has-text-white has-text-weight-light"><b>V</b>iral</span>
         <span class="is-size-3 has-text-white has-text-weight-light"><b>E</b>ngagement</span>
-        <div class="is-size-5 has-text-white has-text-weight-light">For <b>Your</b> Social Media <b>Success</b></div>
+        <div class="is-size-5 has-text-white has-text-weight-light">Grow your brand with <b>Effective</b> social media engagement</div>
         <br><br>
         <button @click.prevent="scrollToElement('why')" class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Learn More</button>
       </div>
-      <div class="clouds mt-6" ref="why">
-        <div class="has-background-white">
-          <div class="container">
-            <h1 class="has-text-centered is-size-1 mb-6">Why Effect&#8226;ive?</h1>
-            <div class="columns">
-              <div class="column">
-                <div class="media">
-                  <div class="media-left">
-                    <div class="icon-circle has-background-accent">
-                      <img :src="require('@/assets/images/icons/ai.png')" />
-                    </div>
-                  </div>
-                  <div class="media-content has-text-primary">
-                    <h3>HUMANS AND AI TOGETHER</h3>
-                    <div  class="has-text-justified">
-                      We combine the power of AI with the expert knowledge of real humans to ensure the most high-quality content
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="column">
-                <div class="media">
-                  <div class="media-left">
-                    <div class="icon-circle has-background-accent">
-                      <img :src="require('@/assets/images/icons/social-media.png')" />
-                    </div>
-                  </div>
-                  <div class="media-content has-text-primary">
-                    <h3>QUALITY ENGAGEMENT</h3>
-                    <div  class="has-text-justified">
-                      With nearly 5 million tasks completed on our platform by real humans, our proven workforce is dedicated to helping you reach your goals.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="column">
-                <div class="media">
-                  <div class="media-left">
-                    <div class="icon-circle has-background-accent">
-                      <img :src="require('@/assets/images/icons/worldwide.png')" />
-
-                    </div>
-                  </div>
-                  <div class="media-content has-text-primary">
-                    <h3>INTERNATIONAL COVERAGE</h3>
-                    <div  class="has-text-justified">
-                      Our multilingual platform transcends borders and enriches your content in more than 10 languages.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="mt-6">
-              <a href="mailto:ive@effect.ai" target="_blank" class="button is-medium is-primary is-rounded is-wide is-uppercase has-text-weight-medium">Request Demo</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="mt-6">
-        <div class="container has-background-primary box has-text-white" ref="how">
-          <h1 class="has-text-centered is-size-1 mb-6 has-text-accent">How it Works</h1>
-          <div class="columns">
-            <div class="column">
-              <div class="media">
-                <div class="media-left">
-                  <div class="icon-circle">
-                    <img :src="require('@/assets/images/icons/building.png')" />
-                  </div>
-                </div>
-                <div class="media-content">
-                  <h3 class="has-text-white">BUILDING THE ROCKET</h3>
-                  <div class="has-text-justified">
-                    Share your vision with us. Tell us where you are now and where you want to be in the future. We want to know your passion and vision for your brand in order to find people that will love your company as much as you do!
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="column">
-              <div class="media">
-                <div class="media-left">
-                  <div class="icon-circle">
-                    <img :src="require('@/assets/images/icons/tuning.png')" />
-                  </div>
-                </div>
-                <div class="media-content">
-                  <h3 class="has-text-white">MIXING THE ROCKET FUEL</h3>
-                  <div class="has-text-justified">
-                    Effect&#8226;ive will enhance and grow your social media presence across all your social media platforms. We are experts at connecting your social media accounts with passionate people who deliver top quality social content.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="column">
-              <div class="media">
-                <div class="media-left">
-                  <div class="icon-circle">
-                    <img :src="require('@/assets/images/icons/rocket.png')" />
-                  </div>
-                </div>
-                <div class="media-content">
-                  <h3 class="has-text-white">BLAST OFF!</h3>
-                  <div>
-                    Effect&#8226;ive will enhance and grow your social media presence across all your social media platforms. We are experts at connecting your social media accounts with passionate people who deliver top quality social content.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="mt-6">
-            <a href="mailto:ive@effect.ai" target="_blank" class="button is-medium is-accent is-rounded is-wide is-uppercase has-text-weight-medium">Request Demo</a>
-          </div>
-        </div>
-      </div>
+      <Why ref="why" />
+      <How ref="how" />
     </div>
   </div>
 </template>
@@ -203,24 +92,6 @@ export default {
     }
   }
 
-  .clouds {
-    background: url('~assets/images/clouds.png') no-repeat;
-    background-size: 100% auto;
-    background-position: top left;
-    padding-top: 13%;
-    position: relative;
-    z-index: 2;
-    &:after {
-      content: "";
-      margin-top: -1px;
-      display: block;
-      background: url('~assets/images/clouds.png') no-repeat;
-      background-size: 100% auto;
-      background-position: top left;
-      transform: scaleY(-1);
-      padding-bottom: 13%;
-    }
-  }
   .media-left {
     .icon-circle {
       margin-top:-10px;
