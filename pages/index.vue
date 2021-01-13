@@ -63,7 +63,7 @@
                   <div class="media-content has-text-primary">
                     <h3>INTERNATIONAL COVERAGE</h3>
                     <div  class="has-text-justified">
-                      We go beyond borders and enrich your content in more than 10 languages.
+                      Our multilingual platform transcends borders and enriches your content in more than 10 languages.
                     </div>
                   </div>
                 </div>
