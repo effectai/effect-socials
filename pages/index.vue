@@ -66,8 +66,8 @@
 }
 .banner {
 
-  background-image: url('~assets/images/socials-and-stars_bg.png');
-  background-size: 100% auto;
+  //background-image: url('~assets/images/socials-and-stars_bg.png');
+  //background-size: 100% auto;
   min-height: 600px;
   position: relative;
   z-index: 1;
