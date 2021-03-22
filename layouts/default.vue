@@ -4,7 +4,7 @@
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          &copy; {{ new Date().getFullYear() }} <b>Effect&#8226;IVE</b> by <a href="https://effect.ai" target="_blank">Effect.AI</a>
+          &copy; {{ new Date().getFullYear() }} Effect <b>Socials</b> by <a href="https://effect.ai" target="_blank">Effect.AI</a>
         </p>
       </div>
     </footer>

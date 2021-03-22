@@ -9,7 +9,8 @@
           <span class="mx-2 has-text-weight-normal is-size-4"> EFFECT.AI </span>
           <span>COMPANY</span>
         </div>
-        <div id="title-big" class="has-text-white">EFFECT&#8226;IVE</div>
+        <img src="~assets/images/effect-socials_part-white_h100.png" class="mt-6" />
+        <br>
         <span class="is-size-3 has-text-white has-text-weight-light"><b>I</b>nnovative</span>
         <span class="is-size-3 has-text-white has-text-weight-light"><b>V</b>iral</span>
         <span class="is-size-3 has-text-white has-text-weight-light"><b>E</b>ngagement</span>
@@ -71,9 +72,9 @@ export default {
     width: 100%;
   }
   .banner {
-    background: rgb(37,89,205);
-    background: linear-gradient(-45deg, rgba(37,89,205,1) 0%, rgba(15,56,193,1) 100%);
-    background-image: url('~assets/images/socials-and-stars_bg.png'), linear-gradient(-45deg, rgba(37,89,205,1) 0%, rgba(15,56,193,1) 100%);
+    background: #101D56;
+    background: linear-gradient(-45deg, rgba(37,89,205,1) 0%, #101D56 100%);
+    background-image: url('~assets/images/socials-and-stars_bg.png'), linear-gradient(-45deg, rgba(37,89,205,1) 0%, #101D56 100%);
     background-size: 100% auto;
     min-height: 700px;
     position: relative;

@@ -2,7 +2,7 @@
   <div class="clouds mt-6">
     <div class="has-background-white">
       <div class="container">
-        <h1 class="has-text-centered is-size-1 mb-6">Why Effect&#8226;ive?</h1>
+        <h1 class="title has-text-centered is-size-1 mb-6">Why Effect Socials?</h1>
         <div class="columns">
           <div class="column">
             <div class="media">
@@ -12,7 +12,7 @@
                 </div>
               </div>
               <div class="media-content has-text-primary">
-                <h3>ENGAGEMENT RATE</h3>
+                <h3 class="subtitle">ENGAGEMENT RATE</h3>
                 <div  class="has-text-justified">
                   The most effective way to have the social media algorithms work for you is to increase your engagement rate.
                   Quality engagement is rewarded 80% more than anything else.
@@ -28,7 +28,7 @@
                 </div>
               </div>
               <div class="media-content has-text-primary">
-                <h3>FANS FOR YOUR BRAND</h3>
+                <h3 class="subtitle">FANS FOR YOUR BRAND</h3>
                 <div  class="has-text-justified">
                   <b>Real Humans!</b> We never use bots. We have a network of thousands of people from all over the globe.
                   Our matching algorithm connects you with genuine fans who are rewarded for high quality engagement on your channels.
@@ -45,7 +45,7 @@
                 </div>
               </div>
               <div class="media-content has-text-primary">
-                <h3>THE POWER OF AI</h3>
+                <h3 class="subtitle">THE POWER OF AI</h3>
                 <div  class="has-text-justified">
                   Our social media algorithms make sure to direct engagement where it will benefit you the most. Our AI system is proven to drive more organic traffic to your brand.
                 </div>
