@@ -10,6 +10,7 @@
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
+    "@nuxtjs/color-mode": "^2.0.5",
     "bulma": "^0.9.1",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6"

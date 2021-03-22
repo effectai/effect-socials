@@ -1,0 +1,39 @@
+html {
+  transition: background 0.2s;
+  &.dark-mode {
+    background: $dark-mode-background;
+    body {
+      color: $primary-invert;
+    }
+    .title, .subtitle, h1, h2, h3, h4, h5, h6 {
+      color: $primary-invert;
+    }
+    .button {
+      &.is-primary {
+        background-color: $primary-invert;
+        color: $primary;
+      }
+    }
+    .has-text-primary {
+      color: $primary-invert !important;
+    }
+    .card {
+      background-color: darken($dark-mode-background, 5%);
+      color: white;
+      &:hover {
+        color: white;
+      }
+    }
+    .menu-label {
+      color: white;
+    }
+    .menu-list {
+      a {
+        color: white;
+        &:hover {
+          color: $menu-item-hover-color;
+        }
+      }
+    }
+  }
+}
