@@ -86,7 +86,7 @@ export default {
     position: absolute;
     right: 0;
     top: 0;
-    margin: 10px;
+    margin: 20px 10px;
 
     width: 100%;
     z-index: -2;
@@ -124,8 +124,8 @@ export default {
         filter: blur(7px);
         display: block;
         position: absolute;
-        top: 220px;
-        left: 220px;
+        top: 240px;
+        left: 240px;
         width: 920px;
         height: 920px;
         background: white;
@@ -148,7 +148,11 @@ export default {
       -ms-filter: blur(7px);
     }
   }
-
+  @media all and (max-width: 770px) {
+    .circle-container:after {
+      display: none;
+    }
+  }
   .dark-mode {
     .circle-container {
       .circle {
