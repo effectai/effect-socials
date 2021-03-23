@@ -1,5 +1,5 @@
 <template>
-  <div class="banner">
+  <div class="hero">
     <canvas id="star-canvas" width="100%" height="100%"></canvas>
     <home-banner  />
     <div ref="why" id="why">
@@ -64,7 +64,7 @@
   height: 100%;
   width: 100%;
 }
-.banner {
+.hero {
 
   //background-image: url('~assets/images/socials-and-stars_bg.png');
   //background-size: 100% auto;
