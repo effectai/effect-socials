@@ -109,8 +109,8 @@ export default {
       background: $secondary;
       transition: background 2s;
       transform: rotate(-100deg);
-      //background: linear-gradient(150deg, rgba($secondary, 0) 0%, rgba($secondary, 0) 5%, rgba($secondary, 0.1) 20%, $secondary 100%);
-      background: radial-gradient(circle at top, rgba(#ffffff, 1) 0%, rgba(#fffef7, 1) 7%, rgba(#06c6c6, 1) 30%, rgba(#06c6c6, 1) 50%, rgba(#06c6c6, 1) 100%);
+      // background: radial-gradient(circle at top, rgba(#ffffff, 1) 0%, rgba(#fffef7, 1) 7%, rgba(#06c6c6, 1) 30%, rgba(#06c6c6, 1) 50%, rgba(#06c6c6, 1) 100%);
+      background: linear-gradient(-40deg, #09C9C9 44%, rgba(9,201,201,0.20) 84%, rgba(255,251,241,0.00) 100%);
       background-size: 150% 400%;
       background-position: 10% 0%;
       animation: grained 0.2s linear infinite, rotate 45s linear infinite;

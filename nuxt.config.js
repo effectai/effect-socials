@@ -1,11 +1,7 @@
-const routerBase = {
-  // router: {
-  //   base: '/effective/'
-  // }
-};
-
 export default {
-  ...routerBase,
+  router: {
+    middleware: ['password-protect']
+  },
   // Target (https://go.nuxtjs.dev/config-target)
   target: 'static',
 
@@ -43,8 +39,21 @@ export default {
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // Doc: https://color-mode.nuxtjs.org/
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    'nuxt-password-protect'
   ],
+  passwordProtect: {
+    enabled: true,
+    formPath: '/password',
+    password: 'hello-network',
+    tokenSeed: 101010,
+    queryString: '_pw',
+    cookieName: '_password',
+    cookie: {
+      prefix: '',
+      expires: 5
+    }
+  },
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
