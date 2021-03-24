@@ -1,39 +1,136 @@
 /* Import the rest of Bulma */
-@import '~bulma';
+@import '../../node_modules/bulma';
+@import 'dark-mode';
 
+a {
+  outline: 0;
+}
+
+.has-limited-width {
+  width: 670px;
+  max-width: 100%;
+}
+.is-horizontal-centered {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card {
+  //transition: box-shadow 0.2s;
+  display: block;
+  &.is-flat {
+    border: $card-footer-border-top;
+    box-shadow: none;
+    .card-header {
+      box-shadow: none;
+      border-bottom: $card-footer-border-top;
+    }
+    &.is-hoverable {
+      cursor: pointer;
+      &:hover {
+        //border: 1px solid rgba($scheme-invert, 0);
+        box-shadow: $card-shadow;
+      }
+    }
+  }
+}
+a.card {
+  color: $text;
+}
+
+.notification {
+  &.is-primary {
+    &.is-outlined {
+      border: 2px solid $primary;
+      color: $text;
+      background: none;
+    }
+  }
+}
+
+.menu-label {
+  font-weight: 700;
+}
+
+.input {
+  &.is-primary {
+    &.is-outlined {
+      border: 1px solid $primary;
+      color: $primary;
+      background: none;
+
+    }
+  }
+  &.is-white {
+    &.is-outlined {
+      border: 1px solid $white;
+      color: $white;
+      background: none;
+      &::placeholder {
+        color: white;
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+.image {
+  overflow: hidden;
+  img {
+    height: auto !important;
+  }
+}
+.background-image {
+  background-size: cover;
+  background-position: top center;
+}
+
+.card-content {
+  position: relative;
+}
+.has-background-white-blur {
+  position: relative;
+  &:before {
+    content: "";
+    display: block;
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    opacity: 0.7;
+    z-index: -1;
+    top: 0;
+    filter: blur(50px);
+    left: 0;
+    background: white;
+  }
+}
+.dark-mode {
+  .has-background-white-blur:before {
+    background: $dark-mode-background;
+  }
+}
 .button {
   &.is-wide {
     min-width: 200px;
   }
-  &.is-small {
-    &.is-wide {
-      min-width: 150px;
-    }
-  }
-  &.is-medium {
-    &.is-wide {
-      min-width: 250px;
-    }
-  }
-  &.is-large {
-    &.is-wide {
-      min-width: 300px;
-    }
-  }
 }
-.container {
-  padding: 1.5rem;
+
+.has-radius {
+  border-radius: 7px;
 }
-.icon-circle {
+.is-rounded {
   border-radius: 100%;
-  width: 60px;
-  height: 60px;
-  font-size: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &.big {
-    width: 75px;
-    height: 75px;
+}
+
+.has-shadow {
+  box-shadow: $box-shadow;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(-40deg)
+  }
+  100% {
+    transform: rotate(320deg)
   }
 }

@@ -2,25 +2,55 @@
 @import '~bulma/sass/utilities/initial-variables';
 @import '~bulma/sass/utilities/functions';
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://use.typekit.net/kej5qyk.css');
+
+$family-sans-serif: 'Inter', sans-serif;
+$family-secondary: 'p22-mackinac-pro',serif;
+
 // Colors
-$primary: #2559CD;
-$text: $primary;
-$text-strong: $text;
-$secondary: #86BFD9;
+$primary: #101D56;
+$secondary: #1148EB;
 $secondary-invert: findColorInvert($secondary) !default;
-$accent: #FDAB38;
-$accent-invert: #fff !default; //findColorInvert($accent) !default;
+$accent: #06c6c6;
+$accent-invert: findColorInvert($accent) !default;
+$yellow-light: #FFFDF7;
 
 $custom-colors: (
   "secondary":($secondary, $secondary-invert),
   "accent":($accent, $accent-invert),
 );
 
-//$desktop: 828px;
+$text: #363636;
+// $body-background-color: #FFFDF7;
 
-$footer-background-color: initial;
+$link: $secondary;
+$link-hover: lighten($secondary, 20%);
+$link-focus: lighten($secondary, 20%);
+$link-active: lighten($secondary, 20%);
 
-//$box-background-color: initial;
-//$box-padding: 1.4rem;
-//$box-shadow: inset -4px -4px 10px 0 #FFFFFF, inset 4px 4px 10px 0 #CDD4E6;
-//$box-shadow-outside: -4px -4px 10px 0 #FFFFFF, 4px 4px 10px 0 #CDD4E6;
+$title-weight: 400;
+$title-color: $primary;
+//$subtitle-color: $secondary;
+$title-family: $family-secondary;
+$subtitle-family: $family-sans-serif;
+
+$body-line-height: 1.7;
+$button-padding-horizontal: 1.7em;
+
+$card-header-padding: 1.25rem 2rem;
+$card-content-padding: 1.2rem 1.2rem;
+
+$translate-color: #00c165;
+$force-color: #057cff;
+$socials-color: #06c6c6;
+$pieces-color: #999999;
+$dao-color: #d7ac00;
+$captions-color: #e06375;
+
+$menu-label-color: black;
+$menu-label-font-size: 0.9em;
+$menu-label-letter-spacing: 0.05em;
+$menu-list-link-padding: 0.5em 0.5em;
+
+$dark-mode-background: #101D56;
