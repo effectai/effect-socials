@@ -1,7 +1,7 @@
 <template>
   <div class="mt-6">
     <div class="container" ref="how">
-      <h1 class="title has-text-centered is-size-1 mb-6 has-text-accent">How it Works</h1>
+      <h1 class="title has-text-centered is-size-1 mb-6">How it Works</h1>
       <div class="columns">
         <div class="column">
           <div class="media">

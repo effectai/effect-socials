@@ -15,7 +15,7 @@
 
         </div>
         <div class="has-text-right">
-          <img width="700" src="~assets/images/socials-image.jpg"  class="has-radius has-shadow"/>
+          <img width="700" src="~assets/images/socials.jpg"  class="has-radius has-shadow"/>
         </div>
       </div>
     </section>

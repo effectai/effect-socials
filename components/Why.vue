@@ -2,7 +2,7 @@
   <div class="clouds">
     <div class="has-background-white">
       <div class="container">
-        <h1 class="title has-text-centered is-size-1 mb-6 has-text-black">Why Effect Socials?</h1>
+        <h1 class="title has-text-centered is-size-1 mb-6 has-text-black pt-6">Why Effect Socials?</h1>
         <div class="columns">
           <div class="column">
             <div class="media">
@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-        <div class="mt-6 has-text-centered">
+        <div class="mt-6 has-text-centered pb-6">
           <a href="https://docs.google.com/forms/d/e/1FAIpQLScBLihxn5gk94MoT-scoy1HNDT6YQXkH_hgeRPydgjFbCexlw/viewform" target="_blank" class="button is-medium is-accent is-wide  has-text-weight-medium">Request Demo</a>
         </div>
       </div>
@@ -64,7 +64,7 @@
 <style lang="scss" scoped>
   .clouds {
 
-    background: url('~assets/images/clouds.png') no-repeat;
+    //background: url('~assets/images/clouds.png') no-repeat;
     background-size: 100% auto;
     background-position: top left;
     margin-top: -150px;
@@ -72,10 +72,10 @@
     position: relative;
     z-index: 2;
     &:after {
-      content: "";
+      //content: "";
       margin-top: -1px;
       display: block;
-      background: url('~assets/images/clouds.png') no-repeat;
+      //background: url('~assets/images/clouds.png') no-repeat;
       background-size: 100% auto;
       background-position: top left;
       transform: scaleY(-1);
