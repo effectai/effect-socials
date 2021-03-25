@@ -19,8 +19,9 @@
         </div>
       </div>
     </section>
-    <div class="circle-container">
-      <div class="circle"></div>
+    <div class="circle-container has-text-right">
+<!--      <div class="circle"></div>-->
+      <img src="~assets/images/circle-socials.png" style="margin-right: -50px; max-width: 1500px"/>
     </div>
   </div>
 </template>
@@ -90,7 +91,9 @@ export default {
 
     width: 100%;
     z-index: -2;
-
+    img {
+      animation: rotate 30s linear infinite;
+    }
     .circle {
       margin-left: auto;
       position: relative;
@@ -137,7 +140,7 @@ export default {
       content: "";
       display: block;
       position: absolute;
-      bottom: 400px;
+      bottom: 450px;
       right: -30px;
       width: 350px;
       height: 350px;
