@@ -1,24 +1,7 @@
 <template>
   <div>
-    <div id="step-1" v-if="step===1">
-      <h2 class="title">1. What kind of interaction do you need?</h2>
-      <div class="control">
-        <label class="radio">
-          <input type="radio" name="rsvp">
-          Likes
-        </label>
-        <label class="radio">
-          <input type="radio" name="rsvp">
-          Retweets
-        </label>
-        <label class="radio">
-          <input type="radio" name="rsvp">
-          Follows
-        </label>
-      </div>
-      <input type="submit" @click.prevent="goToForm()" class="btn btn-primary">
-    </div>
-    <div id="step-2" v-if="step===2">
+    <div id="step-2">
+      <h2 class="title">2. Create your batch of tasks</h2>
       <div class="field">
         <div class="box">
           <div style="background: #fff; border-radius: 8px" class="p-2">
@@ -42,7 +25,7 @@
                   <td>{{ task.id }}</td>
                   <td>
                     {{task}}
-                  </td>>
+                  </td>
                   <td>
                     <button class="button is-danger is-outlined is-small is-rounded" @click.prevent="tasks.splice(index, 1)">
                       <font-awesome-icon class="icon is-small" icon="fa-solid fa-trash-can" />
@@ -121,32 +104,33 @@
               <div class="column is-one-third">
                 <div class="box">
                   <h2>Total Cost</h2>
-                  <strong :class="{'has-text-danger': (campaign.info.reward * tasks.length * repetitions) > efxAvailable}">{{ parseFloat(campaign.info.reward * tasks.length * repetitions).toFixed(4) }} EFX</strong>
+                  <strong>{{ parseFloat(campaign.info.reward * tasks.length * repetitions).toFixed(4) }} EFX</strong>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <form @submit.prevent="uploadBatch">
-      <div class="field is-grouped is-justify-content-center mt-6">
-        <div class="control">
-          <button type="submit" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4" :disabled="!tasks.length || tasks.length > maxAmountTask">
-            Add Tasks
-          </button>
-          <button class="button is-outlined is-primary is-wide" @click.prevent="cancel">
-            Cancel
-          </button>
+
+      <form @submit.prevent="uploadBatch">
+        <div class="field is-grouped is-justify-content-center mt-6">
+          <div class="control">
+            <button class="button is-outlined is-primary is-wide" @click.prevent="cancel">
+              Cancel
+            </button>
+            <button @click.prevent="nextStep" type="submit" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4" :disabled="!tasks.length">
+              Next step
+            </button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 <script>
 import Vue from 'vue'
 export default Vue.extend({
-  props: ['account', 'effectsdk'],
+  props: ['campaign'],
   data() {
     return {
       step: 1,
@@ -164,7 +148,8 @@ export default Vue.extend({
       error: null,
       loading: false,
       page: 1,
-      perPage: 30
+      perPage: 30,
+      type: null
     }
   },
   computed: {
@@ -178,9 +163,6 @@ export default Vue.extend({
   },
   components: {},
     methods: {
-      goToForm () {
-        this.step = 2
-      },
     setPage (newPage) {
       this.page = newPage
     },
@@ -207,20 +189,6 @@ export default Vue.extend({
       event.preventDefault()
       this.uploadFile(event.dataTransfer.files ? event.dataTransfer.files : null, true)
       event.currentTarget.classList.remove('dragover')
-    },
-    async uploadBatch () {
-      try {
-        this.loading = true
-        const content = {
-          tasks: this.tasks
-        }
-        const result = await this.$blockchain.createBatch(this.campaignId, content, Number(this.repetitions))
-        this.$store.dispatch('transaction/addTransaction', result)
-        this.$router.push('/campaigns/' + this.campaignId)
-      } catch (e) {
-        this.$blockchain.handleError(e)
-      }
-      this.loading = false
     },
     uploadFile (event, drop) {
       this.file = {
@@ -268,6 +236,9 @@ export default Vue.extend({
         ...acc,
         [heads[i] || `extra_${i}`]: (cur.length > 0) ? (Number(cur) || cur) : null
       }), {}))
+    },
+    cancel () {
+      this.$emit('previousStep')
     }
   }
 })
