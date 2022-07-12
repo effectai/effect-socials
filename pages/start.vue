@@ -1,8 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container pt-6">
     <div class="columns">
       <div class="column">
-        {{account}}
         <div id="step-1" v-if="step === 1">
           <h2 class="title">1. What kind of interaction do you need?</h2>
           <div class="control">
@@ -21,11 +20,15 @@
               Follows
             </label>
           </div>
-          <input type="submit" @click.prevent="nextStep()" class="btn btn-primary">
+          <input type="submit" @click.prevent="nextStep()" class="button button-primary" value="Next step">
         </div>
 
-        <task-form v-if="step === 2" :campaign="campaigns[type]" @previousStep="previousStep()" @nextStep.prevent="nextStep()"/>
-        <login v-if="step === 3" @account="setAccount"/>
+        <task-form v-if="step === 2" :campaign="campaigns[type]" @setBatch="setBatch" @previousStep="previousStep()" @nextStep="nextStep()"/>
+        <login v-if="step === 3" @previousStep="previousStep()" @account="setAccount" @uploadBatch="uploadBatch" :repetitions="repetitions" :batch="batch" :campaign="campaigns[type]"/>
+
+        <a v-if="createdBatchId" :href="'/batch/' + createdBatchId" >
+          Go to batch results >
+        </a>
       </div>
     </div>
   </div>
@@ -39,6 +42,9 @@ import * as effectsdk from '@effectai/effect-js'
 export default {
   data() {
     return {
+      createdBatchId: null,
+      batch: null,
+      repetitions: 1,
       step: 1,
       account: null,
       effectsdk: null,
@@ -59,7 +65,6 @@ export default {
   },
   methods: {
     nextStep () {
-      console.log('made this choice: ' + this.type)
       this.step += 1
     },
     previousStep () {
@@ -68,10 +73,9 @@ export default {
      async getCampaigns () {
         try {
           this.effectsdk = new effectsdk.EffectClient('jungle')
-          this.campaigns.like = await this.effectsdk.force.getCampaign(1)
-          this.campaigns.retweet = await this.effectsdk.force.getCampaign(2)
-          this.campaigns.follow = await this.effectsdk.force.getCampaign(3)
-          console.log('loaded all campaigns', this.campaigns)
+          this.campaigns.like = await this.effectsdk.force.getCampaign(20)
+          this.campaigns.retweet = await this.effectsdk.force.getCampaign(20)
+          this.campaigns.follow = await this.effectsdk.force.getCampaign(20)
         } catch (error) {
           console.error(error)
         }
@@ -80,15 +84,20 @@ export default {
       this.effectsdk = sdk
       this.account = account
     },
+    setBatch (batch, repetitions) {
+      this.batch = batch
+      this.repetitions = repetitions
+    },
     async uploadBatch () {
       try {
         this.loading = true
         const content = {
-          tasks: this.tasks
+          tasks: this.batch
         }
-        const result = await this.effectsdk.createBatch(this.campaignId, content, Number(this.repetitions))
+        const result = await this.effectsdk.force.createBatch(this.campaigns[this.type].id, content, Number(this.repetitions))
+        this.createdbBatchId = this.effectsdk.force.getBatchId(result.id, this.campaigns[this.type].id)
       } catch (e) {
-        this.$blockchain.handleError(e)
+        console.error(e)
       }
       this.loading = false
     },

@@ -1,8 +1,30 @@
 <template>
   <div>
+    <h2 v-if="!accountConnected" class="title">3. Connect your account</h2>
+    <h2 v-else class="title">4. Submit your tasks!</h2>
+
+    <p v-if="accountConnected">
+        Logged in with: {{connectResponse.accountName}}<br>
+        Batch has {{batch.length}} tasks, and will cost {{(batch.length * repetitions) * campaign.info.reward}} EFX</p>
+
     <div id="connect-buttons" v-if="!accountConnected" class="buttons is-justify-content-center is-flex">
       <button class="button is-primary" @click="login()" id="btn-login" style="background-color: #f6851b">Connect with Metamask</button>
       <button class="button is-link" @click="loginEOS()" id="btn-login-eos" style="background-color: #3750A2">Connect with Anchor</button>
+    </div>
+
+    <div v-if="accountConnected">
+        <form @submit.prevent="uploadBatch">
+            <div class="field is-grouped is-justify-content-center mt-6">
+            <div class="control">
+                <button class="button is-outlined is-primary is-wide" @click="previousStep">
+                Back
+                </button>
+                <button type="submit" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4">
+                Post tasks
+                </button>
+            </div>
+            </div>
+        </form>
     </div>
   </div>
 </template>
@@ -13,23 +35,31 @@ import * as effectsdk from '@effectai/effect-js'
 import AnchorLink from 'anchor-link'
 import AnchorLinkBrowserTransport from 'anchor-link-browser-transport'
 export default Vue.extend({
-  data() {
-    return {
-      client: null,
-      campaignid: null,
-      batchidentification: null,
-      connectAccount: { 
-        providerName: null, 
-        provider: null, 
-        account: null
-      },
-      connectResponse: null,
-      message: null,
-      accountConnected: false
-    }
-  },
+    props:['batch', 'campaign', 'repetitions'],
+    data() {
+        return {
+            loading: false,
+            client: null,
+            campaignid: null,
+            batchidentification: null,
+            connectAccount: { 
+                providerName: null, 
+                provider: null, 
+                account: null
+            },
+            connectResponse: null,
+            message: null,
+            accountConnected: false
+        }
+    },
   components: {},
   methods: {
+    uploadBatch() {
+        this.$emit('uploadBatch')
+    },
+    previousStep () {
+      this.$emit('previousStep')
+    },
     async login() {
         this.generateClient()
         await this.connectMetamask()

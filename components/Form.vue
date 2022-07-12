@@ -112,13 +112,13 @@
         </div>
       </div>
 
-      <form @submit.prevent="uploadBatch">
+      <form>
         <div class="field is-grouped is-justify-content-center mt-6">
           <div class="control">
-            <button class="button is-outlined is-primary is-wide" @click.prevent="cancel">
-              Cancel
+            <button class="button is-outlined is-primary is-wide" @click="cancel">
+              Back
             </button>
-            <button @click.prevent="nextStep" type="submit" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4" :disabled="!tasks.length">
+            <button @click="nextStep" type="submit" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4" :disabled="!tasks.length">
               Next step
             </button>
           </div>
@@ -149,7 +149,8 @@ export default Vue.extend({
       loading: false,
       page: 1,
       perPage: 30,
-      type: null
+      type: null,
+      placeholders: ['link'],
     }
   },
   computed: {
@@ -236,6 +237,10 @@ export default Vue.extend({
         ...acc,
         [heads[i] || `extra_${i}`]: (cur.length > 0) ? (Number(cur) || cur) : null
       }), {}))
+    },
+    nextStep () {
+      this.$emit('nextStep')
+      this.$emit('setBatch', this.tasks, this.repetitions)
     },
     cancel () {
       this.$emit('previousStep')
