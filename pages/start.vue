@@ -95,7 +95,7 @@ export default {
           tasks: this.batch
         }
         const result = await this.effectsdk.force.createBatch(this.campaigns[this.type].id, content, Number(this.repetitions))
-        this.createdbBatchId = this.effectsdk.force.getBatchId(result.id, this.campaigns[this.type].id)
+        this.createdBatchId = await this.effectsdk.force.getBatchId(result.id, this.campaigns[this.type].id)
       } catch (e) {
         console.error(e)
       }
