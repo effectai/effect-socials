@@ -11,9 +11,9 @@
                   <th v-if="tasks.length">
                     Index
                   </th>
-                  <th class="task-placeholder-value">
+                  <th v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value">
                     <!-- <input v-model="newTask[placeholder]" type="text" class="input"> -->
-                    Link
+                    {{ placeholder }}
                   </th>
                   <th v-if="tasks.length">
                     Remove
@@ -23,8 +23,8 @@
               <tbody>
                 <tr v-for="(task, index) in paginatedTasks" :key="task.id">
                   <td>{{ task.id }}</td>
-                  <td>
-                    {{task}}
+                  <td v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value">
+                    {{ task[placeholder] }}
                   </td>
                   <td>
                     <button class="button is-danger is-outlined is-small is-rounded" @click.prevent="tasks.splice(index, 1)">
@@ -34,9 +34,10 @@
                 </tr>
                 <tr>
                   <td v-if="tasks.length" />
-                  <td class="task-placeholder-value">
+                  <td v-for="(placeholder, placeindex) in placeholders" :key="placeholder" class="task-placeholder-value">
                     <input
-                      v-model="newTask.link"
+                      :ref="`placeholder-${placeindex}`"
+                      v-model="newTask[placeholder]"
                       type="text"
                       class="input is-info task-placeholder-value"
                       placeholder="Type here"
@@ -47,13 +48,13 @@
                 </tr>
               </tbody>
             </table>
-            <!-- <pagination
+            <pagination
               v-if="tasks"
               :items="tasks.length"
               :page="page"
               :per-page="perPage"
               @setPage="setPage"
-            /> -->
+            />
           </div>
           <div class="control has-text-centered mt-5">
             <button class="button is-primary is-wide" @click.prevent="createTask">
@@ -100,8 +101,8 @@
               </div>
             </div>
 
-            <div v-if="campaign && campaign.info" class="column is-6 py-0 columns batch-info">
-              <div class="column is-one-third">
+            <div v-if="campaign && campaign.info" class="column is-3 py-0 columns batch-info">
+              <div class="column">
                 <div class="box">
                   <h2>Total Cost</h2>
                   <strong>{{ parseFloat(campaign.info.reward * tasks.length * repetitions).toFixed(4) }} EFX</strong>
@@ -129,6 +130,18 @@
 </template>
 <script>
 import Vue from 'vue'
+import Pagination from './Pagination.vue'
+
+function getMatches (string, regex, index) {
+  index || (index = 1) // default to the first capturing group
+  const matches = []
+  let match
+  while ((match = regex.exec(string))) {
+    matches.push(match[index])
+  }
+  return matches
+}
+
 export default Vue.extend({
   props: ['campaign'],
   data() {
@@ -148,7 +161,7 @@ export default Vue.extend({
       error: null,
       loading: false,
       page: 1,
-      perPage: 30,
+      perPage: 10,
       type: null,
       placeholders: ['link'],
     }
@@ -162,8 +175,15 @@ export default Vue.extend({
       return []
     },
   },
-  components: {},
-    methods: {
+  components: {Pagination},
+  mounted () {
+    this.getPlaceholders(this.campaign.info.template)
+    this.$nextTick(() => {
+      this.generateCsvData(this.placeholders)
+    })
+    this.newTask = this.getEmptyTask(this.placeholders)
+  },
+  methods: {
     setPage (newPage) {
       this.page = newPage
     },
@@ -181,10 +201,10 @@ export default Vue.extend({
       // An temp id is needed for :key=task.id
       this.newTask.id = this.tempCounter++
       this.tasks.push(this.newTask)
-      this.newTask = {
-        id: null,
-        link: null
-      }
+      this.newTask = this.getEmptyTask(this.placeholders)
+      this.$nextTick(() => {
+        this.$refs['placeholder-0'][0].focus()
+      })
     },
     drop (event) {
       event.preventDefault()
@@ -237,6 +257,34 @@ export default Vue.extend({
         ...acc,
         [heads[i] || `extra_${i}`]: (cur.length > 0) ? (Number(cur) || cur) : null
       }), {}))
+    },
+    getPlaceholders (template) {
+      const placeholders = getMatches(
+        template,
+        /\$\{\s?(\w+)\s?\|?\s?(\w*)\s?\}/g
+      )
+      const unique = [...new Set(placeholders)]
+      this.placeholders = unique
+    },
+    generateCsvData (placeholders) {
+      const link = this.$refs.csvfiledownload
+      let csvContent = 'data:text/csv;charset=utf-8,'
+      csvContent += [
+        Object.values(placeholders).join(','),
+        placeholders.map(item => item + '-value-task-1'),
+        placeholders.map(item => item + '-value-task-2'),
+        placeholders.map(item => item + '-value-task-3')
+      ].join('\n')
+        .replace(/(^\[)|(\]$)/gm, '')
+      console.log('TEST', csvContent)
+      link.href = encodeURI(csvContent)
+    },
+    getEmptyTask (placeholders) {
+      const emptyTask = {}
+      placeholders.forEach((placeholder) => {
+        emptyTask[placeholder] = ''
+      })
+      return emptyTask
     },
     nextStep () {
       this.$emit('nextStep')

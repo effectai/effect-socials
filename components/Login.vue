@@ -5,7 +5,9 @@
 
     <p v-if="accountConnected">
         Logged in with: {{connectResponse.accountName}}<br>
-        Batch has {{batch.length}} tasks, and will cost {{(batch.length * repetitions) * campaign.info.reward}} EFX</p>
+        Batch has {{batch.length}} tasks, and will cost {{batchCost}} EFX<br>
+        Your vEFX balance: <span :class="{'has-text-danger': batchCost > vefxAvailable}">{{vefxAvailable}} {{client.config.efxSymbol}}</span>
+    </p>
 
     <div id="connect-buttons" v-if="!accountConnected" class="buttons is-justify-content-center is-flex">
       <button class="button is-primary" @click="login()" id="btn-login" style="background-color: #f6851b">Connect with Metamask</button>
@@ -19,7 +21,7 @@
                 <button class="button is-outlined is-primary is-wide" @click="previousStep">
                 Back
                 </button>
-                <button type="submit" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4">
+                <button type="submit" :disabled="batchCost > vefxAvailable" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4">
                 Post tasks
                 </button>
             </div>
@@ -38,6 +40,7 @@ export default Vue.extend({
     props:['batch', 'campaign', 'repetitions'],
     data() {
         return {
+            account: null,
             loading: false,
             client: null,
             campaignid: null,
@@ -53,6 +56,28 @@ export default Vue.extend({
         }
     },
   components: {},
+  computed: {
+    batchCost () {
+        return (this.batch.length * this.repetitions) * this.campaign.info.reward
+    },
+    efxLoading () {
+      return this.vefxAvailable === null || this.efxAvailable === null || this.efxPending === null
+    },
+    vefxAvailable () {
+      let balance = 0
+      if (this.account) {
+        const vAccountRows = this.account.vAccountRows
+        if (vAccountRows) {
+          vAccountRows.forEach((row) => {
+            if (row.balance.contract === this.client.config.efxTokenContract) {
+              balance = parseFloat(row.balance.quantity)
+            }
+          })
+        }
+      }
+      return balance
+    }
+  },
   methods: {
     uploadBatch() {
         this.$emit('uploadBatch')
@@ -154,6 +179,7 @@ export default Vue.extend({
               alert('Login with on of the wallet.')
           }
           this.accountConnected = true
+          this.account = this.connectResponse
           this.$emit('account', this.connectResponse, this.client)
       } catch (error) {
           alert('Something went wrong. See console for error message')

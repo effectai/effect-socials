@@ -25,7 +25,6 @@
 
         <task-form v-if="step === 2" :campaign="campaigns[type]" @setBatch="setBatch" @previousStep="previousStep()" @nextStep="nextStep()"/>
         <login v-if="step === 3" @previousStep="previousStep()" @account="setAccount" @uploadBatch="uploadBatch" :repetitions="repetitions" :batch="batch" :campaign="campaigns[type]"/>
-
         <a v-if="createdBatchId" :href="'/batch/' + createdBatchId" >
           Go to batch results >
         </a>
@@ -48,6 +47,7 @@ export default {
       step: 1,
       account: null,
       effectsdk: null,
+      efxAvailable: null,
       campaigns: {
         like: null,
         retweet: null,
@@ -62,6 +62,8 @@ export default {
   },
   created () {
     this.getCampaigns();
+  },
+  computed: {
   },
   methods: {
     nextStep () {
