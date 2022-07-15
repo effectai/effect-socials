@@ -9,7 +9,7 @@
         Your vEFX balance: <span :class="{'has-text-danger': batchCost > vefxAvailable}">{{vefxAvailable}} {{client.config.efxSymbol}}</span>
     </p>
 
-    <div id="connect-buttons" v-if="!accountConnected" class="buttons is-justify-content-center is-flex">
+    <div id="connect-buttons" v-if="!accountConnected" class="buttons is-flex">
       <button class="button is-primary" @click="login()" id="btn-login" style="background-color: #f6851b">Connect with Metamask</button>
       <button class="button is-link" @click="loginEOS()" id="btn-login-eos" style="background-color: #3750A2">Connect with Anchor</button>
     </div>
@@ -37,11 +37,10 @@ import * as effectsdk from '@effectai/effect-js'
 import AnchorLink from 'anchor-link'
 import AnchorLinkBrowserTransport from 'anchor-link-browser-transport'
 export default Vue.extend({
-    props:['batch', 'campaign', 'repetitions'],
+    props:['batch', 'campaign', 'repetitions', 'loading'],
     data() {
         return {
             account: null,
-            loading: false,
             client: null,
             campaignid: null,
             batchidentification: null,
@@ -129,7 +128,7 @@ export default Vue.extend({
             this.connectAccount.account = account
             this.connectAccount.providerName = 'anchor'                
         } catch (error) {
-            alert('Something went wrong. See console for error message')
+            this.$emit('error', error.message)
             console.error(error)
         }
     },
@@ -160,11 +159,11 @@ export default Vue.extend({
                 this.connectAccount.account = null
                 this.connectAccount.providerName = 'metamask'
             } catch (error) {
-                alert('Something went wrong. See console for error message')
+                this.$emit('error', error)
                 console.error(error)
             }
         } else {
-            alert('Metamask not installed.')
+            this.$emit('error', 'Metamask not installed')
         }
     },
     /**
@@ -174,16 +173,16 @@ export default Vue.extend({
       console.log('Connecting to account with wallet.')
       try {
           if (this.connectAccount.provider) {
-              this.connectResponse = await this.client.connectAccount(this.connectAccount.provider, this.connectAccount.account)
+            this.connectResponse = await this.client.connectAccount(this.connectAccount.provider, this.connectAccount.account)
           } else {
-              alert('Login with on of the wallet.')
+            this.$emit('error', 'Login with on of the wallet.')
           }
           this.accountConnected = true
           this.account = this.connectResponse
           this.$emit('account', this.connectResponse, this.client)
       } catch (error) {
-          alert('Something went wrong. See console for error message')
-          console.error(error)
+            this.$emit('error', 'Login failed, try again.')
+            console.error(error)
       }
     },
   }

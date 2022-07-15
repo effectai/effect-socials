@@ -1,7 +1,7 @@
 <template>
   <div class="container pt-6">
     <div class="columns">
-      <div class="column">
+      <div class="column is-three-fifths is-offset-one-fifth">
         <div id="step-1" v-if="step === 1">
           <h2 class="title">1. What kind of interaction do you need?</h2>
           <div class="control">
@@ -20,14 +20,34 @@
               Follows
             </label>
           </div>
-          <input type="submit" @click.prevent="nextStep()" class="button button-primary" value="Next step">
+          <input type="submit" @click.prevent="nextStep()" class="button is-primary mt-3" value="Next step">
         </div>
 
-        <task-form v-if="step === 2" :campaign="campaigns[type]" @setBatch="setBatch" @previousStep="previousStep()" @nextStep="nextStep()"/>
-        <login v-if="step === 3" @previousStep="previousStep()" @account="setAccount" @uploadBatch="uploadBatch" :repetitions="repetitions" :batch="batch" :campaign="campaigns[type]"/>
+        <task-form v-if="step === 2" :campaign="campaigns[type]" @error="setErrorMessage" @setBatch="setBatch" @previousStep="previousStep()" @nextStep="nextStep()"/>
+        <login v-if="step === 3" 
+          :loading="loading" 
+          @previousStep="previousStep()" 
+          @error="setErrorMessage" 
+          @success="setSuccessMessage" 
+          @account="setAccount" 
+          @uploadBatch="uploadBatch" 
+          :repetitions="repetitions" 
+          :batch="batch" 
+          :campaign="campaigns[type]"/>
         <a v-if="createdBatchId" :href="'/batch/' + createdBatchId" >
           Go to batch results >
         </a>
+        <article class="message is-success mt-5" v-if="successMessage">
+          <div class="message-body">
+            {{successMessage}}
+          </div>
+        </article>
+
+        <article class="message is-danger mt-5" v-if="errorMessage">
+          <div class="message-body">
+            {{errorMessage}}
+          </div>
+        </article>
       </div>
     </div>
   </div>
@@ -41,6 +61,7 @@ import * as effectsdk from '@effectai/effect-js'
 export default {
   data() {
     return {
+      loading: false,
       createdBatchId: null,
       batch: null,
       repetitions: 1,
@@ -53,7 +74,9 @@ export default {
         retweet: null,
         follow: null,
       },
-      type: null
+      type: null,
+      successMessage: null,
+      errorMessage: null
     }
   },
   components: {
@@ -66,19 +89,29 @@ export default {
   computed: {
   },
   methods: {
+    setSuccessMessage (msg) {
+      this.successMessage = msg;
+    },
+    setErrorMessage (msg) {
+      this.errorMessage = msg;
+    },
     nextStep () {
+      this.successMessage = null
       this.step += 1
     },
     previousStep () {
+      this.errorMessage = null
+      this.successMessage = null
       this.step -= 1
     },
      async getCampaigns () {
         try {
           this.effectsdk = new effectsdk.EffectClient('jungle')
-          this.campaigns.like = await this.effectsdk.force.getCampaign(20)
-          this.campaigns.retweet = await this.effectsdk.force.getCampaign(20)
-          this.campaigns.follow = await this.effectsdk.force.getCampaign(20)
+          this.campaigns.like = await this.effectsdk.force.getCampaign(21)
+          this.campaigns.retweet = await this.effectsdk.force.getCampaign(21)
+          this.campaigns.follow = await this.effectsdk.force.getCampaign(21)
         } catch (error) {
+          this.setErrorMessage(error)
           console.error(error)
         }
       },
@@ -98,7 +131,9 @@ export default {
         }
         const result = await this.effectsdk.force.createBatch(this.campaigns[this.type].id, content, Number(this.repetitions))
         this.createdBatchId = await this.effectsdk.force.getBatchId(result.id, this.campaigns[this.type].id)
+        this.setSuccessMessage('Tasks successfuly uploaded to Effect Force!')
       } catch (e) {
+        this.setErrorMessage(e)
         console.error(e)
       }
       this.loading = false

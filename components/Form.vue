@@ -64,7 +64,7 @@
         </div>
         <div class="box">
           <div class="columns">
-            <div class="column is-3 has-text-centered py-0">
+            <div class="column is-4 has-text-centered py-0">
               <h2 class="subtitle is-6 has-text-weight-bold mb-3">
                 Upload tasks
               </h2>
@@ -92,7 +92,7 @@
               </p>
             </div>
 
-            <div class="column is-3 py-0">
+            <div class="column is-4 py-0">
               <div class="field">
                 <label class="label">Repetitions</label>
                 <div class="control">
@@ -101,7 +101,7 @@
               </div>
             </div>
 
-            <div v-if="campaign && campaign.info" class="column is-3 py-0 columns batch-info">
+            <div v-if="campaign && campaign.info" class="column is-4 py-0 columns batch-info">
               <div class="column">
                 <div class="box">
                   <h2>Total Cost</h2>
@@ -233,13 +233,13 @@ export default Vue.extend({
               }
             })
             if (!containsPlaceholder) {
-              this.error = 'Placeholder not found in CSV'
+              this.$emit('error', 'Placeholder not found in CSV')
             }
           })
         }
         reader.readAsText(file)
       } else {
-        this.error = 'Could not find file'
+        this.$emit('error', 'Could not find file')
         this.file = null
       }
     },
@@ -276,7 +276,6 @@ export default Vue.extend({
         placeholders.map(item => item + '-value-task-3')
       ].join('\n')
         .replace(/(^\[)|(\]$)/gm, '')
-      console.log('TEST', csvContent)
       link.href = encodeURI(csvContent)
     },
     getEmptyTask (placeholders) {
