@@ -19,6 +19,11 @@
               <input type="radio" value="follow" v-model="type" required>
               Follows
             </label>
+            <br>
+            <label class="radio">
+              <input type="radio" value="reply" v-model="type" required>
+              Replies
+            </label>
           </div>
           <input type="submit" @click.prevent="nextStep()" class="button is-primary mt-3" value="Next step">
         </div>
@@ -100,10 +105,12 @@ export default {
     },
      async getCampaigns () {
         try {
-          this.effectsdk = new effectsdk.EffectClient('jungle')
-          this.campaigns.like = await this.effectsdk.force.getCampaign(27)
-          this.campaigns.retweet = await this.effectsdk.force.getCampaign(27)
-          this.campaigns.follow = await this.effectsdk.force.getCampaign(27)
+          this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
+          this.campaigns.retweet = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID))
+          this.campaigns.like = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID)
+          this.campaigns.reply = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID)
+          this.campaigns.follow = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID)
+          
         } catch (error) {
           this.setErrorMessage(error)
           console.error(error)

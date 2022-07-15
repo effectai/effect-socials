@@ -1,3 +1,5 @@
+require('./config.js')
+
 export default {
   router: {
     middleware: ['password-protect']

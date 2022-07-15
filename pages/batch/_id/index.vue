@@ -57,7 +57,7 @@ export default {
   methods: {
     async getResults() {
       console.log('getting results...')
-      this.effectsdk = new effectsdk.EffectClient('jungle')
+      this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
       this.results = await this.effectsdk.force.getSubmissionsOfBatch(this.id)
     },
     async downloadTaskResults () {

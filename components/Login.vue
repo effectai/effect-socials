@@ -103,7 +103,7 @@ export default Vue.extend({
             const content = {
                 tasks: this.batch
             }
-            const result = await this.client.force.createBatch(this.campaign.id, content, Number(this.repetitions), 'efxtaskproxy')
+            const result = await this.client.force.createBatch(this.campaign.id, content, Number(this.repetitions), process.env.NUXT_ENV_PROXY_CONTRACT)
             this.createdBatchId = await this.client.force.getBatchId(result.id, this.campaign.id)
             this.$emit('success', 'Tasks successfuly uploaded to Effect Force!')
         } catch (e) {
@@ -132,7 +132,7 @@ export default Vue.extend({
     generateClient() {
         console.log('Creating SDK...')
         try {
-            this.client = new effectsdk.EffectClient('jungle')
+            this.client = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
             console.log(this.client)
         } catch (error) {
             console.error(error)
@@ -146,8 +146,8 @@ export default Vue.extend({
             const transport = new AnchorLinkBrowserTransport()
             const alink = new AnchorLink({
                 transport,
-                chainId: '2a02a0053e5a8cf73a56ba0fda11e4d92e0238a4a2aa74fccf46d5a910746840',
-                rpc: 'https://jungle3.greymass.com'
+                chainId: this.client.config.eosChainId,
+                rpc: this.client.config.eosNodeUrl,
             })
             // Perform the login, which returns the users identity
             const identity = await alink.login('hackathon-boilerplate')
