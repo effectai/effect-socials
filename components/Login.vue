@@ -6,7 +6,11 @@
     <p v-if="accountConnected">
         Logged in with: {{connectResponse.accountName}}<br>
         Batch has {{batch.length}} tasks, and will cost {{batchCost}} EFX<br>
-        Your vEFX balance: <span :class="{'has-text-danger': batchCost > vefxAvailable}">{{vefxAvailable}} {{client.config.efxSymbol}}</span>
+        Your vEFX balance: <span :class="{'has-text-danger': efxAvailable === null && batchCost > vefxAvailable}">{{vefxAvailable}} {{client.config.efxSymbol}}</span><br>
+        <span v-if="efxAvailable !== null">
+            Your EFX balance: <span>{{efxAvailable}} {{client.config.efxSymbol}}</span><br>
+            Your total EFX balance: <span :class="{'has-text-danger': batchCost > (vefxAvailable + efxAvailable)}">{{vefxAvailable + efxAvailable}} {{client.config.efxSymbol}}</span>
+        </span>
     </p>
 
     <div id="connect-buttons" v-if="!accountConnected" class="buttons is-flex">
@@ -14,20 +18,25 @@
       <button class="button is-link" @click="loginEOS()" id="btn-login-eos" style="background-color: #3750A2">Connect with Anchor</button>
     </div>
 
-    <div v-if="accountConnected">
+    <div v-if="accountConnected && !createdBatchId">
         <form @submit.prevent="uploadBatch">
             <div class="field is-grouped is-justify-content-center mt-6">
             <div class="control">
                 <button class="button is-outlined is-primary is-wide" @click="previousStep">
                 Back
                 </button>
-                <button type="submit" :disabled="batchCost > vefxAvailable" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4">
+                <button type="submit" :disabled="batchCost > (vefxAvailable + efxAvailable)" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4">
                 Post tasks
                 </button>
             </div>
             </div>
         </form>
     </div>
+    <hr>
+
+    <a v-if="createdBatchId" :href="'/batch/' + createdBatchId" >
+        Go to batch results >
+    </a>
   </div>
 </template>
 <script>
@@ -37,9 +46,12 @@ import * as effectsdk from '@effectai/effect-js'
 import AnchorLink from 'anchor-link'
 import AnchorLinkBrowserTransport from 'anchor-link-browser-transport'
 export default Vue.extend({
-    props:['batch', 'campaign', 'repetitions', 'loading'],
+    props:['batch', 'campaign', 'repetitions'],
     data() {
         return {
+            createdBatchId: null,
+            loading: false,
+            efxAvailable: null,
             account: null,
             client: null,
             campaignid: null,
@@ -67,19 +79,38 @@ export default Vue.extend({
       if (this.account) {
         const vAccountRows = this.account.vAccountRows
         if (vAccountRows) {
-          vAccountRows.forEach((row) => {
-            if (row.balance.contract === this.client.config.efxTokenContract) {
-              balance = parseFloat(row.balance.quantity)
-            }
-          })
+            this.getAccountBalance()
+            vAccountRows.forEach((row) => {
+                if (row.balance.contract === this.client.config.efxTokenContract) {
+                    balance = parseFloat(row.balance.quantity)
+                }
+            })
         }
       }
       return balance
     }
   },
   methods: {
-    uploadBatch() {
-        this.$emit('uploadBatch')
+    async uploadBatch() {
+        try {
+            // do a deposit first if the user doesn't have enough vEFX
+            if (!this.account.address && this.batchCost > this.vefxAvailable) {
+                const amount = (this.batchCost - this.vefxAvailable)
+                console.log('trying to deposit..', amount)
+                await this.client.account.deposit(parseFloat(amount).toFixed(4))
+            }
+            this.loading = true
+            const content = {
+                tasks: this.batch
+            }
+            const result = await this.client.force.createBatch(this.campaign.id, content, Number(this.repetitions), 'efxtaskproxy')
+            this.createdBatchId = await this.client.force.getBatchId(result.id, this.campaign.id)
+            this.$emit('success', 'Tasks successfuly uploaded to Effect Force!')
+        } catch (e) {
+            this.$emit('error', e)
+            console.error(e)
+        }
+        this.loading = false
     },
     previousStep () {
       this.$emit('previousStep')
@@ -184,6 +215,42 @@ export default Vue.extend({
             this.$emit('error', 'Login failed, try again.')
             console.error(error)
       }
+    },
+    async getAccountBalance () {
+        if (this.accountConnected) {
+          if (!this.account.address) {
+            const efxRow = (await this.client.api.rpc.get_currency_balance(this.client.config.efxTokenContract, this.account.accountName, this.client.config.efxSymbol))[0]
+            if (efxRow) {
+               this.efxAvailable = parseFloat(efxRow.replace(` ${this.client.config.efxSymbol}`, ''))
+            } else {
+              this.efxAvailable =  0
+            }
+          } else {
+            // For now this doesn't add anything, as we can't deposit from BSC anyways
+            // const balance = await this.getBscEFXBalance(this.account.address)
+            // this.efxAvailable = parseFloat(balance)
+          }
+        }
+    },
+    async getBscEFXBalance (address) {
+        // balanceOf && decimals
+        const erc20JsonInterface = [
+            {
+            constant: true,
+            inputs: [{ name: '_owner', type: 'address' }],
+            name: 'balanceOf',
+            outputs: [{ name: 'balance', type: 'uint256' }],
+            type: 'function'
+            }
+        ]
+        const efxAddress = this.client.config.bscEfxTokenContract// Token contract address
+        const contract = new this.client.config.web3.eth.Contract(erc20JsonInterface, efxAddress)
+        try {
+            const balance = await contract.methods.balanceOf(address).call()
+            return this.client.config.web3.utils.fromWei(balance.toString())
+        } catch (error) {
+            console.error('Could not retrieve balance', error)
+        }
     },
   }
 })
