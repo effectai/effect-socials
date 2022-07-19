@@ -3,29 +3,24 @@
     <div class="columns">
       <div class="column is-three-fifths is-offset-one-fifth">
         <div id="step-1" v-if="step === 1">
-          <h2 class="title">1. What kind of interaction do you need?</h2>
+          <h2 class="title">1. Select engagement</h2>
           <div class="control">
-            <label class="radio">
-              <input type="radio" value="like" v-model="type" required>
-              Likes
-            </label>
-            <br>
-            <label class="radio">
-              <input type="radio" value="retweet" v-model="type" required>
-              Retweets
-            </label>
-            <br>
-            <label class="radio">
-              <input type="radio" value="follow" v-model="type" required>
-              Follows
-            </label>
-            <br>
-            <label class="radio">
-              <input type="radio" value="reply" v-model="type" required>
-              Replies
-            </label>
+
+            <div class="buttons is-centered">
+              <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='like'; nextStep()">
+                Likes
+              </button>
+              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='retweet'; nextStep()">
+                Retweets
+              </button> -->
+              <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='follow'; nextStep()">
+                Follows
+              </button>
+              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='reply'; nextStep()">
+                Replies
+              </button> -->
+            </div>
           </div>
-          <input type="submit" @click.prevent="nextStep()" class="button is-primary mt-3" value="Next step">
         </div>
 
         <task-form v-if="step === 2" :campaign="campaigns[type]" @error="setErrorMessage" @setBatch="setBatch" @previousStep="previousStep()" @nextStep="nextStep()"/>
@@ -106,9 +101,9 @@ export default {
      async getCampaigns () {
         try {
           this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
-          this.campaigns.retweet = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID))
+          // this.campaigns.retweet = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID))
           this.campaigns.like = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID)
-          this.campaigns.reply = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID)
+          // this.campaigns.reply = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID)
           this.campaigns.follow = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID)
           
         } catch (error) {

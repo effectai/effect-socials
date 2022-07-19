@@ -13,12 +13,17 @@
         </span>
     </p>
 
-    <div id="connect-buttons" v-if="!accountConnected" class="buttons is-flex">
-      <button class="button is-primary" @click="login()" id="btn-login" style="background-color: #f6851b">Connect with Metamask</button>
-      <button class="button is-link" @click="loginEOS()" id="btn-login-eos" style="background-color: #3750A2">Connect with Anchor</button>
+    <div id="connect-buttons" v-if="!accountConnected" class="buttons is-flex is-centered">
+      <button class="button is-large is-primary" @click="login()" id="btn-login" style="background-color: #f6851b">Connect with Metamask</button>
+      <button class="button is-large is-link" @click="loginEOS()" id="btn-login-eos" style="background-color: #3750A2">Connect with Anchor</button>
     </div>
 
     <div v-if="accountConnected && !createdBatchId">
+        <br>
+        <p>
+            Please be patient when posting...it can take up to a minute for transaction to complete.
+            Also note that you will need to sign multiple transactions if you are using Metamask.
+        </p>
         <form @submit.prevent="uploadBatch">
             <div class="field is-grouped is-justify-content-center mt-6">
             <div class="control">

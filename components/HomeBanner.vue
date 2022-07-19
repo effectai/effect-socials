@@ -9,7 +9,8 @@
 <!--            <p class="has-background-white-blur">Our social media algorithms connect your and other relevant content to genuine fans that comment and engage with your brand.</p>-->
             <!--          <p>Helping data science teams succeed with structuring data and the deployment of AI automation</p>-->
             <br>
-            <a to="/#why" @click.prevent="scrollToElement('why')" class="button is-secondary" :class="{'is-accent': $colorMode.value === 'dark'}">Learn more
+            <!-- <a to="/start" @click.prevent="scrollToElement('why')" class="button is-secondary" :class="{'is-accent': $colorMode.value === 'dark'}">Start -->
+            <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
             </a>
           </div>
 

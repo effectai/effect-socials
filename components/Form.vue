@@ -8,21 +8,14 @@
             <table class="table mx-auto">
               <thead>
                 <tr>
-                  <th v-if="tasks.length">
-                    Index
-                  </th>
                   <th v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value">
                     <!-- <input v-model="newTask[placeholder]" type="text" class="input"> -->
-                    {{ placeholder }}
-                  </th>
-                  <th v-if="tasks.length">
-                    Remove
+                    {{ placeHolderTitle(placeholder) }}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(task, index) in paginatedTasks" :key="task.id">
-                  <td>{{ task.id }}</td>
                   <td v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value">
                     {{ task[placeholder] }}
                   </td>
@@ -33,18 +26,17 @@
                   </td>
                 </tr>
                 <tr>
-                  <td v-if="tasks.length" />
                   <td v-for="(placeholder, placeindex) in placeholders" :key="placeholder" class="task-placeholder-value">
                     <input
                       :ref="`placeholder-${placeindex}`"
                       v-model="newTask[placeholder]"
                       type="text"
                       class="input is-info task-placeholder-value"
-                      placeholder="Type here"
+                      placeholder="https://twitter.com/username/status/12345"
                       @keydown.enter.prevent="createTask"
+                      required
                     >
                   </td>
-                  <td v-if="tasks.length" />
                 </tr>
               </tbody>
             </table>
@@ -60,11 +52,14 @@
             <button class="button is-primary is-wide" @click.prevent="createTask">
               Add Task
             </button>
+            <div v-if="placeholderError" class="notification is-danger is-light mt-5">
+              {{ placeholderError }}
+            </div>
           </div>
         </div>
         <div class="box">
-          <div class="columns">
-            <div class="column is-4 has-text-centered py-0">
+          <div class="columns is-centered">
+            <!-- <div class="column is-4 has-text-centered py-0">
               <h2 class="subtitle is-6 has-text-weight-bold mb-3">
                 Upload tasks
               </h2>
@@ -90,23 +85,24 @@
               <p v-if="error" class="has-text-danger">
                 {{ error }}
               </p>
-            </div>
+            </div> -->
 
-            <div class="column is-4 py-0">
-              <div class="field">
-                <label class="label">Repetitions</label>
-                <div class="control">
-                  <input v-model="repetitions" class="input" type="number" min="1" required>
-                </div>
-              </div>
-            </div>
 
-            <div v-if="campaign && campaign.info" class="column is-4 py-0 columns batch-info">
+            <div v-if="campaign && campaign.info" class="column is-6 py-0 batch-info">
               <div class="column">
                 <div class="box">
-                  <h2>Total Cost</h2>
+                  Total Cost
                   <strong>{{ parseFloat(campaign.info.reward * tasks.length * repetitions).toFixed(4) }} EFX</strong>
                 </div>
+              </div>
+              <div v-if="tasks.length > 0" class="box">
+                <span>
+                  Amount: 
+                </span>
+                <span>
+                  <strong>{{ repetitions }}</strong>
+                </span>
+                <input class="slider is-fullwidth is-info" step="1" min="0" max="100" v-model="repetitions" type="range">
               </div>
             </div>
           </div>
@@ -164,6 +160,7 @@ export default Vue.extend({
       perPage: 10,
       type: null,
       placeholders: ['link'],
+      placeholderError: null,
     }
   },
   computed: {
@@ -179,7 +176,7 @@ export default Vue.extend({
   mounted () {
     this.getPlaceholders(this.campaign.info.template)
     this.$nextTick(() => {
-      this.generateCsvData(this.placeholders)
+      // this.generateCsvData(this.placeholders)
     })
     this.newTask = this.getEmptyTask(this.placeholders)
   },
@@ -199,6 +196,18 @@ export default Vue.extend({
     },
     createTask () {
       // An temp id is needed for :key=task.id
+      for (const key in this.newTask) {
+        if (Object.hasOwnProperty.call(this.newTask, key)) {
+          const element = this.newTask[key];
+          if (element === null || element === '') {
+            this.placeholderError = `Please fill in all the placeholders`
+            setTimeout(() => {
+              this.placeholderError = null
+            }, 3000)
+            return
+          }
+        }
+      }
       this.newTask.id = this.tempCounter++
       this.tasks.push(this.newTask)
       this.newTask = this.getEmptyTask(this.placeholders)
@@ -206,58 +215,58 @@ export default Vue.extend({
         this.$refs['placeholder-0'][0].focus()
       })
     },
-    drop (event) {
-      event.preventDefault()
-      this.uploadFile(event.dataTransfer.files ? event.dataTransfer.files : null, true)
-      event.currentTarget.classList.remove('dragover')
-    },
-    uploadFile (event, drop) {
-      this.file = {
-        name: null,
-        content: null
-      }
-      this.error = null
-      const file = drop ? event[0] : event.target.files[0]
-      if (file) {
-        this.file.name = file.name
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.file.content = this.csvToJson(e.target.result)
-          this.file.content.forEach((element) => {
-            this.newTask = element
-            this.createTask()
-            let containsPlaceholder = false
-            this.placeholders.forEach((placeholder) => {
-              if (element[placeholder]) {
-                containsPlaceholder = true
-              }
-            })
-            if (!containsPlaceholder) {
-              this.$emit('error', 'Placeholder not found in CSV')
-            }
-          })
-        }
-        reader.readAsText(file)
-      } else {
-        this.$emit('error', 'Could not find file')
-        this.file = null
-      }
-    },
+    // drop (event) {
+    //   event.preventDefault()
+    //   this.uploadFile(event.dataTransfer.files ? event.dataTransfer.files : null, true)
+    //   event.currentTarget.classList.remove('dragover')
+    // },
+    // uploadFile (event, drop) {
+    //   this.file = {
+    //     name: null,
+    //     content: null
+    //   }
+    //   this.error = null
+    //   const file = drop ? event[0] : event.target.files[0]
+    //   if (file) {
+    //     this.file.name = file.name
+    //     const reader = new FileReader()
+    //     reader.onload = (e) => {
+    //       this.file.content = this.csvToJson(e.target.result)
+    //       this.file.content.forEach((element) => {
+    //         this.newTask = element
+    //         this.createTask()
+    //         let containsPlaceholder = false
+    //         this.placeholders.forEach((placeholder) => {
+    //           if (element[placeholder]) {
+    //             containsPlaceholder = true
+    //           }
+    //         })
+    //         if (!containsPlaceholder) {
+    //           this.$emit('error', 'Placeholder not found in CSV')
+    //         }
+    //       })
+    //     }
+    //     reader.readAsText(file)
+    //   } else {
+    //     this.$emit('error', 'Could not find file')
+    //     this.file = null
+    //   }
+    // },
     /**
      * From: https://stackoverflow.com/questions/59218548/what-is-the-best-way-to-convert-from-csv-to-json-when-commas-and-quotations-may/59219146#59219146
      * Takes a raw CSV string and converts it to a JavaScript object.
      */
-    csvToJson (string, headers, quoteChar = '"', delimiter = ',') {
-      const regex = new RegExp(`\\s*(${quoteChar})?(.*?)\\1\\s*(?:${delimiter}|$)`, 'gs')
-      const match = string => [...string.matchAll(regex)].map(match => match[2])
-        .filter((_, i, a) => i < a.length - 1) // cut off blank match at end
-      const lines = string.split('\n')
-      const heads = headers || match(lines.splice(0, 1)[0])
-      return lines.map(line => match(line).reduce((acc, cur, i) => ({
-        ...acc,
-        [heads[i] || `extra_${i}`]: (cur.length > 0) ? (Number(cur) || cur) : null
-      }), {}))
-    },
+    // csvToJson (string, headers, quoteChar = '"', delimiter = ',') {
+    //   const regex = new RegExp(`\\s*(${quoteChar})?(.*?)\\1\\s*(?:${delimiter}|$)`, 'gs')
+    //   const match = string => [...string.matchAll(regex)].map(match => match[2])
+    //     .filter((_, i, a) => i < a.length - 1) // cut off blank match at end
+    //   const lines = string.split('\n')
+    //   const heads = headers || match(lines.splice(0, 1)[0])
+    //   return lines.map(line => match(line).reduce((acc, cur, i) => ({
+    //     ...acc,
+    //     [heads[i] || `extra_${i}`]: (cur.length > 0) ? (Number(cur) || cur) : null
+    //   }), {}))
+    // },
     getPlaceholders (template) {
       const placeholders = getMatches(
         template,
@@ -266,18 +275,18 @@ export default Vue.extend({
       const unique = [...new Set(placeholders)]
       this.placeholders = unique
     },
-    generateCsvData (placeholders) {
-      const link = this.$refs.csvfiledownload
-      let csvContent = 'data:text/csv;charset=utf-8,'
-      csvContent += [
-        Object.values(placeholders).join(','),
-        placeholders.map(item => item + '-value-task-1'),
-        placeholders.map(item => item + '-value-task-2'),
-        placeholders.map(item => item + '-value-task-3')
-      ].join('\n')
-        .replace(/(^\[)|(\]$)/gm, '')
-      link.href = encodeURI(csvContent)
-    },
+    // generateCsvData (placeholders) {
+    //   const link = this.$refs.csvfiledownload
+    //   let csvContent = 'data:text/csv;charset=utf-8,'
+    //   csvContent += [
+    //     Object.values(placeholders).join(','),
+    //     placeholders.map(item => item + '-value-task-1'),
+    //     placeholders.map(item => item + '-value-task-2'),
+    //     placeholders.map(item => item + '-value-task-3')
+    //   ].join('\n')
+    //     .replace(/(^\[)|(\]$)/gm, '')
+    //   link.href = encodeURI(csvContent)
+    // },
     getEmptyTask (placeholders) {
       const emptyTask = {}
       placeholders.forEach((placeholder) => {
@@ -291,7 +300,38 @@ export default Vue.extend({
     },
     cancel () {
       this.$emit('previousStep')
-    }
+    },
+    extractTwitterId (twitter_url) {
+      //extract twitter id
+      //https://twitter.com/TwitterDev/status/1539322936439451649
+      const sanitized_link = twitter_url.replace('https://', '') //remove https://
+      const twitter_id = sanitized_link.split('/')[3] //split string and get twitter id
+      const sanitized_id = twitter_id.split('?')[0] // split string and remove query string if present
+      return sanitized_link 
+    },
+    sanitizeTwitterUrl (twurl) {
+      // remove https:// and query string
+      return twurl.slice(twurl.indexOf('twitter.com'), twurl.indexOf('?'))
+    },
+    /**
+     * What are the placeholder values that can appear?
+     * placeholders => twitter campaigns
+     * `tweet_id` => like
+     * `follow_handle` => follow
+     * `tweet_instructions`  + `tweet_id` => retweet, reply
+     */
+    placeHolderTitle (placeholder) {
+      switch (placeholder) {
+        case 'tweet_id':
+          return 'Link to Tweet';
+        case 'twitter_handle':
+          return 'Twitter Handle';
+        case 'tweet_instructions':
+          return 'Tweet Instructions';
+        default:
+          return placeholder;
+      }
+    },
   }
 })
 </script>
