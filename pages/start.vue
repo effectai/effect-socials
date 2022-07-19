@@ -10,12 +10,12 @@
               <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='like'; nextStep()">
                 Likes
               </button>
+              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='follow'; nextStep()">
+                Follows
+              </button> -->
               <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='retweet'; nextStep()">
                 Retweets
               </button> -->
-              <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='follow'; nextStep()">
-                Follows
-              </button>
               <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='reply'; nextStep()">
                 Replies
               </button> -->

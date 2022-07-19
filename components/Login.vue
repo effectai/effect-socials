@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2 v-if="!accountConnected" class="title">3. Connect your account</h2>
-    <h2 v-else class="title">4. Submit your tasks!</h2>
+    <h2 v-if="!accountConnected" class="title">3. Connect your wallet</h2>
+    <h2 v-else class="title">4. Submit to Effect Network</h2>
 
     <p v-if="accountConnected">
         Logged in with: {{connectResponse.accountName}}<br>
@@ -20,8 +20,9 @@
 
     <div v-if="accountConnected && !createdBatchId">
         <br>
-        <p>
+        <p class="notification is-warning">
             Please be patient when posting...it can take up to a minute for transaction to complete.
+            <br>
             Also note that you will need to sign multiple transactions if you are using Metamask.
         </p>
         <form @submit.prevent="uploadBatch">
@@ -96,6 +97,13 @@ export default Vue.extend({
     }
   },
   methods: {
+    extractTwitterId (twitter_url) {
+      //https://twitter.com/TwitterDev/status/1539322936439451649
+      const sanitize = twitter_url.replace('https://', '').replace('http://', '').replace('www.', '').replace('twitter.com/', '') //remove all https://, http://, www. and twitter.com/ if present.
+      const twitter_id = sanitize.split('/')[2] //split string and get twitter id, should only contain twitter_handle/status/id?etcetcetc by this point
+      const sanitized_id = twitter_id.split('?')[0] // split string and remove query string if present
+      return { tweet_id: sanitized_id } 
+    }, 
     async uploadBatch() {
         try {
             // do a deposit first if the user doesn't have enough vEFX
@@ -105,9 +113,16 @@ export default Vue.extend({
                 await this.client.account.deposit(parseFloat(amount).toFixed(4))
             }
             this.loading = true
+            const sanitized_batch = this.batch.map((twurl) => this.extractTwitterId(twurl.tweet_id))
+            console.log('sanitized batch', sanitized_batch)
+            
             const content = {
-                tasks: this.batch
+                tasks: sanitized_batch
             }
+
+            // const content = {
+            //     tasks: this.batch
+            // }
             const result = await this.client.force.createBatch(this.campaign.id, content, Number(this.repetitions), process.env.NUXT_ENV_PROXY_CONTRACT)
             this.createdBatchId = await this.client.force.getBatchId(result.id, this.campaign.id)
             this.$emit('success', 'Tasks successfuly uploaded to Effect Force!')
@@ -121,14 +136,24 @@ export default Vue.extend({
       this.$emit('previousStep')
     },
     async login() {
-        this.generateClient()
-        await this.connectMetamask()
-        await this.connectEffectAccount()
+        try {
+            this.generateClient()
+            await this.connectMetamask()
+            await this.connectEffectAccount()
+        } catch (error) {
+            console.error(error)
+            this.$emit('error', error)
+        }
     },
     async loginEOS() {
-        this.generateClient()
-        await this.connectAnchor()
-        await this.connectEffectAccount()
+        try {
+            this.generateClient()
+            await this.connectAnchor()
+            await this.connectEffectAccount()
+        } catch (error) {
+            console.error(error)
+            this.$emit('error', error)
+        }
     },
     /**
     * SDK Client
@@ -196,7 +221,7 @@ export default Vue.extend({
                 this.connectAccount.providerName = 'metamask'
             } catch (error) {
                 this.$emit('error', error)
-                console.error(error)
+                console.error('Is this it????', error)
             }
         } else {
             this.$emit('error', 'Metamask not installed')

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="step-2">
-      <h2 class="title">2. Create your batch of tasks</h2>
+      <h2 class="title">2. Add your Tweets</h2>
       <div class="field">
         <div class="box">
           <div style="background: #fff; border-radius: 8px" class="p-2">
@@ -17,7 +17,7 @@
               <tbody>
                 <tr v-for="(task, index) in paginatedTasks" :key="task.id">
                   <td v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value">
-                    {{ task[placeholder] }}
+                    <a :href="task[placeholder]" target="_blank" rel="noopener noreferrer">{{ task[placeholder] }}</a>
                   </td>
                   <td>
                     <button class="button is-danger is-outlined is-small is-rounded" @click.prevent="tasks.splice(index, 1)">
@@ -30,9 +30,10 @@
                     <input
                       :ref="`placeholder-${placeindex}`"
                       v-model="newTask[placeholder]"
-                      type="text"
+                      type="url"
+                      pattern="https?://.+"
                       class="input is-info task-placeholder-value"
-                      placeholder="https://twitter.com/username/status/12345"
+                      :placeholder="campaign.id === 28 ? 'https://twitter.com/username/status/12345' : 'username'"
                       @keydown.enter.prevent="createTask"
                       required
                     >
@@ -300,18 +301,6 @@ export default Vue.extend({
     },
     cancel () {
       this.$emit('previousStep')
-    },
-    extractTwitterId (twitter_url) {
-      //extract twitter id
-      //https://twitter.com/TwitterDev/status/1539322936439451649
-      const sanitized_link = twitter_url.replace('https://', '') //remove https://
-      const twitter_id = sanitized_link.split('/')[3] //split string and get twitter id
-      const sanitized_id = twitter_id.split('?')[0] // split string and remove query string if present
-      return sanitized_link 
-    },
-    sanitizeTwitterUrl (twurl) {
-      // remove https:// and query string
-      return twurl.slice(twurl.indexOf('twitter.com'), twurl.indexOf('?'))
     },
     /**
      * What are the placeholder values that can appear?
