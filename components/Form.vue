@@ -60,7 +60,7 @@
         </div>
         <div class="box">
           <div class="columns is-centered">
-            <!-- <div class="column is-4 has-text-centered py-0">
+            <div class="column is-4 has-text-centered py-0">
               <h2 class="subtitle is-6 has-text-weight-bold mb-3">
                 Upload tasks
               </h2>
@@ -86,7 +86,7 @@
               <p v-if="error" class="has-text-danger">
                 {{ error }}
               </p>
-            </div> -->
+            </div>
 
 
             <div v-if="campaign && campaign.info" class="column is-6 py-0 batch-info">
@@ -126,29 +126,8 @@
   </div>
 </template>
 <script>
-import { SocialLinks } from "social-links"
 import Vue from 'vue'
 import Pagination from './Pagination.vue'
-
-const socialLinks = new SocialLinks({
-  usePredefinedProfiles: true,
-  trimInput: true,
-  allowQueryParams: true
-})
-
-function getTwitterUsername(url) {
-  socialLinks.getProfileId(url)
-}
-
-function getTweetId (url) {
-  if (url != "" && url.includes("/status/")) {
-    var re = new RegExp(/[/status/][0-9]+/g);
-    id = url.match(re);
-    return(id[0].replace("/", ""));
-  } else {
-      return 'Invalid URL'
-  }
-}
 
 function getMatches (string, regex, index) {
   index || (index = 1) // default to the first capturing group
@@ -245,58 +224,58 @@ export default Vue.extend({
         this.$refs['placeholder-0'][0].focus()
       })
     },
-    // drop (event) {
-    //   event.preventDefault()
-    //   this.uploadFile(event.dataTransfer.files ? event.dataTransfer.files : null, true)
-    //   event.currentTarget.classList.remove('dragover')
-    // },
-    // uploadFile (event, drop) {
-    //   this.file = {
-    //     name: null,
-    //     content: null
-    //   }
-    //   this.error = null
-    //   const file = drop ? event[0] : event.target.files[0]
-    //   if (file) {
-    //     this.file.name = file.name
-    //     const reader = new FileReader()
-    //     reader.onload = (e) => {
-    //       this.file.content = this.csvToJson(e.target.result)
-    //       this.file.content.forEach((element) => {
-    //         this.newTask = element
-    //         this.createTask()
-    //         let containsPlaceholder = false
-    //         this.placeholders.forEach((placeholder) => {
-    //           if (element[placeholder]) {
-    //             containsPlaceholder = true
-    //           }
-    //         })
-    //         if (!containsPlaceholder) {
-    //           this.$emit('error', 'Placeholder not found in CSV')
-    //         }
-    //       })
-    //     }
-    //     reader.readAsText(file)
-    //   } else {
-    //     this.$emit('error', 'Could not find file')
-    //     this.file = null
-    //   }
-    // },
+    drop (event) {
+      event.preventDefault()
+      this.uploadFile(event.dataTransfer.files ? event.dataTransfer.files : null, true)
+      event.currentTarget.classList.remove('dragover')
+    },
+    uploadFile (event, drop) {
+      this.file = {
+        name: null,
+        content: null
+      }
+      this.error = null
+      const file = drop ? event[0] : event.target.files[0]
+      if (file) {
+        this.file.name = file.name
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.file.content = this.csvToJson(e.target.result)
+          this.file.content.forEach((element) => {
+            this.newTask = element
+            this.createTask()
+            let containsPlaceholder = false
+            this.placeholders.forEach((placeholder) => {
+              if (element[placeholder]) {
+                containsPlaceholder = true
+              }
+            })
+            if (!containsPlaceholder) {
+              this.$emit('error', 'Placeholder not found in CSV')
+            }
+          })
+        }
+        reader.readAsText(file)
+      } else {
+        this.$emit('error', 'Could not find file')
+        this.file = null
+      }
+    },
     /**
      * From: https://stackoverflow.com/questions/59218548/what-is-the-best-way-to-convert-from-csv-to-json-when-commas-and-quotations-may/59219146#59219146
      * Takes a raw CSV string and converts it to a JavaScript object.
      */
-    // csvToJson (string, headers, quoteChar = '"', delimiter = ',') {
-    //   const regex = new RegExp(`\\s*(${quoteChar})?(.*?)\\1\\s*(?:${delimiter}|$)`, 'gs')
-    //   const match = string => [...string.matchAll(regex)].map(match => match[2])
-    //     .filter((_, i, a) => i < a.length - 1) // cut off blank match at end
-    //   const lines = string.split('\n')
-    //   const heads = headers || match(lines.splice(0, 1)[0])
-    //   return lines.map(line => match(line).reduce((acc, cur, i) => ({
-    //     ...acc,
-    //     [heads[i] || `extra_${i}`]: (cur.length > 0) ? (Number(cur) || cur) : null
-    //   }), {}))
-    // },
+    csvToJson (string, headers, quoteChar = '"', delimiter = ',') {
+      const regex = new RegExp(`\\s*(${quoteChar})?(.*?)\\1\\s*(?:${delimiter}|$)`, 'gs')
+      const match = string => [...string.matchAll(regex)].map(match => match[2])
+        .filter((_, i, a) => i < a.length - 1) // cut off blank match at end
+      const lines = string.split('\n')
+      const heads = headers || match(lines.splice(0, 1)[0])
+      return lines.map(line => match(line).reduce((acc, cur, i) => ({
+        ...acc,
+        [heads[i] || `extra_${i}`]: (cur.length > 0) ? (Number(cur) || cur) : null
+      }), {}))
+    },
     getPlaceholders (template) {
       const placeholders = getMatches(
         template,
@@ -305,18 +284,18 @@ export default Vue.extend({
       const unique = [...new Set(placeholders)]
       this.placeholders = unique
     },
-    // generateCsvData (placeholders) {
-    //   const link = this.$refs.csvfiledownload
-    //   let csvContent = 'data:text/csv;charset=utf-8,'
-    //   csvContent += [
-    //     Object.values(placeholders).join(','),
-    //     placeholders.map(item => item + '-value-task-1'),
-    //     placeholders.map(item => item + '-value-task-2'),
-    //     placeholders.map(item => item + '-value-task-3')
-    //   ].join('\n')
-    //     .replace(/(^\[)|(\]$)/gm, '')
-    //   link.href = encodeURI(csvContent)
-    // },
+    generateCsvData (placeholders) {
+      const link = this.$refs.csvfiledownload
+      let csvContent = 'data:text/csv;charset=utf-8,'
+      csvContent += [
+        Object.values(placeholders).join(','),
+        placeholders.map(item => item + '-value-task-1'),
+        placeholders.map(item => item + '-value-task-2'),
+        placeholders.map(item => item + '-value-task-3')
+      ].join('\n')
+        .replace(/(^\[)|(\]$)/gm, '')
+      link.href = encodeURI(csvContent)
+    },
     getEmptyTask (placeholders) {
       const emptyTask = {}
       placeholders.forEach((placeholder) => {
