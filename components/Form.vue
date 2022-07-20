@@ -126,8 +126,29 @@
   </div>
 </template>
 <script>
+import { SocialLinks } from "social-links"
 import Vue from 'vue'
 import Pagination from './Pagination.vue'
+
+const socialLinks = new SocialLinks({
+  usePredefinedProfiles: true,
+  trimInput: true,
+  allowQueryParams: true
+})
+
+function getTwitterUsername(url) {
+  socialLinks.getProfileId(url)
+}
+
+function getTweetId (url) {
+  if (url != "" && url.includes("/status/")) {
+    var re = new RegExp(/[/status/][0-9]+/g);
+    id = url.match(re);
+    return(id[0].replace("/", ""));
+  } else {
+      return 'Invalid URL'
+  }
+}
 
 function getMatches (string, regex, index) {
   index || (index = 1) // default to the first capturing group
@@ -164,6 +185,10 @@ export default Vue.extend({
       placeholderError: null,
       likeCampaignId: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID),
       followCampaignId: Number(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID),
+      likeCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Like', },
+      followCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Follow', parameter: 'username' },
+      retweetCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Follow', parameter: 'username' },
+      replyCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Follow', parameter: 'username' }, 
     }
   },
   computed: {
