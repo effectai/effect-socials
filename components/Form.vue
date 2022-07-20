@@ -33,7 +33,7 @@
                       type="url"
                       pattern="https?://.+"
                       class="input is-info task-placeholder-value"
-                      :placeholder="campaign.id === 28 ? 'https://twitter.com/username/status/12345' : 'username'"
+                      :placeholder="campaign.id === likeCampaignId ? 'https://twitter.com/username/status/12345' : 'username'"
                       @keydown.enter.prevent="createTask"
                       required
                     >
@@ -162,6 +162,8 @@ export default Vue.extend({
       type: null,
       placeholders: ['link'],
       placeholderError: null,
+      likeCampaignId: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID),
+      followCampaignId: Number(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID),
     }
   },
   computed: {
@@ -180,6 +182,8 @@ export default Vue.extend({
       // this.generateCsvData(this.placeholders)
     })
     this.newTask = this.getEmptyTask(this.placeholders)
+  },
+  created () {
   },
   methods: {
     setPage (newPage) {
