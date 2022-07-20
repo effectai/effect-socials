@@ -98,12 +98,14 @@ export default Vue.extend({
   },
   methods: {
     extractTwitterId (twitter_url) {
-      //https://twitter.com/TwitterDev/status/1539322936439451649
-      const sanitize = twitter_url.replace('https://', '').replace('http://', '').replace('www.', '').replace('twitter.com/', '') //remove all https://, http://, www. and twitter.com/ if present.
-      const twitter_id = sanitize.split('/')[2] //split string and get twitter id, should only contain twitter_handle/status/id?etcetcetc by this point
-      const sanitized_id = twitter_id.split('?')[0] // split string and remove query string if present
-      return { tweet_id: sanitized_id } 
-    }, 
+        if (twitter_url != "" && twitter_url.includes("/status/")) {
+            var re = new RegExp(/[/status/][0-9]+/g)
+            const id = twitter_url.match(re)
+            return { tweet_id: id[0].replace("/", "") }
+        } else {
+            return 'Invalid URL'
+        }
+    },
     async uploadBatch() {
         try {
             // do a deposit first if the user doesn't have enough vEFX
