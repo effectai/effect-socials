@@ -3,22 +3,22 @@
     <div class="columns">
       <div class="column is-three-fifths is-offset-one-fifth">
         <div id="step-1" v-if="step === 1">
-          <h2 class="title">1. Select engagement</h2>
+          <h2 class="title">1. Select <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a> engagement</h2>
           <div class="control">
 
             <div class="buttons is-centered">
               <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='like'; nextStep()">
                 Likes
               </button>
-              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='follow'; nextStep()">
+              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='follow'; nextStep()" disabled>
                 Follows
-              </button> -->
-              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='retweet'; nextStep()">
+              </button>
+              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='retweet'; nextStep()" disabled>
                 Retweets
-              </button> -->
-              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='reply'; nextStep()">
+              </button>
+              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='reply'; nextStep()" disabled>
                 Replies
-              </button> -->
+              </button>
             </div>
           </div>
         </div>
