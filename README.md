@@ -3,7 +3,7 @@
 dApp to post and share social media posts. 
 Buy likes, retweets, replies and follows on Twitter with Effect Network's decentralized workforce.
 
-[https://social.effect.network](https://social.effect.network)
+[https://socials.effect.network](https://socials.effect.network)
 
 ## Build Setup
 
