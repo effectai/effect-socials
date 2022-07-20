@@ -36,25 +36,6 @@
               </div>
             </div>
           </div>
-          <div class="column">
-            <div class="media">
-              <div class="media-left">
-                <div class="icon-circle has-background-accent is-rounded">
-                  <img :src="require('@/assets/images/icons/ai.png')" />
-
-                </div>
-              </div>
-              <div class="media-content">
-                <h3 class="subtitle has-text-weight-bold has-text-black">THE POWER OF AI</h3>
-                <div  class="has-text-justified has-text-dark">
-                  Our social media algorithms make sure to direct engagement where it will benefit you the most. Our AI system is proven to drive more organic traffic to your brand.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mt-6 has-text-centered pb-6">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLScBLihxn5gk94MoT-scoy1HNDT6YQXkH_hgeRPydgjFbCexlw/viewform" target="_blank" class="button is-medium is-accent is-wide  has-text-weight-medium">Request Demo</a>
         </div>
       </div>
     </div>

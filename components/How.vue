@@ -13,8 +13,8 @@
             <div class="media-content">
               <h3 class="subtitle has-text-weight-bold">BUILDING THE ROCKET</h3>
               <div class="has-text-justified">
-                Share your vision with us. Tell us where you are now and where you want to be in the future.
-                We want to know everything about your brand in order to find the best fans to help you grow to new heights.
+                Pick and choose the tweets and twitter handles you want to increase engagement for.
+                We will help you build a rocket fuelled by real people. 
               </div>
             </div>
           </div>
@@ -29,7 +29,7 @@
             <div class="media-content">
               <h3 class="subtitle has-text-weight-bold">MIXING THE ROCKET FUEL</h3>
               <div class="has-text-justified">
-                Effect&#8226;ive will enhance and grow your social media presence across all your social media platforms. We are experts at connecting your social media accounts with passionate people who deliver top quality social content.
+                The tweets will be posted on the <a href="https://app.effect.network" target="_blank" rel="noopener noreferrer">Effect Force</a>, where real across the globe will be able to see and interact with your tweets.
               </div>
             </div>
           </div>
@@ -44,15 +44,12 @@
             <div class="media-content">
               <h3 class="subtitle has-text-weight-bold">BLAST OFF!</h3>
               <div>
-                Our commitment is to help you create exponential growth across your social media engagement.
-                Resulting in exponential growth of your sales, SEO, brand trust, awareness and overall success!
+                Our commitment is to help you create organic growth on Twitter.
+                Resulting in slow and steady increase of your social media presence, brand trust, awareness and engagement.
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="mt-6 has-text-centered">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLScBLihxn5gk94MoT-scoy1HNDT6YQXkH_hgeRPydgjFbCexlw/viewform" target="_blank" class="button is-medium is-accent is-wide has-text-weight-medium">Request Demo</a>
       </div>
     </div>
   </div>

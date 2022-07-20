@@ -2,7 +2,7 @@
   <footer class="footer is-transparent mt-6">
     <div class="container">
       <div class="has-text-centered">
-        <small class="is-size-7">&copy; {{ new Date().getFullYear() }} EFFECT <b>SOCIALS</b> by <a href="https://effect.ai" target="_blank">EFFECT.AI</a></small>
+        <small class="is-size-7">&copy; {{ new Date().getFullYear() }} EFFECT <b>SOCIALS</b> by <a href="https://effect.network" target="_blank">EFFECT NETWORK</a></small>
       </div>
     </div>
   </footer>

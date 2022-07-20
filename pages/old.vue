@@ -6,7 +6,7 @@
       <div class="container">
         <div class="is-size-6 has-text-weight-light is-flex is-align-items-center">
           <span class="">AN </span>
-          <span class="mx-2 has-text-weight-normal is-size-4"> EFFECT.AI </span>
+          <span class="mx-2 has-text-weight-normal is-size-4"> EFFECT.NETWORK </span>
           <span>COMPANY</span>
         </div>
         <img src="~assets/images/effect-socials_h100.png" class="mt-6" />
