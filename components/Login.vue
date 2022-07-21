@@ -3,17 +3,6 @@
     <h2 v-if="!accountConnected" class="title">3. Connect your wallet</h2>
     <h2 v-else class="title">4. Submit to Effect Network</h2>
 
-    <p v-if="accountConnected" class="box">
-        Logged in with: <br><strong>{{connectResponse.accountName}}</strong>
-        <br><br>
-        Batch has {{batch.length}} tasks, and will cost {{batchCost}} EFX<br>
-        Your vEFX balance: <span :class="{'has-text-danger': efxAvailable === null && batchCost > vefxAvailable}">{{vefxAvailable}} {{client.config.efxSymbol}}</span><br>
-        <span v-if="efxAvailable !== null">
-            Your EFX balance: <span>{{efxAvailable}} {{client.config.efxSymbol}}</span><br>
-            Your total EFX balance: <span :class="{'has-text-danger': batchCost > (vefxAvailable + efxAvailable)}">{{vefxAvailable + efxAvailable}} {{client.config.efxSymbol}}</span>
-        </span>
-    </p>
-
     <div v-if="accountConnected" class="box media">
         <figure class="media-left">
             <p class="image is-128x128">
@@ -29,30 +18,76 @@
                     <strong>{{connectResponse.accountName}}</strong>
                 </p>
                 <hr>
+                <p class="subtitle">Balance</p>
                 <p>
-                    vEFX balance: <span :class="{'has-text-danger': efxAvailable === null && batchCost > vefxAvailable}">{{vefxAvailable}} {{client.config.efxSymbol}}</span><br>
+                    vEFX: <span :class="{'has-text-danger': efxAvailable === null && batchCost > vefxAvailable}">{{vefxAvailable}} <i>{{client.config.efxSymbol}}</i></span><br>
                     <span v-if="efxAvailable !== null">
-                        EFX balance: <span>&nbsp;{{efxAvailable}} {{client.config.efxSymbol}}</span><br>
-                        total EFX balance: <span :class="{'has-text-danger': batchCost > (vefxAvailable + efxAvailable)}">{{vefxAvailable + efxAvailable}} {{client.config.efxSymbol}}</span>
+                        EFX: <span>&nbsp;&nbsp;{{efxAvailable}} <i>{{client.config.efxSymbol}}</i></span><br>
+                        Total: <span :class="{'has-text-danger': batchCost > (vefxAvailable + efxAvailable)}">{{vefxAvailable + efxAvailable}} <i>{{client.config.efxSymbol}}</i></span>
                     </span>
                 </p>
-                <hr>
                 <p>
-                    Batch has {{batch.length}} tasks, and will cost {{batchCost}} EFX<br>
-                    Your total EFX balance: <span :class="{'has-text-danger': batchCost > (vefxAvailable + efxAvailable)}">{{vefxAvailable + efxAvailable}} {{client.config.efxSymbol}}</span>
+   
                 </p>
+                <hr>
+                <p class="subtitle">Order</p>
+
+                <table class="table is-narrow is-centered">
+                    <thead></thead>
+                    <tbody>
+                        <tr>
+                            <td>Tasks</td>
+                            <td>{{batch.length}}&nbsp;×</td>
+                        </tr>
+                        <tr>
+                            <td>Amount</td>
+                            <td>{{repetitions}}&nbsp;×</td>
+                        </tr>
+                        <tr>
+                            <td>Cost per Task</td>
+                            <td><strong>{{campaign.info.reward}}</strong> <i>{{client.config.efxSymbol}}</i></td>
+                        </tr>
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td>Total Cost</td>
+                            <td><strong>{{batchCost}}</strong> <i>{{client.config.efxSymbol}}</i></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <p v-if="batchCost > (vefxAvailable + (efxAvailable ? efxAvailable : 0))" class="notification is-warning">
+                    You do not have enough EFX to complete this order.
+                    <br><br>
+                    <a class="button is-fullwidth is-primary is-light" href="https://effect.network/token-page" target="_blank" rel="noopener noreferrer">
+                        <span>Buy <i>EFX</i></span>
+                        &nbsp;&nbsp;
+                        <span><font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" /></span>
+                    </a>
+                </p>
+
             </div>
         </div>
     </div>
 
-    <div id="connect-buttons" v-if="!accountConnected" class="buttons is-flex is-centered">
-      <button class="button is-large is-primary" @click="login()" id="btn-login" style="background-color: #f6851b">Connect with Metamask</button>
-      <button class="button is-large is-link" @click="loginEOS()" id="btn-login-eos" style="background-color: #3750A2">Connect with Anchor</button>
+    <div id="connect-buttons" v-if="!accountConnected" class="buttons px-6">
+      <button class="button is-large is-fullwidth is-light  px-6 mx-6" @click="login()" id="btn-login">
+        <span class="icon">
+            <img src="@/assets/images/providers/BSC-logo.svg" alt="" srcset="">
+        </span>
+        <span>Connect with BSC</span>
+      </button>
+      <button class="button is-large is-fullwidth is-light  px-6 mx-6" @click="loginEOS()" id="btn-login-eos">
+        <span class="icon">
+            <img src="@/assets/images/providers/EOS-logo.svg" alt="" srcset="">
+        </span>
+        <span>Connect with EOS</span>   
+      </button>
     </div>
 
     <div v-if="accountConnected && !createdBatchId">
-        <br>
-        <p class="notification is-warning">
+        <p v-if="paymentLoading" class="notification is-warning">
             Please be patient when posting...it can take up to a minute for transaction to complete.
             <br>
             Also note that you will need to sign multiple transactions if you are using Metamask.
@@ -61,20 +96,32 @@
             <div class="field is-grouped is-justify-content-center mt-6">
             <div class="control">
                 <button class="button is-outlined is-primary is-wide" @click="previousStep">
-                Back
+                    Back
                 </button>
-                <button type="submit" :disabled="batchCost > (vefxAvailable + efxAvailable)" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4">
-                Post tasks
+                <button type="submit" :disabled="batchCost > (vefxAvailable + (efxAvailable ? efxAvailable : 0))" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4">
+                    Post tasks
                 </button>
             </div>
             </div>
         </form>
     </div>
-    <hr>
 
-    <a v-if="createdBatchId" :href="'/batch/' + createdBatchId" >
-        Go to batch results >
-    </a>
+    <div v-if="createdBatchId" class="notification is-success">
+        <p class="mx-6 px-6">
+            Success! Your batch has been successfuly posted to Effect Force. <br>
+            Take a look at <a :href="`https://testnet.effect.network/campaigns/${campaign.id}/${createdBatchId}`" target="_blank" rel="noopener noreferrer">https://app.effect.network</a>
+            <hr>
+            <a :href="'/batch/' + createdBatchId" class="mx-6 px-6" >
+                Go to batch results >
+            </a>
+            <!-- <hr>
+            <button class="button">
+                New Order
+            </button> -->
+        </p>
+    </div>
+
+
   </div>
 </template>
 <script>
@@ -101,10 +148,14 @@ export default Vue.extend({
             },
             connectResponse: null,
             message: null,
-            accountConnected: false
+            accountConnected: false,
+            paymentLoading: false,
         }
     },
   components: {},
+  created () {
+
+  },
   computed: {
     ethereumConnected() {
         return true
@@ -142,6 +193,7 @@ export default Vue.extend({
         }
     },
     async uploadBatch() {
+        this.paymentLoading = true
         try {
             // do a deposit first if the user doesn't have enough vEFX
             if (!this.account.address && this.batchCost > this.vefxAvailable) {
@@ -162,12 +214,13 @@ export default Vue.extend({
             // }
             const result = await this.client.force.createBatch(this.campaign.id, content, Number(this.repetitions), process.env.NUXT_ENV_PROXY_CONTRACT)
             this.createdBatchId = await this.client.force.getBatchId(result.id, this.campaign.id)
-            this.$emit('success', 'Tasks successfuly uploaded to Effect Force!')
+            // this.$emit('success', 'Tasks successfuly uploaded to Effect Force!')
         } catch (e) {
             this.$emit('error', e)
             console.error(e)
         }
         this.loading = false
+        this.paymentLoading = false
     },
     previousStep () {
       this.$emit('previousStep')
@@ -284,7 +337,7 @@ export default Vue.extend({
           this.$emit('account', this.connectResponse, this.client)
       } catch (error) {
         this.accountConnected = false
-        this.$emit('error', 'Login failed, try again.' + error.message)
+        this.$emit('error', 'Login failed, try again.')
         console.error(error)
       }
     },
