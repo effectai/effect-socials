@@ -58,8 +58,8 @@
             </div>
           </div>
         </div>
-        <div class="box">
-          <div class="columns is-centered">
+        <div v-if="tasks.length > 0" class="box is-centered">
+          <!-- <div class="columns is-centered"> -->
             <!-- <div class="column is-4 has-text-centered py-0">
               <h2 class="subtitle is-6 has-text-weight-bold mb-3">
                 Upload tasks
@@ -89,24 +89,20 @@
             </div> -->
 
 
-            <div v-if="campaign && campaign.info" class="column is-6 py-0 batch-info">
-              <div class="column">
-                <div class="box">
-                  Total Cost
-                  <strong>{{ parseFloat(campaign.info.reward * tasks.length * repetitions).toFixed(4) }} EFX</strong>
-                </div>
-              </div>
-              <div v-if="tasks.length > 0" class="box">
+            <div v-if="campaign && campaign.info" class=" is-6 py-0 px-2 batch-info">
+              <div class="box">
                 <span>
                   Amount: 
                 </span>
                 <span>
                   <strong>{{ repetitions }}</strong>
                 </span>
-                <input class="slider is-fullwidth is-info" step="1" min="0" max="100" v-model="repetitions" type="range">
+                <input class="slider is-fullwidth is-info" step="1" min="1" max="20" v-model="repetitions" type="range">
+                Total Cost
+                <strong>{{ parseFloat(campaign.info.reward * tasks.length * repetitions).toFixed(4) }} EFX</strong>
               </div>
             </div>
-          </div>
+          <!-- </div> -->
         </div>
       </div>
 
