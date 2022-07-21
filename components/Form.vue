@@ -16,7 +16,7 @@
               </thead>
               <tbody>
                 <tr v-for="(task, index) in paginatedTasks" :key="task.id">
-                  <td v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value">
+                  <td v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value has-text-left">
                     <a :href="task[placeholder]" target="_blank" rel="noopener noreferrer">{{ task[placeholder] }}</a>
                   </td>
                   <td>
@@ -33,7 +33,7 @@
                       type="url"
                       pattern="https?://.+"
                       class="input is-info task-placeholder-value"
-                      :placeholder="campaign.id === likeCampaignId ? 'https://twitter.com/username/status/12345' : 'username'"
+                      :placeholder="campaign.id === likeCampaign.id ? 'https://twitter.com/username/status/12345' : 'username'"
                       @keydown.enter.prevent="createTask"
                       required
                     >
@@ -60,7 +60,7 @@
         </div>
         <div class="box">
           <div class="columns is-centered">
-            <div class="column is-4 has-text-centered py-0">
+            <!-- <div class="column is-4 has-text-centered py-0">
               <h2 class="subtitle is-6 has-text-weight-bold mb-3">
                 Upload tasks
               </h2>
@@ -86,7 +86,7 @@
               <p v-if="error" class="has-text-danger">
                 {{ error }}
               </p>
-            </div>
+            </div> -->
 
 
             <div v-if="campaign && campaign.info" class="column is-6 py-0 batch-info">
@@ -162,8 +162,6 @@ export default Vue.extend({
       type: null,
       placeholders: ['link'],
       placeholderError: null,
-      likeCampaignId: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID),
-      followCampaignId: Number(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID),
       likeCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Like', },
       followCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Follow', parameter: 'username' },
       retweetCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Follow', parameter: 'username' },
@@ -203,26 +201,54 @@ export default Vue.extend({
     onChange () {
       this.filelist = [...this.$refs.file.files]
     },
+    // TODO refactor this into manageable chunks
     createTask () {
-      // An temp id is needed for :key=task.id
+      
+      // Check that all of the placeholders have been filled in. 
       for (const key in this.newTask) {
         if (Object.hasOwnProperty.call(this.newTask, key)) {
           const element = this.newTask[key];
           if (element === null || element === '') {
             this.placeholderError = `Please fill in all the placeholders`
-            setTimeout(() => {
-              this.placeholderError = null
-            }, 3000)
+            setTimeout(() => this.placeholderError = null, 3000)
             return
           }
         }
       }
+
+      // Check that the link is valid.
+      if (this.campaign.id === this.likeCampaign.id) {
+        // users are instructed to pass in a url. but the template expects a tweet_id
+        let url
+        try {
+          url = (new URL(this.newTask.tweet_id))
+        } catch (error) {
+          this.placeholderError = `Please enter a valid tweet_id`
+          setTimeout(() => this.placeholderError = null, 3000)
+          return
+        }
+        if (url.hostname !== 'twitter.com' && url.pathname.includes('/status/')) {
+          this.placeholderError = `Please enter a valid tweet url`
+          setTimeout(() => this.placeholderError = null, 3000)
+          return
+        } else {
+          const parseUrl = this.parseTwitterUrl(this.newTask.tweet_id) 
+          this.tasks.push({ id: this.newTask.id, tweet_id: `${url.hostname}${url.pathname}` })
+        }
+      }
+
       this.newTask.id = this.tempCounter++
-      this.tasks.push(this.newTask)
       this.newTask = this.getEmptyTask(this.placeholders)
       this.$nextTick(() => {
         this.$refs['placeholder-0'][0].focus()
       })
+    },
+    parseTwitterUrl (twitter_url) {
+      const url = new URL(twitter_url)
+      if (url.hostname !== 'twitter.com' && !url.pathname.includes('/status/')) {
+        return  null
+      }
+      return `${url.hostname}${url.pathname}`
     },
     drop (event) {
       event.preventDefault()
