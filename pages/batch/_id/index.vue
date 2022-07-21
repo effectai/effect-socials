@@ -44,20 +44,24 @@ export default {
     return {
       effectsdk: null,
       id: parseInt(this.$route.params.id),
+      tasks: null,
       results: null,
       timer: null,
     }
   },
   created () {
+    this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
     this.getResults();
     this.timer = setInterval(() => {
       this.getResults();
-    }, 500000)
+    }, 10e3)
   },
   methods: {
+    async getTask () {
+      console.log('getTask', this.id)
+    },
     async getResults() {
       console.log('getting results...')
-      this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
       this.results = await this.effectsdk.force.getSubmissionsOfBatch(this.id)
     },
     async downloadTaskResults () {
