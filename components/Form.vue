@@ -206,7 +206,7 @@ export default Vue.extend({
           const element = this.newTask[key];
           if (element === null || element === '') {
             this.placeholderError = `Please fill in all the placeholders`
-            setTimeout(() => this.placeholderError = null, 3000)
+            setTimeout(() => this.placeholderError = null, 5e3)
             return
           }
         }
@@ -217,18 +217,24 @@ export default Vue.extend({
         // users are instructed to pass in a url. but the template expects a tweet_id
         let url
         try {
-          url = (new URL(this.newTask.tweet_id))
+          if (this.newTask.tweet_id.includes('https://') || this.newTask.tweet_id.includes('http://')) {
+            console.debug('protocol already included  ')
+            url = new URL(this.newTask.tweet_id)
+          } else {
+            console.debug('add protocol to tweet_id')
+            url = new URL(`https://${this.newTask.tweet_id}`)
+          }
         } catch (error) {
-          this.placeholderError = `Please enter a valid tweet_id`
-          setTimeout(() => this.placeholderError = null, 3000)
+          console.error(error)
+          this.placeholderError = `Please enter a valid twitter.com url`
+          setTimeout(() => this.placeholderError = null, 5e3)
           return
         }
-        if (url.hostname !== 'twitter.com' && url.pathname.includes('/status/')) {
-          this.placeholderError = `Please enter a valid tweet url`
-          setTimeout(() => this.placeholderError = null, 3000)
+        if (url.hostname !== 'twitter.com' || !url.pathname.includes('/status/') || url.pathname.split('/')[3].length === 0) {
+          this.placeholderError = `Please enter a valid tweet url: https://twitter.com/username/status/123456789`
+          setTimeout(() => this.placeholderError = null, 5e3)
           return
         } else {
-          const parseUrl = this.parseTwitterUrl(this.newTask.tweet_id) 
           this.tasks.push({ id: this.newTask.id, tweet_id: `${url.hostname}${url.pathname}` })
         }
       }
@@ -238,13 +244,6 @@ export default Vue.extend({
       this.$nextTick(() => {
         this.$refs['placeholder-0'][0].focus()
       })
-    },
-    parseTwitterUrl (twitter_url) {
-      const url = new URL(twitter_url)
-      if (url.hostname !== 'twitter.com' && !url.pathname.includes('/status/')) {
-        return  null
-      }
-      return `${url.hostname}${url.pathname}`
     },
     drop (event) {
       event.preventDefault()
