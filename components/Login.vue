@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="">
     <h2 v-if="!accountConnected" class="title">3. Connect your wallet</h2>
     <h2 v-else class="title">4. Submit to Effect Network</h2>
 
-    <p v-if="accountConnected">
-        Logged in with: {{connectResponse.accountName}}<br>
+    <p v-if="accountConnected" class="box">
+        Logged in with: <br><strong>{{connectResponse.accountName}}</strong>
+        <br><br>
         Batch has {{batch.length}} tasks, and will cost {{batchCost}} EFX<br>
         Your vEFX balance: <span :class="{'has-text-danger': efxAvailable === null && batchCost > vefxAvailable}">{{vefxAvailable}} {{client.config.efxSymbol}}</span><br>
         <span v-if="efxAvailable !== null">
@@ -12,6 +13,37 @@
             Your total EFX balance: <span :class="{'has-text-danger': batchCost > (vefxAvailable + efxAvailable)}">{{vefxAvailable + efxAvailable}} {{client.config.efxSymbol}}</span>
         </span>
     </p>
+
+    <div v-if="accountConnected" class="box media">
+        <figure class="media-left">
+            <p class="image is-128x128">
+                <img v-if="connectAccount.providerName === 'metamask'" src="@/assets/images/providers/BSC-logo.svg" alt="" srcset="">
+                <img v-else src="@/assets/images/providers/EOS-logo.svg" alt="" srcset="">
+            </p>
+        </figure>
+
+        <div class="media-content">
+            <div class="content">
+                <p class="subtitle">Connected</p>
+                <p>
+                    <strong>{{connectResponse.accountName}}</strong>
+                </p>
+                <hr>
+                <p>
+                    vEFX balance: <span :class="{'has-text-danger': efxAvailable === null && batchCost > vefxAvailable}">{{vefxAvailable}} {{client.config.efxSymbol}}</span><br>
+                    <span v-if="efxAvailable !== null">
+                        EFX balance: <span>&nbsp;{{efxAvailable}} {{client.config.efxSymbol}}</span><br>
+                        total EFX balance: <span :class="{'has-text-danger': batchCost > (vefxAvailable + efxAvailable)}">{{vefxAvailable + efxAvailable}} {{client.config.efxSymbol}}</span>
+                    </span>
+                </p>
+                <hr>
+                <p>
+                    Batch has {{batch.length}} tasks, and will cost {{batchCost}} EFX<br>
+                    Your total EFX balance: <span :class="{'has-text-danger': batchCost > (vefxAvailable + efxAvailable)}">{{vefxAvailable + efxAvailable}} {{client.config.efxSymbol}}</span>
+                </p>
+            </div>
+        </div>
+    </div>
 
     <div id="connect-buttons" v-if="!accountConnected" class="buttons is-flex is-centered">
       <button class="button is-large is-primary" @click="login()" id="btn-login" style="background-color: #f6851b">Connect with Metamask</button>
@@ -74,6 +106,9 @@ export default Vue.extend({
     },
   components: {},
   computed: {
+    ethereumConnected() {
+        return true
+    },
     batchCost () {
         return (this.batch.length * this.repetitions) * this.campaign.info.reward
     },
