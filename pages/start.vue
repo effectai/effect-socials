@@ -6,18 +6,25 @@
           <h2 class="title">1. Select <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a> engagement</h2>
           <div class="control">
 
-            <div class="buttons is-centered">
+            <div class="buttons is-centered px-6 mx-6">
               <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='like'; nextStep()">
-                Likes
+                <span><font-awesome-icon icon="fa-solid fa-heart" /></span>
+                <span>&nbsp;Likes</span>
               </button>
+              <br><br><br>
               <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='follow'; nextStep()" disabled>
-                Follows
+                <span><font-awesome-icon icon="fa-solid fa-user-group" /></span>
+                <span>&nbsp;Follows</span>
               </button>
+              <br><br><br>
               <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='retweet'; nextStep()" disabled>
-                Retweets
+                <span><font-awesome-icon icon="fa-solid fa-retweet" /></span>
+                <span>&nbsp;Retweets</span>
               </button>
+              <br><br><br>
               <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='reply'; nextStep()" disabled>
-                Replies
+                <span><font-awesome-icon icon="fa-solid fa-reply" /></span>
+                <span>&nbsp;Replies</span>
               </button>
             </div>
           </div>
