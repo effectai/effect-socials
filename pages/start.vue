@@ -88,6 +88,7 @@ export default {
     },
     setErrorMessage (msg) {
       this.errorMessage = msg;
+      setTimeout(() => this.errorMessage = null, 5000);
     },
     nextStep () {
       this.successMessage = null

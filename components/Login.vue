@@ -204,12 +204,15 @@ export default Vue.extend({
     * Bsc-Mainnet: 0x38 (hex), 56 (decimal)
     * Bsc-Testnet: 0x61 (hex), 97 (decimal)
     * 
+    * Why doesn't it properly catch the error here?
+    * It's weird, that it will skip and not append the error, and now it just fails...
     */
     async connectMetamask() {
         console.log('Connecting to metamask wallet.')
         // @ts-ignore
         if (window.ethereum) {
             try {
+                console.log('Connecting to metamask wallet.')
                 // @ts-ignore
                 const ethAccount = await ethereum.request({ method: 'eth_requestAccounts' });
                 // @ts-ignore
@@ -238,14 +241,16 @@ export default Vue.extend({
           if (this.connectAccount.provider) {
             this.connectResponse = await this.client.connectAccount(this.connectAccount.provider, this.connectAccount.account)
           } else {
-            this.$emit('error', 'Login with on of the wallet.')
+            this.$emit('error', 'Login failed, try again.')
+            return
           }
           this.accountConnected = true
           this.account = this.connectResponse
           this.$emit('account', this.connectResponse, this.client)
       } catch (error) {
-            this.$emit('error', 'Login failed, try again.')
-            console.error(error)
+        this.accountConnected = false
+        this.$emit('error', 'Login failed, try again.' + error.message)
+        console.error(error)
       }
     },
     async getAccountBalance () {
