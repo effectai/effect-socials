@@ -63,7 +63,7 @@
                     <a class="button is-fullwidth is-primary is-light" href="https://effect.network/token-page" target="_blank" rel="noopener noreferrer">
                         <span>Buy <i>EFX</i></span>
                         &nbsp;&nbsp;
-                        <span><font-awesome-icon class="mx-2 is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
+                        <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
                     </a>
                 </p>
 
