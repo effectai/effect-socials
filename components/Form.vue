@@ -17,7 +17,7 @@
               <tbody>
                 <tr v-for="(task, index) in paginatedTasks" :key="task.id">
                   <td v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value has-text-left">
-                    <a :href="task[placeholder]" target="_blank" rel="noopener noreferrer">{{ task[placeholder] }}</a>
+                    <a :href="`https://${task[placeholder]}`" target="_blank" rel="noopener noreferrer">{{ task[placeholder] }}</a>
                   </td>
                   <td>
                     <button class="button is-danger is-outlined is-small is-rounded" @click.prevent="tasks.splice(index, 1)">
