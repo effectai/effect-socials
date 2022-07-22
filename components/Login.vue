@@ -109,7 +109,7 @@
     <div v-if="createdBatchId" class="notification is-success">
         <p class="mx-6 px-6">
             Success! Your batch has been successfuly posted to Effect Force. <br>
-            Take a look at <a :href="`https://app.effect.network/campaigns/${campaign.id}/${createdBatchId}`" target="_blank" rel="noopener noreferrer">https://app.effect.network <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" /></a>
+            Take a look at <a :href="`https://app.effect.network/campaigns/${campaign.id}/${createdBatchId}`" target="_blank" rel="noopener noreferrer">https://app.effect.network <font-awesome-icon class="icon mx-2 is-small" icon="fa-solid fa-arrow-up-right-from-square" /></a>
             <hr>
             <a :href="'/batch/' + createdBatchId" class="mx-6 px-6" target="_blank" rel="noopener noreferrer">
                 Go to batch results >
