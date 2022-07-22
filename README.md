@@ -1,6 +1,5 @@
 # EFFECT Socials dApp
 
-
 <div align="center">
 <a href="https://socials.effect.network" target="_blank"><h1> <img src="https://socials.effect.network/_nuxt/img/effect-socials_h100.4f0f9f8.png" width="80px"><br/>Effect Socials</h1></a>     
 </div>
