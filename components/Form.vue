@@ -8,7 +8,7 @@
             <table class="table mx-auto">
               <thead>
                 <tr>
-                  <th v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value">
+                  <th v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value has-text-left">
                     <!-- <input v-model="newTask[placeholder]" type="text" class="input"> -->
                     {{ placeHolderTitle(placeholder) }}
                   </th>
@@ -17,7 +17,8 @@
               <tbody>
                 <tr v-for="(task, index) in paginatedTasks" :key="task.id">
                   <td v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value has-text-left">
-                    <a :href="`https://${task[placeholder]}`" target="_blank" rel="noopener noreferrer">{{ task[placeholder] }}</a>
+                    <a :href="task[placeholder]" target="_blank" rel="noopener noreferrer" v-if="placeholder==='tweet_id'">{{ task[placeholder] }}</a>
+                    <span v-else>{{ task[placeholder] }}</span>
                   </td>
                   <td>
                     <button class="button is-danger is-outlined is-small is-rounded" @click.prevent="tasks.splice(index, 1)">
@@ -33,7 +34,17 @@
                       type="url"
                       pattern="https?://.+"
                       class="input is-info task-placeholder-value"
-                      :placeholder="campaign.id === likeCampaign.id ? 'https://twitter.com/username/status/12345' : 'username'"
+                      placeholder="https://twitter.com/username/status/12345"
+                      @keydown.enter.prevent="createTask"
+                      required
+                      v-if="placeholder === 'tweet_id'"
+                    >
+                    <input
+                      :ref="`placeholder-${placeindex}`"
+                      v-model="newTask[placeholder]"
+                      v-else
+                      class="input is-info task-placeholder-value"
+                      :placeholder="placeHolderTitle(placeholder)"
                       @keydown.enter.prevent="createTask"
                       required
                     >
@@ -213,30 +224,29 @@ export default Vue.extend({
       }
 
       // Check that the link is valid.
-      if (this.campaign.id === this.likeCampaign.id) {
-        // users are instructed to pass in a url. but the template expects a tweet_id
-        let url
-        try {
-          if (this.newTask.tweet_id.includes('https://') || this.newTask.tweet_id.includes('http://')) {
-            console.debug('protocol already included  ')
-            url = new URL(this.newTask.tweet_id)
-          } else {
-            console.debug('add protocol to tweet_id')
-            url = new URL(`https://${this.newTask.tweet_id}`)
-          }
-        } catch (error) {
-          console.error(error)
-          this.placeholderError = `Please enter a valid twitter.com url`
-          setTimeout(() => this.placeholderError = null, 5e3)
-          return
-        }
-        if (url.hostname !== 'twitter.com' || !url.pathname.includes('/status/') || url.pathname.split('/')[3].length === 0) {
-          this.placeholderError = `Please enter a valid tweet url: https://twitter.com/username/status/123456789`
-          setTimeout(() => this.placeholderError = null, 5e3)
-          return
+      // users are instructed to pass in a url. but the template expects a tweet_id
+      let url
+      try {
+        if (this.newTask.tweet_id.includes('https://') || this.newTask.tweet_id.includes('http://')) {
+          console.debug('protocol already included  ')
+          url = new URL(this.newTask.tweet_id)
         } else {
-          this.tasks.push({ id: this.newTask.id, tweet_id: `${url.hostname}${url.pathname}` })
+          console.debug('add protocol to tweet_id')
+          url = new URL(`https://${this.newTask.tweet_id}`)
         }
+      } catch (error) {
+        console.error(error)
+        this.placeholderError = `Please enter a valid twitter.com url`
+        setTimeout(() => this.placeholderError = null, 5e3)
+        return
+      }
+      if (url.hostname !== 'twitter.com' || !url.pathname.includes('/status/') || url.pathname.split('/')[3].length === 0) {
+        this.placeholderError = `Please enter a valid tweet url: https://twitter.com/username/status/123456789`
+        setTimeout(() => this.placeholderError = null, 5e3)
+        return
+      } else {
+        this.newTask.tweet_id = `${url.hostname}${url.pathname}`
+        this.tasks.push(this.newTask)
       }
 
       this.newTask.id = this.tempCounter++
