@@ -10,7 +10,11 @@
             <!--          <p>Helping data science teams succeed with structuring data and the deployment of AI automation</p>-->
             <br>
             <!-- <a to="/start" @click.prevent="scrollToElement('why')" class="button is-secondary" :class="{'is-accent': $colorMode.value === 'dark'}">Start -->
-            <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
+            <div class="buttons">
+              <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
+              <nuxt-link v-if="transactions.length > 0" to="/transactions" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Transactions</nuxt-link>
+              <button class="button" @click="addTransaction">Add Tx</button>
+            </div>
             </a>
           </div>
 
@@ -26,10 +30,18 @@
     </div>
   </div>
 </template>
+
 <script>
+import { mapState } from 'vuex'
 
 export default {
   components: {
+  },
+  computed: {
+    ...mapState({
+      // $blockchain: state => state.$blockchain,
+      transactions: state => state.transactions ?? [],
+    }),
   },
   methods: {
     scrollToElement(ref) {
@@ -44,6 +56,15 @@ export default {
       } else {
         this.$router.push('/#'+ref);
       }
+    },
+    addTransaction () {
+      console.log("addTransaction")
+      this.$store.dispatch('transaction/addTransaction', {
+        id: Math.random(),
+        name: 'Test',
+        amount: Math.random() * 100,
+        date: new Date(),
+      })
     }
   }
 }
