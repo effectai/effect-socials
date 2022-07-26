@@ -3,9 +3,12 @@ export default {
     modules: {},
     mutations: {
       ADD_TRANSACTION (state, transaction) {
-        if (state.transactions === null) { state.transactions = {} }
+        if (state.transactions.list === null || state.transactions.list === undefined) { 
+            state.transactions = {} 
+            state.transactions.list = [] 
+        }
         if (transaction) {
-            state.transactions.push(transaction)
+            state.transactions.list.push(transaction)
         }
       }
     },
