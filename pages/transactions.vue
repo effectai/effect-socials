@@ -57,7 +57,7 @@ import Pagination from '@/components/Pagination.vue'
 export default {
   components: { Pagination },
   filters: {},
-  middleware: ['auth'],
+  middleware: [],
   data () {
     return {
       loading: null,
@@ -71,7 +71,7 @@ export default {
       transactionsByUser: 'transaction/transactionsByUser'
     }),
     transactions () {
-      return this.transactionsByUser(this.$auth.user.vAccountRows[0].id)
+      return this.transactionsByUser()
     },
     paginatedTransactions () {
       const start = (this.page - 1) * this.perPage
