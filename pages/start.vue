@@ -12,14 +12,14 @@
                 <span>&nbsp;Likes</span>
               </button>
               <br><br><br>
-              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='follow'; nextStep()" disabled>
+              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" @click.prevent="type='retweet'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
-                <span>&nbsp;Follows</span>
+                <span>&nbsp;Retweets</span>
               </button>
               <br><br><br>
-              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='retweet'; nextStep()" disabled>
+              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='follow'; nextStep()" disabled>
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-retweet" /></span>
-                <span>&nbsp;Retweets</span>
+                <span>&nbsp;Follows</span>
               </button>
               <br><br><br>
               <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='reply'; nextStep()" disabled>
@@ -109,7 +109,7 @@ export default {
      async getCampaigns () {
         try {
           this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
-          // this.campaigns.retweet = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID))
+          this.campaigns.retweet = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID))
           this.campaigns.like = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID)
           // this.campaigns.reply = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID)
           this.campaigns.follow = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID)
