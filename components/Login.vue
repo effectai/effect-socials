@@ -224,7 +224,7 @@ export default Vue.extend({
                 type: this.type,
                 campaign: {
                     id: this.campaign.id,
-                    title: this.campaign.title,
+                    title: this.campaign.info.title,
                     description: this.campaign.info.description,
                     image: this.campaign.info.image,
                     reward: this.campaign.info.reward
@@ -238,7 +238,8 @@ export default Vue.extend({
                 totalCost: this.batchCost,
                 batchId: this.createdBatchId,
             }
-            addTransaction(transaction)
+            // console.log('transaction', transaction)
+            this.addTransaction(transaction)
         } catch (e) {
             this.$emit('error', e)
             console.error(e)

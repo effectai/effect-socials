@@ -13,7 +13,7 @@
                 <tr>
                   <th>#</th>
                   <th>Type</th>
-                  <th>Date</th>
+                  <!-- <th>Date</th> -->
                   <th>Amount</th>
                   <th>Total</th>
                   <th/>
@@ -24,18 +24,21 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="tx in paginatedTransactions" :key="tx.idx">
+                <tr v-for="(tx, idx) in paginatedTransactions" :key="tx.idx">
+
+                  <!-- <td>{{ tx }}</td> -->
+                 
                   <td>
-                    {{ tx.idx }}
+                    {{ idx + 1 }}
                   </td>
                   <td>
-                    {{ tx.productType }}
+                    {{ tx.campaign.title }}
                   </td>
-                  <td>
+                  <!-- <td>
                     {{ tx.date }}
-                  </td>
+                  </td> -->
                   <td>
-                    {{ tx.productAmount }}
+                    {{ tx.repetitions }}
                   </td>
                   <td>
                     {{ tx.totalCost }} EFX
@@ -51,7 +54,7 @@
                     </nuxt-link>
                   </td>
                   <td>
-                    <a :href="`https://app.effect.network/campaigns/${tx.campaignId}/${tx.batchId}`" class="" target="_blank" rel="noopener noreferrer">
+                    <a :href="`https://app.effect.network/campaigns/${tx.campaign.id}/${tx.batchId}`" class="" target="_blank" rel="noopener noreferrer">
                       <span class="icon-text">
                         <span>Force</span>
                         <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
@@ -59,7 +62,7 @@
                     </a>
                   </td>
                   <td>
-                    <a :href="`https://bloks.io/transaction/${tx.eosTx.id}`" class="" target="_blank" rel="noopener noreferrer">
+                    <a :href="`https://bloks.io/transaction/${tx.eos.transaction.transaction_id}`" class="" target="_blank" rel="noopener noreferrer">
                     <span class="icon-text">
                       <span>BlockExplorer</span>
                       <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
