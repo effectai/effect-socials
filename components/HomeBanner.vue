@@ -13,7 +13,6 @@
             <div class="buttons">
               <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
               <nuxt-link v-if="!transactionsIsEmpty" to="/orders" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Orders</nuxt-link>
-              <button class="button" @click="addTx">Add Tx REMOVE THIS</button>
             </div>
             </a>
           </div>
