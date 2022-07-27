@@ -12,8 +12,8 @@
             <!-- <a to="/start" @click.prevent="scrollToElement('why')" class="button is-secondary" :class="{'is-accent': $colorMode.value === 'dark'}">Start -->
             <div class="buttons">
               <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
-              <nuxt-link v-if="txList" to="/transactions" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Transactions</nuxt-link>
-              <button class="button" @click="addTransaction">Add Tx</button>
+              <nuxt-link v-if="!transactionsIsEmpty" to="/orders" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Orders</nuxt-link>
+              <button class="button" @click="addTransaction">Add Tx REMOVE THIS</button>
             </div>
             </a>
           </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -40,11 +40,13 @@ export default {
   computed: {
     ...mapState({
       // $blockchain: state => state.$blockchain,
-      transactions: state => state.transactions,
+      transactions: state => state.transactions
     }),
-    txList() {
-      return this.transactions?.list.length > 0 ? true : false
-    },
+    ...mapGetters({
+      transactionById: 'transactionById',
+      allTransactions: 'transaction/allTransactions',
+      transactionsIsEmpty: 'transaction/transactionsIsEmpty'
+    }),
   },
   methods: {
     scrollToElement(ref) {
@@ -63,14 +65,52 @@ export default {
     addTransaction () {
       console.log("addTransaction")
       this.$store.dispatch('transaction/addTransaction', {
-        id: Math.random(),
-        name: 'Test',
-        amount: Math.random() * 100,
+        idx: 123, 
+        eosTx: {
+          id: "123",
+          status: "pending",
+        },
         date: new Date(),
+        productType: "like",
+        productAmount: 3,
+        productRepetion: 4,
+        costPerTask: 2,
+        totalCost: 10,
+        createdAt: "2019-01-01",
+        boughtWithAccount: "account1",
+        boughtWithEos: true,
+        campaignId: 14,
+        batchId: 60129542155
       })
     }
   }
 }
+/**
+ *  
+ * {
+ * }id: '188d9cba22eb1acbeff074d9c092b202808c1510f37b02798c286d00c9cc7b5d',
+ trx: {
+   receipt: {
+     status: 'executed',
+     cpu_usage_us: 344,
+     net_usage_words: 19,
+     trx: [Array]
+   },
+   trx: {
+     expiration: '2020-02-27T03:36:29',
+     ref_block_num: 1126,
+     ref_block_prefix: 2779202260,
+     max_net_usage_words: 0,
+     max_cpu_usage_ms: 0,
+     delay_sec: 0,
+     context_free_actions: [],
+     actions: [Array],
+     transaction_extensions: [],
+     signatures: [Array],
+     context_free_data: []
+   }
+ },
+ */
 </script>
 
 <style lang="scss" scoped>
