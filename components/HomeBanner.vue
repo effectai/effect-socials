@@ -12,7 +12,7 @@
             <!-- <a to="/start" @click.prevent="scrollToElement('why')" class="button is-secondary" :class="{'is-accent': $colorMode.value === 'dark'}">Start -->
             <div class="buttons">
               <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
-              <nuxt-link v-if="transactions.length > 0" to="/transactions" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Transactions</nuxt-link>
+              <nuxt-link v-if="txList" to="/transactions" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Transactions</nuxt-link>
               <button class="button" @click="addTransaction">Add Tx</button>
             </div>
             </a>
@@ -40,8 +40,11 @@ export default {
   computed: {
     ...mapState({
       // $blockchain: state => state.$blockchain,
-      transactions: state => state.transactions ?? [],
+      transactions: state => state.transactions,
     }),
+    txList() {
+      return this.transactions?.list.length > 0 ? true : false
+    },
   },
   methods: {
     scrollToElement(ref) {
