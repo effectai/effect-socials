@@ -13,7 +13,7 @@
             <div class="buttons">
               <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
               <nuxt-link v-if="!transactionsIsEmpty" to="/orders" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Orders</nuxt-link>
-              <button class="button" @click="addTransaction">Add Tx REMOVE THIS</button>
+              <button class="button" @click="addTx">Add Tx REMOVE THIS</button>
             </div>
             </a>
           </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -49,6 +49,9 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      addTransaction: 'transaction/addTransaction'
+    }),
     scrollToElement(ref) {
       let el = this.$refs[ref];
       console.log("scroll", el)
@@ -61,27 +64,31 @@ export default {
       } else {
         this.$router.push('/#'+ref);
       }
-    },
-    addTransaction () {
-      console.log("addTransaction")
-      this.$store.dispatch('transaction/addTransaction', {
-        idx: 123, 
-        eosTx: {
-          id: "123",
-          status: "pending",
-        },
-        date: new Date(),
-        productType: "like",
-        productAmount: 3,
-        productRepetion: 4,
-        costPerTask: 2,
-        totalCost: 10,
-        createdAt: "2019-01-01",
-        boughtWithAccount: "account1",
-        boughtWithEos: true,
-        campaignId: 14,
-        batchId: 60129542155
-      })
+    }, 
+    addTx () {
+
+            const transaction = {
+                id: 999,
+                type: 'Likes',
+                campaign: {
+                    id: 28,
+                    title: "Effect Socials: Twitter Like tweet",
+                    description: "You will be provided with a tweet link. You’ll like the tweet.",
+                    image: "https://cdn.discordapp.com/attachments/999288162062958652/999691161637748849/Screen_Shot_2022-07-21_at_4.53.29_PM.png?width=705&height=402",
+                    reward: 10
+                },
+                batch: {
+                  info: "this.batch"
+                },
+                repetitions: 5,
+                account: { info: "this.account" },
+                date: new Date(),
+                batchId: 123,
+                eos: 'eos',
+                totalCost: 200,
+                batchId: 1337,
+            }
+      this.addTransaction(transaction);
     }
   }
 }

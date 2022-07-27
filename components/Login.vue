@@ -125,6 +125,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import Vue from 'vue'
 import Web3 from 'web3'
 import * as effectsdk from '@effectai/effect-js'
@@ -183,6 +184,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    ...mapActions ({
+        addTransaction: 'transaction/addTransaction'
+    }),
     extractTwitterId (twitter_url) {
         if (twitter_url != "" && twitter_url.includes("/status/")) {
             var re = new RegExp(/[/status/][0-9]+/g)
@@ -215,6 +219,26 @@ export default Vue.extend({
             const result = await this.client.force.createBatch(this.campaign.id, content, Number(this.repetitions), process.env.NUXT_ENV_PROXY_CONTRACT)
             this.createdBatchId = await this.client.force.getBatchId(result.id, this.campaign.id)
             // this.$emit('success', 'Tasks successfuly uploaded to Effect Force!')
+
+            const transaction = {
+                type: this.type,
+                campaign: {
+                    id: this.campaign.id,
+                    title: this.campaign.title,
+                    description: this.campaign.info.description,
+                    image: this.campaign.info.image,
+                    reward: this.campaign.info.reward
+                },
+                batch: this.batch,
+                repetitions: this.repetitions,
+                account: this.account,
+                date: new Date(),
+                batchId: this.createdBatchId,
+                eos: result,
+                totalCost: this.batchCost,
+                batchId: this.createdBatchId,
+            }
+            addTransaction(transaction)
         } catch (e) {
             this.$emit('error', e)
             console.error(e)
