@@ -10,7 +10,10 @@
             <!--          <p>Helping data science teams succeed with structuring data and the deployment of AI automation</p>-->
             <br>
             <!-- <a to="/start" @click.prevent="scrollToElement('why')" class="button is-secondary" :class="{'is-accent': $colorMode.value === 'dark'}">Start -->
-            <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
+            <div class="buttons">
+              <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
+              <nuxt-link v-if="!transactionsIsEmpty" to="/orders" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Orders</nuxt-link>
+            </div>
             </a>
           </div>
 
@@ -26,12 +29,28 @@
     </div>
   </div>
 </template>
+
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
   },
+  computed: {
+    ...mapState({
+      // $blockchain: state => state.$blockchain,
+      transactions: state => state.transactions
+    }),
+    ...mapGetters({
+      transactionById: 'transactionById',
+      allTransactions: 'transaction/allTransactions',
+      transactionsIsEmpty: 'transaction/transactionsIsEmpty'
+    }),
+  },
   methods: {
+    ...mapActions({
+      addTransaction: 'transaction/addTransaction'
+    }),
     scrollToElement(ref) {
       let el = this.$refs[ref];
       console.log("scroll", el)
@@ -44,9 +63,60 @@ export default {
       } else {
         this.$router.push('/#'+ref);
       }
+    }, 
+    addTx () {
+
+            const transaction = {
+                id: 999,
+                type: 'Likes',
+                campaign: {
+                    id: 28,
+                    title: "Effect Socials: Twitter Like tweet",
+                    description: "You will be provided with a tweet link. You’ll like the tweet.",
+                    image: "https://cdn.discordapp.com/attachments/999288162062958652/999691161637748849/Screen_Shot_2022-07-21_at_4.53.29_PM.png?width=705&height=402",
+                    reward: 10
+                },
+                batch: {
+                  info: "this.batch"
+                },
+                repetitions: 5,
+                account: { info: "this.account" },
+                date: new Date(),
+                batchId: 123,
+                eos: 'eos',
+                totalCost: 200,
+                batchId: 1337,
+            }
+      this.addTransaction(transaction);
     }
   }
 }
+/**
+ *  
+ * {
+ * }id: '188d9cba22eb1acbeff074d9c092b202808c1510f37b02798c286d00c9cc7b5d',
+ trx: {
+   receipt: {
+     status: 'executed',
+     cpu_usage_us: 344,
+     net_usage_words: 19,
+     trx: [Array]
+   },
+   trx: {
+     expiration: '2020-02-27T03:36:29',
+     ref_block_num: 1126,
+     ref_block_prefix: 2779202260,
+     max_net_usage_words: 0,
+     max_cpu_usage_ms: 0,
+     delay_sec: 0,
+     context_free_actions: [],
+     actions: [Array],
+     transaction_extensions: [],
+     signatures: [Array],
+     context_free_data: []
+   }
+ },
+ */
 </script>
 
 <style lang="scss" scoped>
