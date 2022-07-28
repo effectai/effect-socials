@@ -2,34 +2,123 @@
   <div class="section pt-6">
     <div class="columns">
       <div class="column is-three-fifths is-offset-one-fifth">
-        <h2 class="title">Task results</h2>
-        <div v-if="results && results.length > 0">
-          <table class="table" style="width: 100%">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Result</th>
-                <th>Submitted on</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="r in results"
-                :key="r.id"
-              >
-                <td>{{ r.id }}</td>
-                <td>{{ r.data }}</td>
-                <td>{{ r.submitted_on }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <button class="button is-primary" @click.prevent="downloadTaskResults()">
-            Download results
-          </button>
+        <h2 class="title">Order</h2>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li><nuxt-link to="/">Home</nuxt-link></li>
+            <li><nuxt-link to="/orders">Order History</nuxt-link></li>
+            <li class="is-active"><nuxt-link to="#" aria-current="page">Order</nuxt-link></li>
+          </ul>
+        </nav>
+        <div v-if="batch && campaign">
+          <!-- {{ batch }} -->
+          <!-- <br><br> -->
+          <!-- {{ batchIpfs }} -->
+          <!-- {{ campaign}} -->
+          <br>
+          <br>
+          <div class="box media">
+            <figure class="media-left">
+              <p class="image is-128x128 is-square">
+                <img :src="campaign.info.image">
+              </p>
+            </figure>
+            <div class="media-content">
+              <div class="content">
+                <p class="subtitle">
+                  <a :href="`https://app.effect.network/campaigns/${batch.campaign_id}`" target="_blank" rel="noopener noreferrer">
+                    <span class="icon-text">
+                      <span>{{ campaign.info.title }}</span>
+                      <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
+                    </span>
+                  </a>
+                </p>
+                <hr>
+
+                <p class="subtitle">Details</p>
+                <div class="px-6">
+                  <p>
+                    <span>Order ID: <strong>{{ id }}</strong></span>
+                    <br>
+                    <span>Status: <strong>{{ batchPercentageDone }}%</strong></span>
+                  </p>
+                  <table class="table is-narrow is-centered">
+                      <thead></thead>
+                      <tbody>
+                          <tr>
+                              <td>Tasks</td>
+                              <td>{{batch.num_tasks}}&nbsp;×</td>
+                          </tr>
+                          <tr>
+                              <td>Amount</td>
+                              <td>{{batch.repetitions}}&nbsp;×</td>
+                          </tr>
+                          <tr>
+                              <td>Cost per Task</td>
+                              <td><strong>{{campaign.info.reward}} EFX</strong> </td>
+                          </tr>
+                      </tbody>
+
+                      <tfoot>
+                          <tr>
+                              <td>Total Cost</td>
+                              <td><strong>{{batch.balance.quantity}}</strong> </td>
+                          </tr>
+                      </tfoot>
+                  </table>                
+
+                </div>
+                <hr>
+
+                <p class="subtitle">Tasks</p>
+                <table class="table is-narrow">
+                  <thead></thead>
+                  <tbody>
+                    <tr v-for="task in batchIpfs.tasks" :key="task.link_id">
+                      <td>{{task.tweet_id}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <hr>
+
+                <p class="subtitle">Results ({{ batch.tasks_done }}/{{ batch.num_tasks * batch.repetitions }})</p>
+                <div v-if="results && results.length > 0">
+                  <table class="table" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Result</th>
+                        <th>Submitted on</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="r in results"
+                        :key="r.id"
+                      >
+                        <td>{{ r.id }}</td>
+                        <td>{{ r.data }}</td>
+                        <td>{{ r.submitted_on }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br>
+                  <button class="button is-primary mx-auto is-centered" @click.prevent="downloadTaskResults()">
+                    Download results
+                  </button>
+                </div>
+                <div v-else>
+                  No results yet, please wait...
+                </div>                
+              </div>
+            </div>
+          </div>
         </div>
         <div v-else>
-          No tasks found
+          <p>No batch found</p>
         </div>
+        <hr>
       </div>
     </div>
   </div>
@@ -47,22 +136,47 @@ export default {
       tasks: null,
       results: null,
       timer: null,
+      batch: null,
+      batchIpfs: null,
+      campaign: null,
     }
   },
   created () {
     this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
-    this.getResults();
+    this.getBatch()
+    this.getResults()
     this.timer = setInterval(() => {
-      this.getResults();
-    }, 10e3)
+      this.getResults()
+    }, 30e3)
+  },
+  computed: {
+    batchPercentageDone() {
+      if (this.batch) {
+        return Math.round((this.batch.tasks_done / (this.batch.num_tasks * this.batch.repetitions)) * 100)
+      }
+      return 0
+    }
   },
   methods: {
-    async getTask () {
-      console.log('getTask', this.id)
+    async getBatch () {
+      this.batch = await this.effectsdk.force.getBatchById(this.id)
+      this.batchIpfs = await this.effectsdk.force.getIpfsContent(this.batch.content.field_1)
+      this.campaign = await this.effectsdk.force.getCampaign(this.batch.campaign_id)
+      console.log('getBatch', this.batch, this.batchIpfs)
     },
     async getResults() {
       console.log('getting results...')
+      let oldResultsLength = 0
+      if (this.results){
+        oldResultsLength = this.results.length
+      }
       this.results = await this.effectsdk.force.getSubmissionsOfBatch(this.id)
+      console.log('results', this.results)
+      // check if results changed
+      if (this.results.length !== oldResultsLength) {
+        console.log('results changed')
+        this.getBatch()
+      }
     },
     async downloadTaskResults () {
       try {
