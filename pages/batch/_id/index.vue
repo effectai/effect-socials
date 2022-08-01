@@ -10,115 +10,124 @@
             <li class="is-active"><nuxt-link to="#" aria-current="page">Order</nuxt-link></li>
           </ul>
         </nav>
-        <div v-if="batch && campaign">
-          <!-- {{ batch }} -->
-          <!-- <br><br> -->
-          <!-- {{ batchIpfs }} -->
-          <!-- {{ campaign}} -->
-          <br>
-          <br>
-          <div class="box media">
-            <figure class="media-left">
-              <p class="image is-128x128 is-square">
-                <img :src="campaign.info.image">
-              </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p class="subtitle">
-                  <a :href="`https://app.effect.network/campaigns/${batch.campaign_id}`" target="_blank" rel="noopener noreferrer">
-                    <span class="icon-text">
-                      <span>{{ campaign.info.title }}</span>
-                      <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
-                    </span>
-                  </a>
+        <div v-if="loading" class="loading-text">
+          Loading
+        </div>
+        <div v-else>
+          <div v-if="batch && campaign">
+            <!-- {{ batch }} -->
+            <!-- <br><br> -->
+            <!-- {{ batchIpfs }} -->
+            <!-- {{ campaign}} -->
+            <br>
+            <br>
+            <div class="box media">
+              <figure class="media-left">
+                <p class="image is-128x128 is-square">
+                  <img :src="campaign.info.image">
                 </p>
-                <hr>
-
-                <p class="subtitle">Details</p>
-                <div class="px-6">
-                  <p>
-                    <span>Order ID: <strong>{{ id }}</strong></span>
-                    <br>
-                    <span>Status: <strong>{{ batchPercentageDone }}%</strong></span>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p class="subtitle">
+                    <a :href="`https://app.effect.network/campaigns/${batch.campaign_id}`" target="_blank" rel="noopener noreferrer">
+                      <span class="icon-text">
+                        <span>{{ campaign.info.title }}</span>
+                        <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
+                      </span>
+                    </a>
                   </p>
-                  <table class="table is-narrow is-centered">
-                      <thead></thead>
-                      <tbody>
-                          <tr>
-                              <td>Tasks</td>
-                              <td>{{batch.num_tasks}}&nbsp;×</td>
-                          </tr>
-                          <tr>
-                              <td>Amount</td>
-                              <td>{{batch.repetitions}}&nbsp;×</td>
-                          </tr>
-                          <tr>
-                              <td>Cost per Task</td>
-                              <td><strong>{{campaign.info.reward}} EFX</strong> </td>
-                          </tr>
-                      </tbody>
+                  <hr>
 
-                      <tfoot>
-                          <tr>
-                              <td>Total Cost</td>
-                              <td><strong>{{batch.balance.quantity}}</strong> </td>
-                          </tr>
-                      </tfoot>
-                  </table>                
+                  <p class="subtitle">Details</p>
+                  <div class="px-6">
+                    <p>
+                      <span>Order ID: <strong>{{ id }}</strong></span>
+                      <br>
+                      <span>Status: <strong>{{ batchPercentageDone }}%</strong></span>
+                    </p>
+                    <table class="table is-narrow is-centered">
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <td>Tasks</td>
+                                <td>{{batch.num_tasks}}&nbsp;×</td>
+                            </tr>
+                            <tr>
+                                <td>Amount</td>
+                                <td>{{batch.repetitions}}&nbsp;×</td>
+                            </tr>
+                            <tr>
+                                <td>Cost per Task</td>
+                                <td><strong>{{campaign.info.reward}} EFX</strong> </td>
+                            </tr>
+                        </tbody>
 
-                </div>
-                <hr>
+                        <tfoot>
+                            <tr>
+                                <td>Total Cost</td>
+                                <td><strong>{{batch.balance.quantity}}</strong> </td>
+                            </tr>
+                        </tfoot>
+                    </table>                
 
-                <p class="subtitle">Tasks</p>
-                <table class="table is-narrow">
-                  <thead></thead>
-                  <tbody>
-                    <tr v-for="task in batchIpfs.tasks" :key="task.link_id">
-                      <td>{{task.tweet_id}}</td>
-                    </tr>
-                  </tbody>
-                </table>
+                  </div>
+                  <hr>
 
-                <hr>
-
-                <p class="subtitle">Results ({{ batch.tasks_done }}/{{ batch.num_tasks * batch.repetitions }})</p>
-                <div v-if="results && results.length > 0">
-                  <table class="table" style="width: 100%">
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Result</th>
-                        <th>Submitted on</th>
-                      </tr>
-                    </thead>
+                  <p class="subtitle">Tasks</p>
+                  <table class="table is-narrow">
+                    <thead></thead>
                     <tbody>
-                      <tr
-                        v-for="r in results"
-                        :key="r.id"
-                      >
-                        <td>{{ r.id }}</td>
-                        <td>{{ r.data }}</td>
-                        <td>{{ r.submitted_on }}</td>
+                      <tr v-for="task in batchIpfs.tasks" :key="task.link_id">
+                        <td>{{task.tweet_id}}</td>
                       </tr>
                     </tbody>
                   </table>
-                  <br>
-                  <button class="button is-primary mx-auto is-centered" @click.prevent="downloadTaskResults()">
-                    Download results
-                  </button>
+
+                  <!-- <div id="tweet"></div> -->
+
+                  <hr>
+
+                  <p class="subtitle">Results ({{ batch.tasks_done }}/{{ batch.num_tasks * batch.repetitions }})</p>
+                  <div v-if="results && results.length > 0">
+                    <table class="table" style="width: 100%">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Result</th>
+                          <th>Submitted on</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="r in results"
+                          :key="r.id"
+                        >
+                          <td>{{ r.id }}</td>
+                          <td>{{ r.data }}</td>
+                          <td>{{ r.submitted_on }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <br>
+                    <div class="buttons is-centered">
+                      <button class="button is-primary mx-auto is-centered" @click.prevent="downloadTaskResults()">
+                        Download results
+                      </button>
+                    </div>
+                  </div>
+                  <div v-else>
+                    No results yet, please wait while someone start working on your order.
+                  </div>                
                 </div>
-                <div v-else>
-                  No results yet, please wait...
-                </div>                
               </div>
             </div>
           </div>
+          <div v-else>
+            <p>No batch found</p>
+          </div>          
         </div>
-        <div v-else>
-          <p>No batch found</p>
-        </div>
-        <hr>
+
       </div>
     </div>
   </div>
@@ -131,6 +140,7 @@ import * as effectsdk from '@effectai/effect-js'
 export default {
   data() {
     return {
+      loading: true,
       effectsdk: null,
       id: parseInt(this.$route.params.id),
       tasks: null,
@@ -141,7 +151,7 @@ export default {
       campaign: null,
     }
   },
-  created () {
+  mounted () {
     this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
     this.getBatch()
     this.getResults()
@@ -159,10 +169,12 @@ export default {
   },
   methods: {
     async getBatch () {
+      this.loading = true
       this.batch = await this.effectsdk.force.getBatchById(this.id)
       this.batchIpfs = await this.effectsdk.force.getIpfsContent(this.batch.content.field_1)
       this.campaign = await this.effectsdk.force.getCampaign(this.batch.campaign_id)
-      console.log('getBatch', this.batch, this.batchIpfs)
+      this.loading = false
+      console.log('getBatch', this.batch, this.batchIpfs, this.campaign)
     },
     async getResults() {
       console.log('getting results...')
@@ -231,7 +243,7 @@ export default {
       } catch (error) {
         console.error(error)
       }
-    },
+    }
   },
   beforeDestroy() {
     clearInterval(this.timer)

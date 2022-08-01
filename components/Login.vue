@@ -107,13 +107,17 @@
     </div>
 
     <div v-if="createdBatchId" class="notification is-success">
-        <p class="mx-6 px-6">
-            Success! Your batch has been successfuly posted to Effect Force. <br>
-            Take a look at <a :href="`https://app.effect.network/campaigns/${campaign.id}/${createdBatchId}`" target="_blank" rel="noopener noreferrer">https://app.effect.network <font-awesome-icon class="icon mx-2 is-small" icon="fa-solid fa-arrow-up-right-from-square" /></a>
+        <p class="mx-6 px-6 has-text-centered">
+            <strong>Success!</strong><br> 
+            Your order has been successfuly posted to: <br>
+            <a :href="`https://app.effect.network/campaigns/${campaign.id}/${createdBatchId}`" target="_blank" rel="noopener noreferrer">Effect Force <font-awesome-icon class="icon mx-2 is-small" icon="fa-solid fa-arrow-up-right-from-square" /></a>
+             <br>
             <hr>
-            <a :href="'/batch/' + createdBatchId" class="mx-6 px-6" target="_blank" rel="noopener noreferrer">
-                Go to batch results >
-            </a>
+            <div class="buttons is-centered">
+                <a :href="'/batch/' + createdBatchId" class="mx-6 px-6 button is-centered " target="" rel="noopener noreferrer">
+                    Go to results
+                </a>
+            </div>
             <!-- <hr>
             <button class="button">
                 New Order
