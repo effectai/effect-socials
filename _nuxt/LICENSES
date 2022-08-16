@@ -66,6 +66,14 @@ object-assign
  * Released under the MIT License.
  */
 
+/*!
+ * vuex v3.6.0
+ * (c) 2020 Evan You
+ * @license MIT
+ */
+
+/*! (c) 2020 Andrea Giammarchi */
+
 /*! crc32.js (C) 2014-present SheetJS -- http://sheetjs.com */
 
 /*! https://mths.be/punycode v1.4.1 by @mathias */
