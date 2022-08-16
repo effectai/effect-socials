@@ -69,7 +69,7 @@
             </div>
           </div>
         </div>
-        <div v-if="tasks.length > 0" class="box is-centered">
+        <div v-if="tasks.length === 0" class="box is-centered">
           <!-- <div class="columns is-centered"> -->
             <!-- <div class="column is-4 has-text-centered py-0">
               <h2 class="subtitle is-6 has-text-weight-bold mb-3">
