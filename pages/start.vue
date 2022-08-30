@@ -17,17 +17,17 @@
                 <span>&nbsp;Twitter Retweets</span>
               </button>
               <br><br><br>
-              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='follow'; nextStep()" disabled>
+              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='follow'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-retweet" /></span>
                 <span>&nbsp;Twitter Follows</span>
               </button>
+              <!-- <br><br><br> -->
+              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='reply'; nextStep()"> -->
+                <!-- <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-reply" /></span> -->
+                <!-- <span>&nbsp;Twitter Replies</span> -->
+              <!-- </button>               -->
               <br><br><br>
-              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='reply'; nextStep()" disabled>
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-reply" /></span>
-                <span>&nbsp;Twitter Replies</span>
-              </button>              
-              <br><br><br>
-              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='hearts'; nextStep()" disabled>
+              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='instagram'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
                 <span>&nbsp;Instagram Likes</span>
               </button>
@@ -79,6 +79,8 @@ export default {
         like: null,
         retweet: null,
         follow: null,
+        reply: null,
+        instagram: null,
       },
       type: null,
       successMessage: null,
