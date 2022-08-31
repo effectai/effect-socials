@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="step-2">
-      <h2 class="title">2. Add your Tweets</h2>
+      <h2 class="title">2. Add Links</h2>
       <div class="field">
         <div class="box">
           <div style="background: #fff; border-radius: 8px" class="p-2">
@@ -173,6 +173,7 @@ export default Vue.extend({
       followCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Follow', parameter: 'username' },
       retweetCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Follow', parameter: 'username' },
       replyCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'Follow', parameter: 'username' }, 
+      InstagramCampaign: {id: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID), title: 'instagram', parameter: 'link' }, 
     }
   },
   computed: {
@@ -208,8 +209,8 @@ export default Vue.extend({
     onChange () {
       this.filelist = [...this.$refs.file.files]
     },
-    // TODO refactor this into manageable chunks
     createTask () {
+      // TODO refactor this into manageable chunks
       
       // Check that all of the placeholders have been filled in. 
       for (const key in this.newTask) {
@@ -223,31 +224,71 @@ export default Vue.extend({
         }
       }
 
-      // Check that the link is valid.
-      // users are instructed to pass in a url. but the template expects a tweet_id
       let url
-      try {
-        if (this.newTask.tweet_id.includes('https://') || this.newTask.tweet_id.includes('http://')) {
-          console.debug('protocol already included  ')
-          url = new URL(this.newTask.tweet_id)
-        } else {
-          console.debug('add protocol to tweet_id')
-          url = new URL(`https://${this.newTask.tweet_id}`)
+      // figure out which campaign is used.
+      console.log(this.campaign.id, parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID))
+      if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID)) {
+        
+        try {
+          // Make sure the url is constructed correctly.
+            if (this.newTask.instagramLink.includes('https://') || this.newTask.instagramLink.includes('http://')) {
+              url = new URL(this.newTask.instagramLink)
+            } else {
+              url = new URL(`https://${this.newTask.instagramLink}`)
+            }
+        } catch (error) {
+            console.error(error)
+            this.placeholderError = `Please fill in all the placeholders`
+            setTimeout(() => this.placeholderError = null, 5e3)
         }
-      } catch (error) {
-        console.error(error)
-        this.placeholderError = `Please enter a valid twitter.com url`
-        setTimeout(() => this.placeholderError = null, 5e3)
-        return
-      }
-      if (url.hostname !== 'twitter.com' || !url.pathname.includes('/status/') || url.pathname.split('/')[3].length === 0) {
-        this.placeholderError = `Please enter a valid tweet url: https://twitter.com/username/status/123456789`
-        setTimeout(() => this.placeholderError = null, 5e3)
-        return
+
+        console.log(url, !url.pathname.includes('/p/'), !url.pathname.includes('/reel/'))
+        if (url.hostname !== 'www.instagram.com') {
+          this.placeholderError = `Please enter a valid instagram link.`
+          setTimeout(() => this.placeholderError = null, 10e3)
+          return
+        } else if (!url.pathname.includes('/p/') && !url.pathname.includes('/reel/')) {
+          this.placeholderError = `Please enter a valid instagram link: https://www.instagram.com/reel/Chg66lVlP2J/ or https://www.instagram.com/p/Chg66lVlP2J/`
+          setTimeout(() => this.placeholderError = null, 10e3)
+          return
+        } else {
+          this.newTask.instagramLink = `https://www.instagram.com${url.pathname}`
+          this.tasks.push(this.newTask)
+        }
+
+        
+
+
       } else {
-        this.newTask.tweet_id = `${url.hostname}${url.pathname}`
-        this.tasks.push(this.newTask)
+        // Twitter campaignsfaw
+        // Check that the link is valid.
+        // users are instructed to pass in a url. but the template expects a tweet_id
+        try {
+          if (this.newTask.tweet_id.includes('https://') || this.newTask.tweet_id.includes('http://')) {
+            // console.debug('protocol already included  ')
+            url = new URL(this.newTask.tweet_id)
+          } else {
+            // console.debug('add protocol to tweet_id')
+            url = new URL(`https://${this.newTask.tweet_id}`)
+          }
+        } catch (error) {
+          console.error(error)
+          this.placeholderError = `Please enter a valid twitter.com url`
+          setTimeout(() => this.placeholderError = null, 5e3)
+          return
+        }
+        if (url.hostname !== 'twitter.com' || !url.pathname.includes('/status/') || url.pathname.split('/')[3].length === 0) {
+          this.placeholderError = `Please enter a valid tweet url: https://twitter.com/username/status/123456789`
+          setTimeout(() => this.placeholderError = null, 5e3)
+          return
+        } else {
+          this.newTask.tweet_id = `${url.hostname}${url.pathname}`
+          this.tasks.push(this.newTask)
+        }
       }
+      
+
+
 
       this.newTask.id = this.tempCounter++
       this.newTask = this.getEmptyTask(this.placeholders)
