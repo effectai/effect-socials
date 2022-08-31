@@ -17,17 +17,17 @@
                 <span>&nbsp;Twitter Retweets</span>
               </button>
               <br><br><br>
-              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='follow'; nextStep()">
+              <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='follow'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-retweet" /></span>
                 <span>&nbsp;Twitter Follows</span>
               </button>
               <!-- <br><br><br> -->
-              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='reply'; nextStep()"> -->
+              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='reply'; nextStep()"> -->
                 <!-- <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-reply" /></span> -->
                 <!-- <span>&nbsp;Twitter Replies</span> -->
               <!-- </button>               -->
               <br><br><br>
-              <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" data-tooltip="Coming Soon!" @click.prevent="type='instagram'; nextStep()">
+              <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='instagram'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
                 <span>&nbsp;Instagram Likes</span>
               </button>
@@ -117,10 +117,10 @@ export default {
         try {
           this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
           this.campaigns.retweet = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID))
-          this.campaigns.like = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID)
-          // this.campaigns.reply = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID)
-          this.campaigns.follow = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID)
-          this.campaigns.instagram = await this.effectsdk.force.getCampaign(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID)
+          this.campaigns.like = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID))
+          // this.campaigns.reply = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID))
+          this.campaigns.follow = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID))
+          this.campaigns.instagram = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID))
           
         } catch (error) {
           this.setErrorMessage(error)
