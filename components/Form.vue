@@ -226,7 +226,7 @@ export default Vue.extend({
 
       let url
       // figure out which campaign is used.
-      console.log(this.campaign.id, parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID))
+      console.log(this.campaign.id, parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID))
       if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID)) {
         
         try {
@@ -256,7 +256,29 @@ export default Vue.extend({
           this.tasks.push(this.newTask)
         }
 
+      } else if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID)) {
+
+        try {
+          if (this.newTask.twitter_handle.includes('https://') || this.newTask.twitter_handle.includes('http://')) {
+            url = new URL(this.newTask.twitter_handle)
+          } else {
+            url = new URL(`https://${this.newTask.twitter_handle}`)
+          }
+          
+        } catch (error) {
+          console.error(error)
+          this.placeholderError = `Please fill in all the placeholders`
+          setTimeout(() => this.placeholderError = null, 5e3)
+        }
         
+        if (url.hostname !== 'twitter.com') {
+          this.placeholderError = `Please enter a valid twitter handle: https://twitter.com/username`
+          setTimeout(() => this.placeholderError = null, 10e3)
+          return
+        } else {
+          this.newTask.twitter_handle = `https://www.twitter.com${url.pathname}`
+          this.tasks.push(this.newTask)
+        }
 
 
       } else {
