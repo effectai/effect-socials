@@ -200,12 +200,22 @@ export default Vue.extend({
             return 'Invalid URL'
         }
     },
+    extractTwitterHandle (twitter_url) {
+        try {
+            const url = new URL(twitter_url)
+            return url.hostname.split('/').pop()
+        } catch (error) {
+            console.error(error)
+            
+        }
+    },
     extractInstagramID (instagramUrl) {
         try {
             const url = new URL(instagramUrl)
             const id = url.pathname.split('/')[2]
             return { instagram_id: id }
         } catch (error) {
+            console.error(error)
             return 'Invalid URL'
         }
     },
@@ -223,6 +233,8 @@ export default Vue.extend({
             let sanitized_batch
             if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID)) {
                 sanitized_batch = this.batch.map((item) => this.extractInstagramID(item.instagramLink))
+            } else if(this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID)) {
+                sanitized_batch = this.batch.map((item) => this.extractTwitterHandle(item.twitterLink))
             } else {
                 sanitized_batch = this.batch.map((twurl) => this.extractTwitterId(twurl.tweet_id))
             }
