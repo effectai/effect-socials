@@ -200,6 +200,15 @@ export default Vue.extend({
             return 'Invalid URL'
         }
     },
+    extractInstagramID (instagramUrl) {
+        try {
+            const url = new URL(instagramUrl)
+            const id = url.pathname.split('/')[2]
+            return { instagram_id: id }
+        } catch (error) {
+            return 'Invalid URL'
+        }
+    },
     async uploadBatch() {
         this.paymentLoading = true
         try {
@@ -210,7 +219,13 @@ export default Vue.extend({
                 await this.client.account.deposit(parseFloat(amount).toFixed(4))
             }
             this.loading = true
-            const sanitized_batch = this.batch.map((twurl) => this.extractTwitterId(twurl.tweet_id))
+
+            let sanitized_batch
+            if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID)) {
+                sanitized_batch = this.batch.map((item) => this.extractInstagramID(item.instagramLink))
+            } else {
+                sanitized_batch = this.batch.map((twurl) => this.extractTwitterId(twurl.tweet_id))
+            }
             console.log('sanitized batch', sanitized_batch)
             
             const content = {
