@@ -8,7 +8,7 @@
             <table class="table mx-auto">
               <thead>
                 <tr>
-                  <th v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value has-text-left">
+                  <th v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value has-text-left" style="text-transform: capitalize;">
                     <!-- <input v-model="newTask[placeholder]" type="text" class="input"> -->
                     {{ placeHolderTitle(placeholder) }}
                   </th>
@@ -187,7 +187,9 @@ export default Vue.extend({
   },
   components: {Pagination},
   mounted () {
-    this.getPlaceholders(this.campaign.info.template)
+    if (this.campaign && this.campaign.info) {
+      this.getPlaceholders(this.campaign.info.template)
+    }
     this.$nextTick(() => {
       // this.generateCsvData(this.placeholders)
     })
@@ -419,6 +421,8 @@ export default Vue.extend({
           return 'Twitter Handle';
         case 'tweet_instructions':
           return 'Tweet Instructions';
+        case 'instagramLink':
+          return 'URL to Instagram post';
         default:
           return placeholder;
       }
