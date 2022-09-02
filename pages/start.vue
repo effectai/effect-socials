@@ -121,6 +121,7 @@ export default {
           // this.campaigns.reply = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID))
           this.campaigns.follow = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID))
           this.campaigns.instagram = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID))
+          console.log('this.campaigns.', this.campaigns)
           
         } catch (error) {
           this.setErrorMessage(error)
