@@ -39,15 +39,15 @@
                 <span>&nbsp;Instagram Follows</span>
               </button>
 
-              <h3 class="title mt-6 mb-3">Youtube</h3>
+              <h3 class="title mt-6 mb-3">YouTube</h3>
                <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='youtubeLike'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-thumbs-up" /></span>
-                <span>&nbsp;Youtube Likes</span>
+                <span>&nbsp;YouTube Likes</span>
               </button>
               <br><br><br>
               <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='youtubeSubscribe'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
-                <span>&nbsp;Youtube Subscribes</span>
+                <span>&nbsp;Channel Subscribers</span>
               </button>
             </div>
           </div>
