@@ -69,51 +69,20 @@
             </div>
           </div>
         </div>
-        <div v-if="tasks.length === 0" class="box is-centered">
-          <!-- <div class="columns is-centered"> -->
-            <!-- <div class="column is-4 has-text-centered py-0">
-              <h2 class="subtitle is-6 has-text-weight-bold mb-3">
-                Upload tasks
-              </h2>
-              <div class="file is-boxed mt-3">
-                <label class="file-label" style="width: 100%">
-                  <input class="file-input" type="file" name="csvtasks" @change="uploadFile">
-                  <span class="file-cta" @dragover="dragover" @dragleave="dragleave" @drop="drop">
-                    <span class="file-icon">
-                      <font-awesome-icon class="is-small" icon="fa-solid fa-upload" />
-                    </span>
-                    <span class="file-label has-text-grey is-size-7">
-                      Drag and drop or browse<br>to choose a CSV file
-                    </span>
-                  </span>
-                </label>
-              </div>
-              <div>
-                <a ref="csvfiledownload" class="is-size-7" href="" :download="`example.csv`">Download example CSV</a>
-              </div>
-              <p v-if="file.name" class="has-text-success mt-2">
-                Imported file: {{ file.name }}
-              </p>
-              <p v-if="error" class="has-text-danger">
-                {{ error }}
-              </p>
-            </div> -->
-
-
-            <div v-if="campaign && campaign.info" class=" is-6 py-0 px-2 batch-info">
-              <div class="box">
-                <span>
-                  Amount: 
-                </span>
-                <span>
-                  <strong>{{ repetitions }}</strong>
-                </span>
-                <input class="slider is-fullwidth is-info" step="1" min="1" max="20" v-model="repetitions" type="range">
-                Total Cost
-                <strong>{{ parseFloat(campaign.info.reward * tasks.length * repetitions).toFixed(4) }} EFX</strong>
-              </div>
+        <div class="box is-centered">
+          <div v-if="campaign && campaign.info" class=" is-6 py-0 px-2 batch-info">
+            <div class="box">
+              <span>
+                Amount:
+              </span>
+              <span>
+                <strong>{{ repetitions }}</strong>
+              </span>
+              <input class="slider is-fullwidth is-info" step="1" min="1" max="20" v-model="repetitions" type="range">
+              Total Cost
+              <strong>{{ parseFloat(campaign.info.reward * tasks.length * repetitions).toFixed(4) }} EFX</strong>
             </div>
-          <!-- </div> -->
+          </div>
         </div>
       </div>
 
@@ -283,7 +252,7 @@ export default Vue.extend({
         }
 
 
-      } else {
+      } else if (this.campaign.id !== parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID)) {
         // Twitter campaignsfaw
         // Check that the link is valid.
         // users are instructed to pass in a url. but the template expects a tweet_id
@@ -309,10 +278,9 @@ export default Vue.extend({
           this.newTask.tweet_id = `${url.hostname}${url.pathname}`
           this.tasks.push(this.newTask)
         }
+      } else {
+        this.tasks.push(this.newTask)
       }
-      
-
-
 
       this.newTask.id = this.tempCounter++
       this.newTask = this.getEmptyTask(this.placeholders)
@@ -423,6 +391,8 @@ export default Vue.extend({
           return 'Tweet Instructions';
         case 'instagramLink':
           return 'URL to Instagram post';
+         case 'instagramAcct':
+          return 'Instagram account name';
         default:
           return placeholder;
       }

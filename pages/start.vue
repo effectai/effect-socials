@@ -13,12 +13,12 @@
               </button>
               <br><br><br>
               <button class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" @click.prevent="type='retweet'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
+                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-retweet" /></span>
                 <span>&nbsp;Twitter Retweets</span>
               </button>
               <br><br><br>
               <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='follow'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-retweet" /></span>
+                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
                 <span>&nbsp;Twitter Follows</span>
               </button>
               <!-- <br><br><br> -->
@@ -29,7 +29,12 @@
               <br><br><br>
               <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='instagram'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
-                <span>&nbsp;Instagram Likes</span>
+                <span>&nbsp;Instagram Hearts</span>
+              </button>
+              <br><br><br>
+              <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='instagramFollow'; nextStep()">
+                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
+                <span>&nbsp;Instagram Follows</span>
               </button>
             </div>
           </div>
@@ -121,6 +126,7 @@ export default {
           // this.campaigns.reply = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID))
           this.campaigns.follow = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID))
           this.campaigns.instagram = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID))
+          this.campaigns.instagramFollow = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID))
           console.log('this.campaigns.', this.campaigns)
           
         } catch (error) {
