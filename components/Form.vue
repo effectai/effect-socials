@@ -252,7 +252,9 @@ export default Vue.extend({
         }
 
 
-      } else if (this.campaign.id !== parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID)) {
+      } else if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID)) {
+        this.tasks.push(this.newTask)
+      } else {
         // Twitter campaignsfaw
         // Check that the link is valid.
         // users are instructed to pass in a url. but the template expects a tweet_id
@@ -278,8 +280,6 @@ export default Vue.extend({
           this.newTask.tweet_id = `${url.hostname}${url.pathname}`
           this.tasks.push(this.newTask)
         }
-      } else {
-        this.tasks.push(this.newTask)
       }
 
       this.newTask.id = this.tempCounter++
