@@ -215,11 +215,11 @@ export default Vue.extend({
 
         console.log(url, !url.pathname.includes('/p/'), !url.pathname.includes('/reel/'))
         if (url.hostname !== 'www.instagram.com') {
-          this.placeholderError = `Please enter a valid instagram link.`
+          this.placeholderError = `Please enter a valid Instagram link.`
           setTimeout(() => this.placeholderError = null, 10e3)
           return
         } else if (!url.pathname.includes('/p/') && !url.pathname.includes('/reel/')) {
-          this.placeholderError = `Please enter a valid instagram link: https://www.instagram.com/reel/Chg66lVlP2J/ or https://www.instagram.com/p/Chg66lVlP2J/`
+          this.placeholderError = `Please enter a valid Instagram link: https://www.instagram.com/reel/Chg66lVlP2J/ or https://www.instagram.com/p/Chg66lVlP2J/`
           setTimeout(() => this.placeholderError = null, 10e3)
           return
         } else {
@@ -252,7 +252,7 @@ export default Vue.extend({
         }
 
 
-      } else if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID)) {
+      } else if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID) || this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_YOUTUBE_SUBSCRIBE_ID) || this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_YOUTUBE_LIKE_ID) ) {
         this.tasks.push(this.newTask)
       } else {
         // Twitter campaignsfaw
@@ -391,8 +391,12 @@ export default Vue.extend({
           return 'Tweet Instructions';
         case 'instagramLink':
           return 'URL to Instagram post';
-         case 'instagramAcct':
-          return 'Instagram account name';
+        case 'instagramAcct':
+          return 'Instagram Account name';
+        case 'channel_url':
+          return 'Youtube Channel Name';
+        case 'video_url':
+          return 'Youtube Video URL';
         default:
           return placeholder;
       }
