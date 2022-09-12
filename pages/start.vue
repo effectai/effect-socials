@@ -3,10 +3,11 @@
     <div class="columns">
       <div class="column is-three-fifths is-offset-one-fifth">
         <div id="step-1" v-if="step === 1">
-          <h2 class="title">1. Select <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a> engagement</h2>
+          <h2 class="title">1. Select the type of engagement</h2>
           <div class="control">
 
             <div class="buttons is-centered px-6 mx-6">
+              <h3 class="title mt-5 mb-3">Twitter</h3>
               <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='like'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
                 <span>&nbsp;Twitter Likes</span>
@@ -21,12 +22,13 @@
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
                 <span>&nbsp;Twitter Follows</span>
               </button>
-              <!-- <br><br><br> -->
-              <!-- <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='reply'; nextStep()"> -->
-                <!-- <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-reply" /></span> -->
-                <!-- <span>&nbsp;Twitter Replies</span> -->
-              <!-- </button>               -->
               <br><br><br>
+              <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='reply'; nextStep()">
+                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-reply" /></span>
+                <span>&nbsp;Twitter Replies</span>
+              </button>
+
+              <h3 class="title mt-6 mb-3">Instagram</h3>
               <button class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='instagram'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
                 <span>&nbsp;Instagram Hearts</span>
@@ -123,7 +125,7 @@ export default {
           this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
           this.campaigns.retweet = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID))
           this.campaigns.like = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID))
-          // this.campaigns.reply = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID))
+          this.campaigns.reply = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID))
           this.campaigns.follow = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID))
           this.campaigns.instagram = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID))
           this.campaigns.instagramFollow = await this.effectsdk.force.getCampaign(parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID))

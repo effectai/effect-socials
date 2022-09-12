@@ -197,7 +197,7 @@ export default Vue.extend({
 
       let url
       // figure out which campaign is used.
-      console.log(this.campaign.id, parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID))
+      console.log(this.campaign.id)
       if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID)) {
         
         try {

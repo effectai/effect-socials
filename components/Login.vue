@@ -223,21 +223,25 @@ export default Vue.extend({
     async uploadBatch() {
         this.paymentLoading = true
         try {
-            // do a deposit first if the user doesn't have enough vEFX
-            if (!this.account.address && this.batchCost > this.vefxAvailable) {
-                const amount = (this.batchCost - this.vefxAvailable)
-                console.log('trying to deposit..', amount)
-                await this.client.account.deposit(parseFloat(amount).toFixed(4))
-            }
             this.loading = true
 
+            // TODO: clean this up, this is getting confusing
             let sanitized_batch
             if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID)) {
                 sanitized_batch = this.batch.map((item) => this.extractInstagramID(item.instagramLink))
             } else if(this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID)) {
                 sanitized_batch = this.batch.map((item) => this.extractTwitterHandle(item.twitter_handle))
+            } else if(this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID)) {
+                sanitized_batch = this.batch;
             } else {
-                sanitized_batch = this.batch.map((twurl) => this.extractTwitterId(twurl.tweet_id))
+                if (this.batch[0] && this.batch[0].tweet_id) {
+                    sanitized_batch = this.batch.map((task) => {
+                        task.tweet_id = this.extractTwitterId(task.tweet_id)
+                        return task;
+                    });
+                } else {
+                    sanitized_batch = this.batch;
+                }
             }
             console.log('sanitized batch', sanitized_batch)
             
