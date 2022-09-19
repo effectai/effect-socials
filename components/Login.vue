@@ -50,7 +50,7 @@
                         <tr>
                             <td class="" >
                                 <span>Network Fee</span>
-                                <span class="icon is-small" data-tooltip="10% of the transaction is sent to the Effect Network DAO. Already included.">
+                                <span class="icon is-small" data-tooltip="10% of the transaction is sent to the Effect Network DAO. Included in price.">
                                     <font-awesome-icon icon="fa-solid fa-circle-info"/>
                                 </span>
                             </td>
