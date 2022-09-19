@@ -61,17 +61,6 @@
                                 <td>Cost per Task</td>
                                 <td><strong>{{campaign.info.reward}} EFX</strong> </td>
                             </tr>
-                            <tr>
-                              <td class="" >
-                                  <span>Network Fee</span>
-                                  <span class="icon is-small" data-tooltip="10% of the transaction is sent to the Effect Network DAO. Already included.">
-                                      <font-awesome-icon icon="fa-solid fa-circle-info"/>
-                                  </span>
-                              </td>
-                              
-                              <!-- TODO retrieve fee percentage from force settings table or effect-js config -->
-                              <td>{{ campaign.info.reward * 0.10}} <i>EFX</i></td>
-                          </tr>
                         </tbody>
 
                         <tfoot>
@@ -79,6 +68,17 @@
                                 <td>Total Cost</td>
                                 <td><strong>{{batch.balance.quantity}}</strong> </td>
                             </tr>
+                            <tr class="is-size-7">
+                              <td>
+                                  <span>Network Fee</span>
+                                  <span class="icon is-small" data-tooltip="10% of the transaction is sent to the Effect Network DAO. Already included.">
+                                      <font-awesome-icon icon="fa-solid fa-circle-info"/>
+                                  </span>
+                              </td>
+                              
+                              <!-- TODO retrieve fee percentage from force settings table or effect-js config -->
+                              <td>{{ campaign.info.reward * batch.repetitions * 0.10}} <i>EFX</i></td>
+                          </tr>
                         </tfoot>
                     </table>                
 
