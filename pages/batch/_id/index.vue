@@ -66,7 +66,7 @@
                         <tfoot>
                             <tr>
                                 <td>Total Cost</td>
-                                <td><strong>{{batch.balance.quantity}}</strong> </td>
+                                <td><strong>{{campaign.info.reward * batch.repetitions}} EFX</strong> </td>
                             </tr>
                             <tr class="is-size-7">
                               <td>

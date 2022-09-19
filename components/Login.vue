@@ -63,7 +63,7 @@
                             </td>
                             
                             <!-- TODO retrieve fee percentage from force settings table or effect-js config -->
-                            <td>{{ campaign.info.reward * repetitions * 0.10}} <i>{{ client.config.efxSymbol }}</i></td>
+                            <td>{{ batchCost * 0.10}} <i>{{ client.config.efxSymbol }}</i></td>
                         </tr>
                     </tfoot>
                 </table>
