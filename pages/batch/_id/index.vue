@@ -128,7 +128,7 @@
                     </div>
                   </div>
                   <div v-else>
-                    No results yet, please wait while someone start working on your order.
+                    No results yet, please wait while someone starts working on your order.
                   </div>                
                 </div>
               </div>
