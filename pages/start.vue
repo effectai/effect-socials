@@ -6,7 +6,7 @@
           <h2 class="title">1. Select the type of engagement</h2>
           <div class="control">
 
-            <div class="buttons is-centered px-6 mx-6">
+            <div class="buttons is-centered px-6 mx-6" ref="step1">
               <h3 class="title mt-5 mb-3">Twitter</h3>
               <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='like'; nextStep()">
                 <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
@@ -111,6 +111,27 @@ export default {
   },
   created () {
     this.getCampaigns();
+  },
+  mounted () {
+    this.$nextTick(() => {
+      const tour = this.$shepherd({
+        useModalOverlay: true
+      })
+
+      tour.addStep({
+        attachTo: { element: this.$refs.step1, on: 'bottom' },
+        text: 'Select the type of task you want to perform',
+        title: 'Select Task Type',
+        buttons: [
+          {
+            text: 'Done',
+            action: tour.complete
+          }
+        ]
+      })
+
+      tour.start()
+    })
   },
   computed: {
   },
