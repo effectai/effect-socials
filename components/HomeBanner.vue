@@ -5,14 +5,14 @@
         <div class="columns is-vcentered">
           <div class="column is-three-fifths">
             <h1 class="title is-1 is-spaced has-background-white-blur">Grow your brand with social media engagement</h1>
-            <h1 class="subtitle has-background-white-blur">Real engagements on your social media posts from genuine fans.</h1>
+            <h1 class="subtitle has-background-white-blur">Real engagements on your social media posts from real people.</h1>
 <!--            <p class="has-background-white-blur">Our social media algorithms connect your and other relevant content to genuine fans that comment and engage with your brand.</p>-->
             <!--          <p>Helping data science teams succeed with structuring data and the deployment of AI automation</p>-->
             <br>
             <!-- <a to="/start" @click.prevent="scrollToElement('why')" class="button is-secondary" :class="{'is-accent': $colorMode.value === 'dark'}">Start -->
             <div class="buttons">
               <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
-              <nuxt-link to="/batch" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Orders</nuxt-link>
+              <nuxt-link to="/batch" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Dashboard</nuxt-link>
             </div>
             </a>
           </div>

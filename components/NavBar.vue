@@ -25,7 +25,7 @@
             <div class="navbar-item" exact-active-class="is-active">
 
               <nuxt-link to="/batch" class="button is-secondary is-outlined mx-2" :class="{'is-accent': $colorMode.value === 'dark'}" exact-active-class="is-active">
-                Orders
+                Dashboard
               </nuxt-link>
 
               <nuxt-link to="/" class="button is-secondary is-outlined mx-2" :class="{'is-accent': $colorMode.value === 'dark'}" exact-active-class="is-active">
