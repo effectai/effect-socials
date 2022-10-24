@@ -16,8 +16,19 @@ export default {
   namespaced: true,
   modules: {},
   mutations: {
-    SET_SHEPHERD (state, value) {
+    DISABLE_SHEPHERD (state, value) {
       state.shepherd = false
+    },
+    ENABLE_SHEPHERD (state, value) {
+      state.shepherd = true
+    }
+  },
+  actions: {
+    disableShepherd ({ commit }) {
+      commit('DISABLE_SHEPHERD')
+    },
+    enableShepherd ({ commit }) {
+      commit('ENABLE_SHEPHERD')
     }
   },
   state: () => {
