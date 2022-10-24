@@ -14,12 +14,10 @@
                   <th>#</th>
                   <th>Type</th>
                   <!-- <th>Date</th> -->
-                  <th>Amount</th>
+                  <th>Workers</th>
                   <th>Total</th>
-                  <th/>
-                  <th/>
-                  <th/>
-                  <th/>
+                  <th>Status</th>
+                  <th>Actions</th>
 
                 </tr>
               </thead>
@@ -44,35 +42,22 @@
                     {{ tx.totalCost }} EFX
                   </td>
                   <td>
-                    <nuxt-link :to="`/batch/${tx.batchId}`" class="">
-                      <span class="icon-text is-vcentered">
-                        <span>Results</span>
-                        <span class="icon is-small">
-                          <font-awesome-icon icon="fa-solid fa-angle-right" />
+                    <progress class="progress is-large"></progress>
+                  </td>
+                  <td>
+                    <div class="buttons">
+                      <nuxt-link :to="`/batch/${tx.batchId}`" class="button is-info is-small is-rounded">
+                        <span class="icon-text is-vcentered">
+                          <span>Details</span>
+                          <span class="icon is-small">
+                            <font-awesome-icon icon="fa-solid fa-eye" />
+                          </span>
                         </span>
-                      </span>
-                    </nuxt-link>
-                  </td>
-                  <td>
-                    <a :href="`https://app.effect.network/campaigns/${tx.campaign.id}/${tx.batchId}`" class="" target="_blank" rel="noopener noreferrer">
-                      <span class="icon-text">
-                        <span>Force</span>
-                        <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
-                      </span>
-                    </a>
-                  </td>
-                  <td>
-                    <a :href="`https://bloks.io/transaction/${tx.eos.transaction.transaction_id}`" class="" target="_blank" rel="noopener noreferrer">
-                    <span class="icon-text">
-                      <span>BlockExplorer</span>
-                      <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
-                    </span>
-                    </a>
-                  </td>
-                  <td>
-                    <button class="button is-small is-danger is-rounded" @click="removeTransaction(tx)">
-                      <font-awesome-icon class="icon is-small" icon="fa-solid fa-trash-can" />
-                    </button>
+                      </nuxt-link>
+                      <button class="button is-small is-danger is-rounded" @click="removeTransaction(tx)">
+                        <font-awesome-icon class="icon is-small" icon="fa-solid fa-trash-can" />
+                      </button>
+                    </div>
                   </td>
 
                 </tr>
