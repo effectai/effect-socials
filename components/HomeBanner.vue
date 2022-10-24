@@ -12,7 +12,7 @@
             <!-- <a to="/start" @click.prevent="scrollToElement('why')" class="button is-secondary" :class="{'is-accent': $colorMode.value === 'dark'}">Start -->
             <div class="buttons">
               <nuxt-link to="/start" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Start</nuxt-link>
-              <nuxt-link v-if="!transactionsIsEmpty" to="/orders" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Orders</nuxt-link>
+              <nuxt-link to="/batch" class="button is-primary is-large" :class="{'is-accent': $colorMode.value === 'dark'}">Orders</nuxt-link>
             </div>
             </a>
           </div>

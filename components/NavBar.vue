@@ -21,20 +21,15 @@
 
           </div>
           <div class="navbar-end is-align-items-center">
-            <a @click.prevent="scrollToElement('why')"  class="navbar-item" href="/#why" exact-active-class="is-active">
-              About
-            </a>
-            <!-- <a @click.prevent="scrollToElement('how')"  class="navbar-item" href="/#how" exact-active-class="is-active">
-              How it Works
-            </a> -->
 
             <div class="navbar-item" exact-active-class="is-active">
-              <!-- <a href="https://docs.google.com/forms/d/e/1FAIpQLScBLihxn5gk94MoT-scoy1HNDT6YQXkH_hgeRPydgjFbCexlw/viewform" target="_blank"  class="button is-secondary is-outlined" :class="{'is-accent': $colorMode.value === 'dark'}" exact-active-class="is-active">
-                Demo
-              </a> -->
 
-              <nuxt-link to="/start" class="button is-secondary is-outlined" :class="{'is-accent': $colorMode.value === 'dark'}" exact-active-class="is-active">
-                Start
+              <nuxt-link to="/batch" class="button is-secondary is-outlined mx-2" :class="{'is-accent': $colorMode.value === 'dark'}" exact-active-class="is-active">
+                Orders
+              </nuxt-link>
+
+              <nuxt-link to="/" class="button is-secondary is-outlined mx-2" :class="{'is-accent': $colorMode.value === 'dark'}" exact-active-class="is-active">
+                Home
               </nuxt-link>
 
             </div>

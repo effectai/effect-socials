@@ -3,7 +3,7 @@
     <div class="columns">
       <div class="column is-three-fifths is-offset-one-fifth">
         <div id="step-1" v-if="step === 1">
-          <h2 class="title">1. Select the type of engagement</h2>
+          <h2 class="title">1. Select Engagment</h2>
           <div class="control">
 
             <div class="buttons is-centered px-6 mx-6" ref="step1">
@@ -54,14 +54,16 @@
         </div>
 
         <task-form v-if="step === 2" :campaign="campaigns[type]" @error="setErrorMessage" @setBatch="setBatch" @previousStep="previousStep()" @nextStep="nextStep()"/>
-        <login v-if="step === 3"
+        <login 
+          v-if="step === 3"
           @previousStep="previousStep()" 
           @error="setErrorMessage" 
           @success="setSuccessMessage" 
           @account="setAccount"  
           :repetitions="repetitions" 
           :batch="batch" 
-          :campaign="campaigns[type]"/>
+          :campaign="campaigns[type]"
+        />
         <article class="message is-success mt-5" v-if="successMessage">
           <div class="message-body">
             {{successMessage}}
@@ -82,6 +84,7 @@
 import Login from '../components/Login.vue'
 import TaskForm from '../components/Form.vue'
 import * as effectsdk from '@effectai/effect-js'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -115,13 +118,20 @@ export default {
   mounted () {
     this.$nextTick(() => {
       const tour = this.$shepherd({
-        useModalOverlay: true
+        useModalOverlay: true,
+        defaultStepOptions: {
+          cancelIcon: {
+            enabled: true
+          },
+          classes: 'shadow-md bg-purple-dark',
+          scrollTo: false
+        }
       })
 
       tour.addStep({
         attachTo: { element: this.$refs.step1, on: 'bottom' },
-        text: 'Select the type of task you want to perform',
-        title: 'Select Task Type',
+        title: 'Choose Platform',
+        text: 'Choose the platform and interaction. Here you can select the social media platform and the interaction you want. Choose one to begin.',
         buttons: [
           {
             text: 'Done',
@@ -130,12 +140,21 @@ export default {
         ]
       })
 
-      tour.start()
+      if (this.shepherd){
+        this.tour.start()
+      }
+
     })
   },
   computed: {
+    ...mapState({
+      shepherd: state => state.shepherd
+    })
   },
   methods: {
+    ...mapActions({
+      disableShepherd: 'view/disableShepherd'
+    }),
     setSuccessMessage (msg) {
       this.successMessage = msg;
     },

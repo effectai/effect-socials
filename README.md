@@ -10,7 +10,7 @@ dApp to post and share social media posts.
 Buy likes, retweets, replies, and follows on Twitter with Effect Network's decentralized workforce.
 
 # Features
-The most eeffective way to have the social media algorithms work for you is to increase your engagement rate. Quality engagement is rewarded 80% more than anything else.\
+The most effective way to have the social media algorithms work for you is to increase your engagement rate. Quality engagement is rewarded 80% more than anything else.\
 
 Real Humans! We never use bots. We have a network of thousands of people from all over the globe. Our matching algorithm connects you with genuine fans who are rewarded for high-quality engagement on your channels.
 
@@ -37,8 +37,6 @@ $ npm run start
 $ npm run generate
 ```
 
-
 ## Node version
 
 In order to run the project, you need to have node version v15 installed. You can use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to install and manage node versions.
-

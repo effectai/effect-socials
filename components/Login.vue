@@ -98,19 +98,19 @@
     </div>
 
     <div v-if="accountConnected && !createdBatchId">
-        <p v-if="paymentLoading" class="notification is-warning">
-            Please be patient when posting...it can take up to a minute for transaction to complete.
-            <br>
-            Also note that you will need to sign multiple transactions if you are using Metamask.
+        <p v-if="paymentLoading" class="notification is-warning has-text-centered">
+              Please be patient, this may take a few minutes.
+              <br>
+              If you are using <strong class="is-underlined">Metamask</strong>, you will need to confirm multiple transactions.
         </p>
         <form @submit.prevent="uploadBatch">
             <div class="field is-grouped is-justify-content-center mt-6">
             <div class="control">
-                <button class="button is-outlined is-primary is-wide" @click="previousStep">
+                <button :class="{'is-loading': loading}" class="button is-outlined is-primary is-wide" @click="previousStep">
                     Back
                 </button>
                 <button type="submit" :disabled="batchCost > (vefxAvailable + (efxAvailable ? efxAvailable : 0))" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4">
-                    Post tasks
+                    Pay
                 </button>
             </div>
             </div>
@@ -120,7 +120,6 @@
     <div v-if="createdBatchId" class="notification is-success">
         <p class="mx-6 px-6 has-text-centered">
             <strong>Success!</strong><br> 
-            Your order has been successfuly posted to: <br>
             <a :href="`https://app.effect.network/campaigns/${campaign.id}/${createdBatchId}`" target="_blank" rel="noopener noreferrer">Effect Force <font-awesome-icon class="icon mx-2 is-small" icon="fa-solid fa-arrow-up-right-from-square" /></a>
              <br>
             <hr>
