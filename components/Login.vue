@@ -109,7 +109,7 @@
                 <button :class="{'is-loading': loading}" class="button is-outlined is-primary is-wide" @click="previousStep">
                     Back
                 </button>
-                <button type="submit" :disabled="batchCost > (vefxAvailable + (efxAvailable ? efxAvailable : 0))" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4">
+                <button type="submit" :disabled="batchCost > (vefxAvailable + (efxAvailable ? efxAvailable : 0))" :class="{'is-loading': loading}" class="button is-primary is-wide">
                     Pay
                 </button>
             </div>

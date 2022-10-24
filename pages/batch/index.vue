@@ -4,10 +4,10 @@
       <div>
         <div class="py-2">
           <h2 class="title is-4 mt-6 is-spaced">
-            Orders
+            Dashboard
           </h2>
           <p>Recent Orders <sup>*</sup></p>
-          <div v-if="!transactionsIsEmpty" class="table-container mt-5">
+          <div v-if="!transactionsIsEmpty" class="box table-container mt-5">
             <table class="table" style="width: 100%">
               <thead>
                 <tr>
@@ -45,10 +45,10 @@
                   </td>
                   <td>
                     <nuxt-link :to="`/batch/${tx.batchId}`" class="">
-                      <span class="icon-text">
+                      <span class="icon-text is-vcentered">
                         <span>Results</span>
-                        <span class="mx-1 icon is-small">
-                          <font-awesome-icon icon="fa-solid fa-angle-right" />  
+                        <span class="icon is-small">
+                          <font-awesome-icon icon="fa-solid fa-angle-right" />
                         </span>
                       </span>
                     </nuxt-link>
@@ -79,7 +79,9 @@
               </tbody>
             </table>
           </div>
-          <span v-else>No transactions found</span>
+          <div v-else class="box has-text-centered">
+            <p class="is-size-5">No orders found</p>
+          </div>
           <pagination
             v-if="transactions"
             :items="transactions.length"
@@ -88,7 +90,7 @@
             @setPage="setPage"
           />
           <p class="is-size-7">
-            <sup>*</sup> Note that when the localstorage is cleared all transactions will be cleared as well.
+            <sup>*</sup> Note that when the localstorage is cleared all orders will be cleared as well.
           </p>
         </div>
       </div>
