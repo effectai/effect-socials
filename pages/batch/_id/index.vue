@@ -105,16 +105,16 @@
                   <p class="subtitle has-text-black">Links</p>
                   <div class="px-6">
                     <vsa-list v-if="campaign.id === 14 || campaign.id === 16 || campaign.id === 17">
-                      <vsa-item v-for="task in batchIpfs.tasks" :key="task.id">
+                      <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
                         <vsa-heading>
                           <span class="icon-text">
-                            <span>{{ task.id }}:&nbsp;{{ task.tweet_id.tweet_id }}</span>
+                            <span>{{ idx }}:&nbsp;{{ task.tweet_id }}</span>
                             <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
                           </span>
                         </vsa-heading>
 
                         <vsa-content>
-                          <Tweet :id="task.tweet_id.tweet_id" :options="{ cards: 'hidden' }" ><div class="spinner"></div></Tweet>
+                          <Tweet :id="task.tweet_id" :options="{ cards: 'hidden' }" ><div class="spinner"></div></Tweet>
                         </vsa-content>
 
                       </vsa-item>
@@ -156,12 +156,12 @@
                   <hr>
 
                   <p class="subtitle has-text-black">Results ({{ batch.tasks_done }}/{{ batch.num_tasks * batch.repetitions }})</p>
-                  <div v-if="results && results.length > 0" class="table-container">
+                  <div v-if="results && results.length > 0" class="table-container px-6">
                     <table class="table" style="width: 100%">
                       <thead>
                         <tr>
                           <th>ID</th>
-                          <th>Result</th>
+                          <th>Worker-ID</th>
                           <th>Submitted on</th>
                         </tr>
                       </thead>
@@ -170,8 +170,17 @@
                           v-for="r in results"
                           :key="r.id"
                         >
+                          <!-- <td>{{r}}</td> -->
                           <td>{{ r.id }}</td>
-                          <td>{{ r.data }}</td>
+                          <td>
+                            {{ r.account_id }}
+                            <!-- <a :href="`https://app.effect.network/profile/${r.account_id}`" target="_blank" rel="noopener noreferrer"> -->
+                              <!-- {{ r.account_id }} -->
+                              <!-- <span class="icon-text"> -->
+                                <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
+                              <!-- </span> -->
+                            <!-- </a> -->
+                          </td>
                           <td>{{ r.submitted_on }}</td>
                         </tr>
                       </tbody>
