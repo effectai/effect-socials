@@ -21,13 +21,15 @@ export default {
       transactionById (state) {
         return id => state.transactions ? state.transactions.find(c => c.id === id) : null
       },
+      transactionByBatchId (state) {
+        return batchId => state.transactions ? state.transactions.list.find(c => c.batchId === batchId) : null
+      },
       allTransactions (state) {
         return state.transactions ? state.transactions.list : []
       },
       transactionsIsEmpty (state) {
         return state.transactions?.list ? state.transactions?.list.length === 0 : true
       }
-
     },
     actions: {
       addTransaction ({ commit }, transaction) {
