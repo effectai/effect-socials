@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div id="step-2" ref="step1">
       <h2 class="title">2. Add Links</h2>
       <div class="field">
@@ -28,16 +27,16 @@
               <tbody>
                 <tr v-for="(task, index) in paginatedTasks" :key="task.id">
                   <td v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value has-text-left">
-                    <a v-if="placeholder === 'tweet_id' || placeholder === 'tweet'" :href="task[placeholder]" target="_blank" rel="noopener noreferrer">{{ task[placeholder] }}</a>
+                    <a v-if="placeholder === 'tweet_id' || placeholder === 'tweet'" :href="`https://${task[placeholder]}`" target="_blank" rel="noopener noreferrer">{{ task[placeholder] }}</a>
                     <span v-else>{{ task[placeholder] }}</span>
                   </td>
                   <td>
                     <span class="buttons">
-                      <button class="button is-small is-rounded is-outlined is-info" @click.prevent="twitterModal = true">
-                        <span class="icon is-small">
-                          <font-awesome-icon class="icon is-small" icon="fa-solid fa-eye" />
-                        </span>
-                      </button>
+                      <!-- <button class="button is-small is-rounded is-outlined is-info" @click.prevent="twitterModal = true"> -->
+                        <!-- <span class="icon is-small"> -->
+                          <!-- <font-awesome-icon class="icon is-small" icon="fa-solid fa-eye" /> -->
+                        <!-- </span> -->
+                      <!-- </button> -->
                       <button class="button is-danger is-outlined is-small is-rounded" @click.prevent="tasks.splice(index, 1)">
                         <font-awesome-icon class="icon is-small" icon="fa-solid fa-trash-can" />
                       </button>
@@ -151,17 +150,6 @@
           </div>
         </div>
       </form>
-
-    </div>
-    <div v-if="twitterModal" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <h1 class="title">
-          Hello some info about the task
-        </h1>
-      </div>
-      <button class="modal-close"></button>
-    </div>
   </div>
 </template>
 <script>
