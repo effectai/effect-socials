@@ -246,8 +246,7 @@ export default Vue.extend({
             } else {
                 if (this.batch[0] && this.batch[0].tweet_id) {
                     sanitized_batch = this.batch.map((task) => {
-                        task.tweet_id = this.extractTwitterId(task.tweet_id)
-                        return task;
+                        return this.extractTwitterId(task.tweet_id)
                     });
                 } else {
                     sanitized_batch = this.batch;
