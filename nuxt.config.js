@@ -2,7 +2,7 @@ require('./config.js')
 
 export default {
   server: {
-    port: 8080
+    port: 8585
   },
   router: {
     middleware: ['password-protect']
