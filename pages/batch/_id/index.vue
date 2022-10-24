@@ -6,7 +6,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><nuxt-link to="/">Home</nuxt-link></li>
-            <li><nuxt-link to="/batch">Order History</nuxt-link></li>
+            <li><nuxt-link to="/batch">Dashboard</nuxt-link></li>
             <li class="is-active"><nuxt-link to="#" aria-current="page">Order</nuxt-link></li>
           </ul>
         </nav>
@@ -23,6 +23,7 @@
                   <img :src="campaign.info.image">
                 </p>
               </figure>
+
               <div class="media-content">
                 <div class="content">
                   <p class="subtitle">
@@ -35,15 +36,20 @@
                   </p>
                   <hr>
 
-                  <p class="subtitle">Order</p>
+                  <p class="subtitle has-text-black">Order</p>
                   <div class="px-6">
-                    <table class="table is-narrow is-centered">
+                    <p>Status: {{ batchPercentageDone }}%</p>
+                    <progress class="progress is-info" :value="batchPercentageDone"></progress>
+                  </div>
+                  <br>
+                  <div class="px-6 is-centered table-container">
+                    <table class="table is-narrow is-centered px-6">
                         <thead></thead>
                         <tbody>
                             <tr>
                                 <td>Order-ID</td>
                                 <td>
-                                  <a :href="`https://app.effect.network/campaigns/4{batch.campaign_id}/${id}`" target="_blank" rel="noopener noreferrer">
+                                  <a :href="`https://app.effect.network/campaigns/${batch.campaign_id}/${id}`" target="_blank" rel="noopener noreferrer">
                                   <span class="icon-text">
                                     <span>{{ id }}</span>
                                     <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
@@ -52,8 +58,15 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Order-Status</td>
-                                <td>{{ batchPercentageDone }}%</td>
+                              <td>BlockExplorer</td>
+                              <td>
+                                <a :href="`https://bloks.io/transaction/${transaction.eos.transaction.transaction_id}`" class="" target="_blank" rel="noopener noreferrer">
+                                <span class="icon-text">
+                                  <span>BlockExplorer</span>
+                                  <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
+                                </span>
+                                </a>
+                              </td>
                             </tr>
                             <tr>
                                 <td>Tasks</td>
@@ -81,8 +94,6 @@
                                       <font-awesome-icon icon="fa-solid fa-circle-info"/>
                                   </span>
                               </td>
-                              
-                              <!-- TODO retrieve fee percentage from force settings table or effect-js config -->
                               <td>{{ campaign.info.reward * batch.num_tasks * batch.repetitions * 0.10}} <i>EFX</i></td>
                           </tr>
                         </tfoot>
@@ -91,42 +102,60 @@
                   </div>
                   <hr>
 
-                  <p class="subtitle">Tasks</p>
-                  <table class="table is-narrow">
-                    <thead></thead>
-                    <tbody>
-                      <tr v-for="task in batchIpfs.tasks" :key="task.link_id">
-                        <!-- <td>{{task.tweet_id}}</td> -->
-                        <td>
-                          <!-- {{ task }} -->
-                          <!-- <Tweet :id="task.tweet_id.tweet_id" class="spinner" /> -->
-                          <vsa-list>
-                            <!-- Here you can use v-for to loop through items  -->
-                            <vsa-item>
-                              <vsa-heading>
-                                {{ task.tweet_id.tweet_id }}
-                              </vsa-heading>
+                  <p class="subtitle has-text-black">Links</p>
+                  <div class="px-6">
+                    <vsa-list v-if="campaign.id === 14 || campaign.id === 16 || campaign.id === 17">
+                      <vsa-item v-for="task in batchIpfs.tasks" :key="task.id">
+                        <vsa-heading>
+                          <span class="icon-text">
+                            <span>{{ task.id }}:&nbsp;{{ task.tweet_id.tweet_id }}</span>
+                            <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
+                          </span>
+                        </vsa-heading>
 
-                              <vsa-content>
-                                <Tweet :id="task.tweet_id.tweet_id" class="spinner" />
-                              </vsa-content>
-                            </vsa-item>
-                          </vsa-list>
+                        <vsa-content>
+                          <Tweet :id="task.tweet_id.tweet_id" :options="{ cards: 'hidden' }" ><div class="spinner"></div></Tweet>
+                        </vsa-content>
 
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                      </vsa-item>
+                    </vsa-list>
+
+                    <vsa-list v-else-if="campaign.id === 15">
+                      <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
+                        <vsa-heading>
+                          <span class="icon-text">
+                            <span>{{ task.twitter_handle }}</span>
+                            <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
+                          </span>
+                        </vsa-heading>
+
+                        <vsa-content>
+                          <Timeline :id="task.twitter_handle" sourceType="profile" :options="{ tweetLimit: '1' }"/>
+                        </vsa-content>
+                      </vsa-item>
+                    </vsa-list>
+
+                    <vsa-list v-else>
+                      <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
+                        <vsa-heading>
+                          <span class="icon-text">
+                            <span>{{ idx }}</span>
+                            <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
+                          </span>
+                        </vsa-heading>
+
+                        <vsa-content>
+                          {{ task }}
+                        </vsa-content>
+                      </vsa-item>
+                    </vsa-list>
+
+
+                  </div>
 
                   <hr>
-                  <!-- <Tweet id="20" />
-                  <Tweet id="1583805574206324736" /> -->
 
-
-                  <p class="subtitle">Results ({{ batch.tasks_done }}/{{ batch.num_tasks * batch.repetitions }})</p>
-                  <div>
-                    <progress class="progress is-info" :value="batchPercentageDone"></progress>
-                  </div>
+                  <p class="subtitle has-text-black">Results ({{ batch.tasks_done }}/{{ batch.num_tasks * batch.repetitions }})</p>
                   <div v-if="results && results.length > 0" class="table-container">
                     <table class="table" style="width: 100%">
                       <thead>
@@ -168,7 +197,7 @@
           </div>
           <div v-else>
             <p>No batch found</p>
-          </div>          
+          </div>
         </div>
 
       </div>
@@ -179,12 +208,13 @@
 <script>
 const jsonexport = require('jsonexport/dist')
 import * as effectsdk from '@effectai/effect-js'
-import { Tweet, Moment } from 'vue-tweet-embed'
+import { Tweet, Timeline } from 'vue-tweet-embed'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
     Tweet,
-    Moment
+    Timeline
   },
   data() {
     return {
@@ -197,10 +227,12 @@ export default {
       batch: null,
       batchIpfs: null,
       campaign: null,
+      transaction: null
     }
   },
   mounted () {
     this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
+    this.transaction = this.transactionByBatchId(this.id)
     this.getBatch()
     this.getResults()
     this.timer = setInterval(() => {
@@ -208,6 +240,9 @@ export default {
     }, 30e3)
   },
   computed: {
+    ...mapGetters({
+      transactionByBatchId: 'transaction/transactionByBatchId',
+    }),
     batchPercentageDone() {
       if (this.batch) {
         return Math.round((this.batch.tasks_done / (this.batch.num_tasks * this.batch.repetitions)) * 100)
