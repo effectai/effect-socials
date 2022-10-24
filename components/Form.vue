@@ -1,7 +1,18 @@
 <template>
   <div>
-    <div id="step-2">
+    <div id="step-2" ref="step1">
       <h2 class="title">2. Add Links</h2>
+      <div class="field">
+        <input 
+          class="switch is-info is-outlined unselectable"
+          type="checkbox"
+          name="bulkuploadswitch"
+          id="bulkuploadswitch"
+          :checked="bulkUploadDiv"
+          @click="bulkUploadDiv = !bulkUploadDiv"
+        >
+        <label for="bulkuploadswitch">Bulk Upload</label>
+      </div>
       <div class="field">
         <div class="box">
           <div style="background: #fff; border-radius: 8px" class="p-2">
@@ -17,16 +28,23 @@
               <tbody>
                 <tr v-for="(task, index) in paginatedTasks" :key="task.id">
                   <td v-for="placeholder in placeholders" :key="placeholder" class="task-placeholder-value has-text-left">
-                    <a :href="task[placeholder]" target="_blank" rel="noopener noreferrer" v-if="placeholder==='tweet_id'">{{ task[placeholder] }}</a>
+                    <a v-if="placeholder === 'tweet_id' || placeholder === 'tweet'" :href="task[placeholder]" target="_blank" rel="noopener noreferrer">{{ task[placeholder] }}</a>
                     <span v-else>{{ task[placeholder] }}</span>
                   </td>
                   <td>
-                    <button class="button is-danger is-outlined is-small is-rounded" @click.prevent="tasks.splice(index, 1)">
-                      <font-awesome-icon class="icon is-small" icon="fa-solid fa-trash-can" />
-                    </button>
+                    <span class="buttons">
+                      <button class="button is-small is-rounded is-outlined is-info" @click.prevent="twitterModal = true">
+                        <span class="icon is-small">
+                          <font-awesome-icon class="icon is-small" icon="fa-solid fa-eye" />
+                        </span>
+                      </button>
+                      <button class="button is-danger is-outlined is-small is-rounded" @click.prevent="tasks.splice(index, 1)">
+                        <font-awesome-icon class="icon is-small" icon="fa-solid fa-trash-can" />
+                      </button>
+                    </span>
                   </td>
                 </tr>
-                <tr>
+                <tr ref="step2">
                   <td v-for="(placeholder, placeindex) in placeholders" :key="placeholder" class="task-placeholder-value">
                     <input
                       :ref="`placeholder-${placeindex}`"
@@ -69,16 +87,43 @@
             </div>
           </div>
         </div>
+        <div v-show="bulkUploadDiv" class="box is-centered">
+          <h2 class="subtitle is-6 has-text-weight-bold mb-3">
+            Bulk Upload
+          </h2>
+          <div class="file is-boxed mt-3">
+            <label class="file-label" style="width: 100%">
+              <input class="file-input" type="file" name="csvtasks" @change="uploadFile">
+              <span class="file-cta" @dragover="dragover" @dragleave="dragleave" @drop="drop">
+                <span class="file-icon">
+                  <font-awesome-icon class="is-small" icon="fa-solid fa-upload" />
+                </span>
+                <span class="file-label has-text-grey is-size-7">
+                  Drag and drop or browse<br>to choose a CSV file
+                </span>
+              </span>
+            </label>
+          </div>
+          <div>
+            <a ref="csvfiledownload" class="is-size-7" href="" :download="`example.csv`">Download example CSV</a>
+          </div>
+          <p v-if="file.name" class="has-text-success mt-2">
+            Imported file: {{ file.name }}
+          </p>
+          <p v-if="error" class="has-text-danger">
+            {{ error }}
+          </p>
+        </div>
         <div class="box is-centered">
           <div v-if="campaign && campaign.info" class=" is-6 py-0 px-2 batch-info">
             <div class="box">
               <span>
-                Amount:
+                Worker per Link:
               </span>
               <span>
                 <strong>{{ repetitions }}</strong>
               </span>
-              <input class="slider is-fullwidth is-info" step="1" min="1" max="20" v-model="repetitions" type="range">
+              <input class="slider is-fullwidth is-info" step="1" min="1" max="20" v-model="repetitions" type="range" ref="step3">
               Total Cost
               <strong>{{ parseFloat(campaign.info.reward * tasks.length * repetitions).toFixed(4) }} EFX</strong>
             </div>
@@ -88,21 +133,40 @@
 
       <form>
         <div class="field is-grouped is-justify-content-center mt-6">
-          <div class="control">
+          <div class="control buttons">
             <button class="button is-outlined is-primary is-wide" @click="cancel">
               Back
             </button>
-            <button @click="nextStep" type="submit" :class="{'is-loading': loading}" class="button button is-primary is-wide mr-4" :disabled="!tasks.length">
+            <button class="button is-outlined is-info" @click.prevent="restartTour" >
+              <span class="icon-text">
+                <!-- fontawesome magnifying glass icon -->
+                <!-- <span>Assist</span> -->
+                <!-- <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-question" /></span> -->
+                Help
+              </span>
+            </button>
+            <button @click="nextStep" type="submit" :class="{'is-loading': loading}" class="button is-primary is-wide mr-4" :disabled="!tasks.length" ref="step4">
               Next step
             </button>
           </div>
         </div>
       </form>
+
+    </div>
+    <div v-if="twitterModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <h1 class="title">
+          Hello some info about the task
+        </h1>
+      </div>
+      <button class="modal-close"></button>
     </div>
   </div>
 </template>
 <script>
 import Vue from 'vue'
+import { mapState, mapActions } from 'vuex'
 import Pagination from './Pagination.vue'
 
 function getMatches (string, regex, index) {
@@ -119,6 +183,9 @@ export default Vue.extend({
   props: ['campaign'],
   data() {
     return {
+      tour: null,
+      twitterModal: false,
+      bulkUploadDiv: false,
       step: 1,
       repetitions: 1,
       tempCounter: 0,
@@ -146,27 +213,103 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState({
+      shepherd: state => state.shepherd
+    }),
     paginatedTasks () {
       const start = (this.page - 1) * this.perPage
       if (this.tasks) {
         return this.tasks.slice(start, start + this.perPage)
       }
       return []
-    },
+    }
   },
   components: {Pagination},
   mounted () {
     if (this.campaign && this.campaign.info) {
       this.getPlaceholders(this.campaign.info.template)
     }
+
+    // Set up download link for example CSV
+    this.$nextTick(() => this.generateCsvData(this.$refs.csvfiledownload, this.placeholders))
+
+    // Set up shepherd tour
     this.$nextTick(() => {
-      // this.generateCsvData(this.placeholders)
+      this.tour = this.$shepherd({
+        defaultStepOptions: {
+          cancelIcon: {
+            enabled: true
+          },
+          classes: 'shepherd-theme-arrows',
+          scrollTo: true
+        },
+        useModalOverlay: true
+      })
+
+      this.tour.addSteps([
+        {
+          id: 'step1',
+          title: 'Order Form',
+          text: 'Welcome to the order form. Here you can create a new order for your social media campaign.',
+          attachTo: { element: this.$refs.step1, on: 'top' },
+          buttons: [{ text: 'Next', action: this.tour.next }, { text: 'Close', action: this.closeShepherd }],
+          cancelIcon: { enabled: true },
+          classes: 'shepherd-theme-arrows'
+        },
+        {
+          id: 'step2',
+          title: 'Add your links',
+          text: 'Add your links to the table below. You can add as many links as you want.',
+          attachTo: { element: this.$refs.step2, on: 'top' },
+          buttons: [{ text: 'Next', action: this.tour.next }, { text: 'Close', action: this.closeShepherd }],
+          cancelIcon: { enabled: true },
+          classes: 'shepherd-theme-arrows'
+        },
+        {
+          id: 'step3',
+          title: 'Worker per Link',
+          text: 'Set the amount of workers you want per link. You can have multiple workers per link. So if you want 10 people to like your tweet, you can set the amount to 10.',
+          attachTo: { element: this.$refs.step3, on: 'top' },
+          buttons: [{ text: 'Next', action: this.tour.next }, { text: 'Close', action: this.closeShepherd }],
+          cancelIcon: { enabled: true },
+          classes: 'shepherd-theme-arrows'
+        },
+        {
+          id: 'step4',
+          title: 'Next Step',
+          text: 'Next step is to connect your wallet, let\'s go!',
+          attachTo: { element: this.$refs.step4, on: 'top' },
+          buttons: [{ text: 'Next', action: this.tour.next }, { text: 'Close', action: this.closeShepherd }],
+          cancelIcon: { enabled: true },
+          classes: 'shepherd-theme-arrows'
+        }
+      ])
+
+      if (this.shepherd) {
+        this.tour.start()
+      }
     })
     this.newTask = this.getEmptyTask(this.placeholders)
   },
   created () {
   },
   methods: {
+    ...mapActions({
+      // shepherd: state => state.shepherd
+      disableShepherd: 'view/disableShepherd',
+      enableShepherd: 'view/enableShepherd'
+    }),
+    closeShepherd () {
+      this.disableShepherd()
+      this.tour.cancel()
+    },
+    restartTour () {
+      this.tour.cancel()
+      this.tour.start()
+    },
+    showTwitter () {
+      this.twitterModal = true
+    },
     setPage (newPage) {
       this.page = newPage
     },
@@ -348,7 +491,9 @@ export default Vue.extend({
       const unique = [...new Set(placeholders)]
       this.placeholders = unique
     },
-    generateCsvData (placeholders) {
+    generateCsvData (ref, placeholders) {
+      // log all refs
+      console.log(this.$refs)
       const link = this.$refs.csvfiledownload
       let csvContent = 'data:text/csv;charset=utf-8,'
       csvContent += [
@@ -358,6 +503,7 @@ export default Vue.extend({
         placeholders.map(item => item + '-value-task-3')
       ].join('\n')
         .replace(/(^\[)|(\]$)/gm, '')
+      console.log(link, csvContent)
       link.href = encodeURI(csvContent)
     },
     getEmptyTask (placeholders) {
