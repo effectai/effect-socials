@@ -6,7 +6,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><nuxt-link to="/">Home</nuxt-link></li>
-            <li><nuxt-link to="/orders">Order History</nuxt-link></li>
+            <li><nuxt-link to="/batch">Order History</nuxt-link></li>
             <li class="is-active"><nuxt-link to="#" aria-current="page">Order</nuxt-link></li>
           </ul>
         </nav>
@@ -15,11 +15,7 @@
         </div>
         <div v-else>
           <div v-if="batch && campaign">
-            <!-- {{ batch }} -->
-            <!-- <br><br> -->
-            <!-- {{ batchIpfs }} -->
-            <!-- {{ campaign}} -->
-            <br>
+
             <br>
             <div class="box media">
               <figure class="media-left">
@@ -39,16 +35,26 @@
                   </p>
                   <hr>
 
-                  <p class="subtitle">Details</p>
+                  <p class="subtitle">Order</p>
                   <div class="px-6">
-                    <p>
-                      <span>Order ID: <strong>{{ id }}</strong></span>
-                      <br>
-                      <span>Status: <strong>{{ batchPercentageDone }}%</strong></span>
-                    </p>
                     <table class="table is-narrow is-centered">
                         <thead></thead>
                         <tbody>
+                            <tr>
+                                <td>Order-ID</td>
+                                <td>
+                                  <a :href="`https://app.effect.network/campaigns/4{batch.campaign_id}/${id}`" target="_blank" rel="noopener noreferrer">
+                                  <span class="icon-text">
+                                    <span>{{ id }}</span>
+                                    <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
+                                  </span>
+                                  </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Order-Status</td>
+                                <td>{{ batchPercentageDone }}%</td>
+                            </tr>
                             <tr>
                                 <td>Tasks</td>
                                 <td>{{batch.num_tasks}}&nbsp;×</td>
