@@ -72,7 +72,7 @@
                         <tfoot>
                             <tr>
                                 <td>Total Cost</td>
-                                <td><strong>{{campaign.info.reward * batch.repetitions}} EFX</strong> </td>
+                                <td><strong>{{campaign.info.reward * batch.num_tasks * batch.repetitions}} EFX</strong> </td>
                             </tr>
                             <tr class="is-size-7">
                               <td>
@@ -83,7 +83,7 @@
                               </td>
                               
                               <!-- TODO retrieve fee percentage from force settings table or effect-js config -->
-                              <td>{{ campaign.info.reward * batch.repetitions * 0.10}} <i>EFX</i></td>
+                              <td>{{ campaign.info.reward * batch.num_tasks * batch.repetitions * 0.10}} <i>EFX</i></td>
                           </tr>
                         </tfoot>
                     </table>                
@@ -96,17 +96,38 @@
                     <thead></thead>
                     <tbody>
                       <tr v-for="task in batchIpfs.tasks" :key="task.link_id">
-                        <td>{{task.tweet_id}}</td>
+                        <!-- <td>{{task.tweet_id}}</td> -->
+                        <td>
+                          <!-- {{ task }} -->
+                          <!-- <Tweet :id="task.tweet_id.tweet_id" class="spinner" /> -->
+                          <vsa-list>
+                            <!-- Here you can use v-for to loop through items  -->
+                            <vsa-item>
+                              <vsa-heading>
+                                {{ task.tweet_id.tweet_id }}
+                              </vsa-heading>
+
+                              <vsa-content>
+                                <Tweet :id="task.tweet_id.tweet_id" class="spinner" />
+                              </vsa-content>
+                            </vsa-item>
+                          </vsa-list>
+
+                        </td>
                       </tr>
                     </tbody>
                   </table>
 
-                  <!-- <div id="tweet"></div> -->
-
                   <hr>
+                  <!-- <Tweet id="20" />
+                  <Tweet id="1583805574206324736" /> -->
+
 
                   <p class="subtitle">Results ({{ batch.tasks_done }}/{{ batch.num_tasks * batch.repetitions }})</p>
-                  <div v-if="results && results.length > 0">
+                  <div>
+                    <progress class="progress is-info" :value="batchPercentageDone"></progress>
+                  </div>
+                  <div v-if="results && results.length > 0" class="table-container">
                     <table class="table" style="width: 100%">
                       <thead>
                         <tr>
@@ -133,9 +154,14 @@
                       </button>
                     </div>
                   </div>
-                  <div v-else>
-                    No results yet, please wait while someone starts working on your order.
-                  </div>                
+                  <div v-else class="has-text-centered">
+                    <br>
+                    <p>
+                      No results yet.
+                      <br>
+                      Please wait while someone starts working on your order.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -153,8 +179,13 @@
 <script>
 const jsonexport = require('jsonexport/dist')
 import * as effectsdk from '@effectai/effect-js'
+import { Tweet, Moment } from 'vue-tweet-embed'
 
 export default {
+  components: {
+    Tweet,
+    Moment
+  },
   data() {
     return {
       loading: true,
