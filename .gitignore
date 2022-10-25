@@ -92,3 +92,6 @@ sw.*
 .env.development
 .env.production
 .env.development.bak
+
+# Custom
+.labs/
