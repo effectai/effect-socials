@@ -114,7 +114,11 @@
                         </vsa-heading>
 
                         <vsa-content>
-                          <Tweet :id="task.tweet_id" :options="{ cards: 'hidden' }" ><div class="spinner"></div></Tweet>
+                          <Tweet :id="task.tweet_id" :options="{ cards: 'hidden' }" >
+                            <div class="mx-auto is-centered">
+                              <progress class="progress mx-auto is-info"></progress>
+                            </div>
+                          </Tweet>
                         </vsa-content>
 
                       </vsa-item>
@@ -130,7 +134,9 @@
                         </vsa-heading>
 
                         <vsa-content>
-                          <Timeline :id="task.twitter_handle" sourceType="profile" :options="{ tweetLimit: '1' }"/>
+                          <Timeline :id="task.twitter_handle" sourceType="profile" :options="{ tweetLimit: '1' }" >
+                            <progress class="progress mx-auto is-info"></progress>
+                          </Timeline>
                         </vsa-content>
                       </vsa-item>
                     </vsa-list>
