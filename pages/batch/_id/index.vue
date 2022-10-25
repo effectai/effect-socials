@@ -103,7 +103,7 @@
                   <hr>
 
                   <p class="subtitle has-text-black">Links</p>
-                  <div class="px-6">
+                  <div class="px-6 mx-auto is-centered">
                     <vsa-list v-if="campaign.id === 14 || campaign.id === 16 || campaign.id === 17">
                       <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
                         <vsa-heading>
@@ -113,8 +113,8 @@
                           </span>
                         </vsa-heading>
 
-                        <vsa-content>
-                          <Tweet :id="task.tweet_id" :options="{ cards: 'hidden' }" >
+                        <vsa-content class="mx-auto">
+                          <Tweet class="mx-auto" :id="task.tweet_id" :options="{ cards: 'hidden' }" >
                             <div class="mx-auto is-centered">
                               <progress class="progress mx-auto is-info"></progress>
                             </div>
@@ -133,8 +133,8 @@
                           </span>
                         </vsa-heading>
 
-                        <vsa-content>
-                          <Timeline :id="task.twitter_handle" sourceType="profile" :options="{ tweetLimit: '1' }" >
+                        <vsa-content class="mx-auto">
+                          <Timeline class="mx-auto" :id="task.twitter_handle" sourceType="profile" :options="{ tweetLimit: '1' }" >
                             <progress class="progress mx-auto is-info"></progress>
                           </Timeline>
                         </vsa-content>

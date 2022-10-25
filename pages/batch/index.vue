@@ -16,7 +16,7 @@
                   <!-- <th>Date</th> -->
                   <th>Workers</th>
                   <th>Total</th>
-                  <th>Status</th>
+                  <!-- <th>Status</th> -->
                   <th>Actions</th>
 
                 </tr>
@@ -41,9 +41,9 @@
                   <td>
                     {{ tx.totalCost }} EFX
                   </td>
-                  <td>
-                    <progress class="progress is-large"></progress>
-                  </td>
+                  <!-- <td> -->
+                    <!-- <progress class="progress is-large"></progress> -->
+                  <!-- </td> -->
                   <td>
                     <div class="buttons">
                       <nuxt-link :to="`/batch/${tx.batchId}`" class="button is-info is-small is-rounded">
