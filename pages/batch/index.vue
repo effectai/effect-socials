@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-    <div class="container">
+    <div class="container is-max-desktop">
       <div>
         <div class="py-2">
           <h2 class="title is-4 mt-6 is-spaced">
@@ -8,7 +8,7 @@
           </h2>
           <p>Recent Orders <sup>*</sup></p>
           <div v-if="!transactionsIsEmpty" class="box table-container mt-5">
-            <table class="table" style="width: 100%">
+            <table class="table is-hoverable" style="width: 100%">
               <thead>
                 <tr>
                   <th>#</th>
@@ -22,7 +22,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(tx, idx) in paginatedTransactions" :key="tx.idx">
+                <tr v-for="(tx, idx) in paginatedTransactions" :key="tx.idx" @click="goToOrder(tx.batchId)">
 
                   <!-- <td>{{ tx }}</td> -->
                  
@@ -48,13 +48,12 @@
                     <div class="buttons">
                       <nuxt-link :to="`/batch/${tx.batchId}`" class="button is-info is-small is-rounded">
                         <span class="icon-text is-vcentered">
-                          <span>Details</span>
                           <span class="icon is-small">
                             <font-awesome-icon icon="fa-solid fa-eye" />
                           </span>
                         </span>
                       </nuxt-link>
-                      <button class="button is-small is-danger is-rounded" @click="removeTransaction(tx)">
+                      <button class="button is-small is-danger is-rounded" @click="removeOrder(tx)">
                         <font-awesome-icon class="icon is-small" icon="fa-solid fa-trash-can" />
                       </button>
                     </div>
@@ -65,7 +64,11 @@
             </table>
           </div>
           <div v-else class="box has-text-centered">
-            <p class="is-size-5">No orders found</p>
+            <p class="p-2 is-size-5">No orders found</p>
+            <div class="buttons is-centered">
+              <nuxt-link to="/" class="button is-wide is-primary">Home</nuxt-link>
+              <nuxt-link to="/start" class="button is-wide is-primary">Start</nuxt-link>
+            </div>
           </div>
           <pagination
             v-if="transactions"
@@ -121,6 +124,14 @@ export default {
     }),
     setPage (newPage) {
       this.page = newPage
+    },
+    removeOrder (tx) {
+      if (confirm('Are you sure you want to remove this order?')) {
+        this.removeTransaction(tx)
+      }
+    },
+    goToOrder (batchId) {
+      this.$router.push(`/batch/${batchId}`)
     }
   }
 }
