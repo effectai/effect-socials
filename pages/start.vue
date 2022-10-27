@@ -1,80 +1,82 @@
 <template>
   <div class="section pt-6">
-    <div class="columns">
-      <div class="column is-three-fifths is-offset-one-fifth">
-        <div id="step-1" v-if="step === 1">
-          <h2 class="title">1. Select Engagment</h2>
-          <div class="control">
+    <div class="container is-max-desktop">
+      <div class="columns">
+        <div class="column is-three-fifths is-offset-one-fifth">
+          <div id="step-1" v-if="step === 1">
+            <h2 class="title">1. Select Engagment</h2>
+            <div class="control">
 
-            <div class="buttons is-centered px-6 mx-6" ref="step1">
-              <h3 class="title mt-5 mb-3">Twitter</h3>
-              <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='like'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
-                <span>&nbsp;Twitter Likes</span>
-              </button>
-              <br><br><br>
-              <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" @click.prevent="type='retweet'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-retweet" /></span>
-                <span>&nbsp;Twitter Retweets</span>
-              </button>
-              <br><br><br>
-              <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='follow'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
-                <span>&nbsp;Twitter Follows</span>
-              </button>
-              <br><br><br>
-              <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='reply'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-reply" /></span>
-                <span>&nbsp;Twitter Replies</span>
-              </button>
+              <div class="buttons is-centered px-6 mx-6" ref="step1">
+                <h3 class="title mt-5 mb-3">Twitter</h3>
+                <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='like'; nextStep()">
+                  <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
+                  <span>&nbsp;Twitter Likes</span>
+                </button>
+                <br><br><br>
+                <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large has-tooltip-arrow has-tooltip-top has-tooltip-info" @click.prevent="type='retweet'; nextStep()">
+                  <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-retweet" /></span>
+                  <span>&nbsp;Twitter Retweets</span>
+                </button>
+                <br><br><br>
+                <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='follow'; nextStep()">
+                  <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
+                  <span>&nbsp;Twitter Follows</span>
+                </button>
+                <br><br><br>
+                <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='reply'; nextStep()">
+                  <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-reply" /></span>
+                  <span>&nbsp;Twitter Replies</span>
+                </button>
 
-              <h3 class="title mt-6 mb-3">Instagram</h3>
-              <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='instagram'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
-                <span>&nbsp;Instagram Hearts</span>
-              </button>
-              <br><br><br>
-              <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='instagramFollow'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
-                <span>&nbsp;Instagram Follows</span>
-              </button>
+                <h3 class="title mt-6 mb-3">Instagram</h3>
+                <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='instagram'; nextStep()">
+                  <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-heart" /></span>
+                  <span>&nbsp;Instagram Hearts</span>
+                </button>
+                <br><br><br>
+                <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='instagramFollow'; nextStep()">
+                  <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
+                  <span>&nbsp;Instagram Follows</span>
+                </button>
 
-              <h3 class="title mt-6 mb-3">YouTube</h3>
-               <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='youtubeLike'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-thumbs-up" /></span>
-                <span>&nbsp;YouTube Likes</span>
-              </button>
-              <br><br><br>
-              <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='youtubeSubscribe'; nextStep()">
-                <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
-                <span>&nbsp;Channel Subscribers</span>
-              </button>
+                <h3 class="title mt-6 mb-3">YouTube</h3>
+                <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='youtubeLike'; nextStep()">
+                  <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-thumbs-up" /></span>
+                  <span>&nbsp;YouTube Likes</span>
+                </button>
+                <br><br><br>
+                <button :disabled="loading" :class="{'is-loading': loading}" class="button is-link is-light mt-3 is-fullwidth is-large" @click.prevent="type='youtubeSubscribe'; nextStep()">
+                  <span><font-awesome-icon class="mx-2 icon is-small" icon="fa-solid fa-user-group" /></span>
+                  <span>&nbsp;Channel Subscribers</span>
+                </button>
+              </div>
             </div>
           </div>
+
+          <task-form v-if="step === 2" :campaign="campaigns[type]" @error="setErrorMessage" @setBatch="setBatch" @previousStep="previousStep()" @nextStep="nextStep()"/>
+          <login 
+            v-if="step === 3"
+            @previousStep="previousStep()" 
+            @error="setErrorMessage" 
+            @success="setSuccessMessage" 
+            @account="setAccount"  
+            :repetitions="repetitions" 
+            :batch="batch" 
+            :campaign="campaigns[type]"
+          />
+          <article class="message is-success mt-5" v-if="successMessage">
+            <div class="message-body">
+              {{successMessage}}
+            </div>
+          </article>
+
+          <article class="message is-danger mt-5" v-if="errorMessage">
+            <div class="message-body">
+              {{errorMessage}}
+            </div>
+          </article>
         </div>
-
-        <task-form v-if="step === 2" :campaign="campaigns[type]" @error="setErrorMessage" @setBatch="setBatch" @previousStep="previousStep()" @nextStep="nextStep()"/>
-        <login 
-          v-if="step === 3"
-          @previousStep="previousStep()" 
-          @error="setErrorMessage" 
-          @success="setSuccessMessage" 
-          @account="setAccount"  
-          :repetitions="repetitions" 
-          :batch="batch" 
-          :campaign="campaigns[type]"
-        />
-        <article class="message is-success mt-5" v-if="successMessage">
-          <div class="message-body">
-            {{successMessage}}
-          </div>
-        </article>
-
-        <article class="message is-danger mt-5" v-if="errorMessage">
-          <div class="message-body">
-            {{errorMessage}}
-          </div>
-        </article>
       </div>
     </div>
   </div>
