@@ -39,7 +39,8 @@ export default {
   plugins: [
     '~/plugins/fontawesome.js',
     '~/plugins/shepherd.js',
-    '~/plugins/accordion.js'
+    '~/plugins/accordion.js',
+    '~/plugins/effect.js',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
