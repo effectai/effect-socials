@@ -33,6 +33,7 @@
       // MailingList
     },
     mounted () {
+      console.log("EffectSDK", this.$effect)
       stars.start();
       window.addEventListener('resize', this.onResize)
     },

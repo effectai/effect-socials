@@ -88,6 +88,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import Pagination from '@/components/Pagination.vue'
+// import * as effectsdk from '@effectai/effect-js'
 
 export default {
   components: { Pagination },
@@ -98,9 +99,14 @@ export default {
       loading: null,
       page: 1,
       perPage: 10,
-      pages: []
+      pages: [],
+      effectsdk: null
     }
   },
+  created () {
+    // this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
+  },
+  mounted () {},
   computed: {
     ...mapGetters({
       transactionById: 'transactionById',
@@ -132,6 +138,11 @@ export default {
     },
     goToOrder (batchId) {
       this.$router.push(`/batch/${batchId}`)
+    },
+    async getBatch (batchId) {
+      // const batch = await this.effectsdk.getBatch(batchId)
+      const batch = this.$effect.force.getBatch(batchId)
+      return batch
     }
   }
 }

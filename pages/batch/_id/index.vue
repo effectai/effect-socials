@@ -252,7 +252,7 @@ export default {
     }
   },
   mounted () {
-    this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
+    // this.effectsdk = new effectsdk.EffectClient(process.env.NUXT_ENV_EOS_ENV)
     this.transaction = this.transactionByBatchId(this.id)
     this.getBatch()
     this.getResults()
@@ -274,9 +274,12 @@ export default {
   methods: {
     async getBatch () {
       this.loading = true
-      this.batch = await this.effectsdk.force.getBatchById(this.id)
-      this.batchIpfs = await this.effectsdk.force.getIpfsContent(this.batch.content.field_1)
-      this.campaign = await this.effectsdk.force.getCampaign(this.batch.campaign_id)
+      // this.batch = await this.effectsdk.force.getBatchById(this.id)
+      // this.batchIpfs = await this.effectsdk.force.getIpfsContent(this.batch.content.field_1)
+      // this.campaign = await this.effectsdk.force.getCampaign(this.batch.campaign_id)
+      this.batch = await this.$effect.force.getBatchById(this.id)
+      this.batchIpfs = await this.$effect.force.getIpfsContent(this.batch.content.field_1)
+      this.campaign = await this.$effect.force.getCampaign(this.batch.campaign_id)
       this.loading = false
       console.log('getBatch', this.batch, this.batchIpfs, this.campaign)
     },
@@ -287,13 +290,20 @@ export default {
       if (this.results){
         oldResultsLength = this.results.length
       }
-      this.results = await this.effectsdk.force.getSubmissionsOfBatch(this.id)
+      // this.results = await this.effectsdk.force.getSubmissionsOfBatch(this.id)
+      this.results = await this.$effect.force.getSubmussionsOfBatch(this.id)
 
       // Retrieve worker vaccount profiles
       for (const result of this.results) {
         if (result.account === null || result.account === undefined) {
-          const acc = await this.effectsdk.account.getVAccountById(result.account_id)
+          // const acc = await this.effectsdk.account.getVAccountById(result.account_id)
+          const acc = await this.$effect.account.getVAccountById(result.account_id)
           result.account = acc.length > 0 ? acc[0] : null
+
+          // Retrieve worker qualis
+          // const quali = await this.effectsdk.force.getAssignedQualifications(null, 100, true, result.account_id)
+          const quali = await this.$effect.force.getAssignedQualifications(null, 100, true, result.account_id)
+          result.account.quali = quali
         }
       }
       console.log('results', this.results)
