@@ -291,7 +291,7 @@ export default {
         oldResultsLength = this.results.length
       }
       // this.results = await this.effectsdk.force.getSubmissionsOfBatch(this.id)
-      this.results = await this.$effect.force.getSubmussionsOfBatch(this.id)
+      this.results = await this.$effect.force.getSubmissionsOfBatch(this.id)
 
       // Retrieve worker vaccount profiles
       for (const result of this.results) {
