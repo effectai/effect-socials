@@ -109,13 +109,13 @@
                         <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
                           <vsa-heading>
                             <span class="icon-text">
-                              <span>{{ idx }}:&nbsp;{{ task.tweet_id }}</span>
+                              <span>{{ task.tweet }}</span>
                               <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
                             </span>
                           </vsa-heading>
 
                           <vsa-content class="mx-auto">
-                            <Tweet class="mx-auto" :id="task.tweet_id" :options="{ cards: 'hidden' }" >
+                            <Tweet class="mx-auto" :id="task.tweet.split('/')[1]" :options="{ cards: 'hidden' }" >
                               <div class="mx-auto is-centered">
                                 <progress class="progress mx-auto is-info"></progress>
                               </div>
@@ -168,8 +168,8 @@
                         <thead>
                           <tr>
                             <th>ID</th>
-                            <th>Tweet-ID</th>
-                            <th>Worker-ID</th>
+                            <th>Tweet</th>
+                            <th>Worker</th>
                             <th>Submitted on</th>
                           </tr>
                         </thead>
@@ -180,7 +180,15 @@
                           >
                             <!-- <td>{{r}}</td> -->
                             <td>{{ r.id }}</td>
-                            <td v-if="r.data">{{ r.data }}</td>
+                            <!-- Which campaign is the twitter like campaign?  -->
+                            <td v-if="r.data && batch.campaign_id === 14">
+                              <a 
+                                :href="`https://twitter.com/${r.data.split('/')[0].slice(1)}/status/${r.data.split('/')[1].slice(0, -1)}`"
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                {{ r.data.split('/')[1].slice(0, -1) }}
+                              </a>
+                            </td>
                             <td v-else>Loading</td>
                             <td v-if="r.account && r.account.address">
                               <!-- results.3.account.address.1 -->
@@ -228,7 +236,6 @@
 
 <script>
 const jsonexport = require('jsonexport/dist')
-import * as effectsdk from '@effectai/effect-js'
 import { Tweet, Timeline } from 'vue-tweet-embed'
 import { mapGetters } from 'vuex'
 
