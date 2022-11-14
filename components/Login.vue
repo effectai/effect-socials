@@ -205,20 +205,14 @@ export default Vue.extend({
         if (twitter_url != "" && twitter_url.includes("/status/")) {
             var re = new RegExp(/[/status/][0-9]+/g)
             const id = twitter_url.match(re)
-            return { tweet_id: id[0].replace("/", "") }
+            return id[0].replace("/", "")
         } else {
             return 'Invalid URL'
         }
     },
     extractTwitterHandle (twitter_url) {
-        try {
-            const url = new URL(twitter_url)
-            const handle = url.pathname.split('/').pop()
-            return { twitter_handle: handle }
-        } catch (error) {
-            console.error(error)
-            
-        }
+        console.debug('twitterurl', twitter_url)
+        return twitter_url.split('/')[1]
     },
     extractInstagramID (instagramUrl) {
         try {
@@ -246,7 +240,10 @@ export default Vue.extend({
             } else {
                 if (this.batch[0] && this.batch[0].tweet_id) {
                     sanitized_batch = this.batch.map((task) => {
-                        return this.extractTwitterId(task.tweet_id)
+                        const tweet_id = this.extractTwitterId(task.tweet_id)
+                        const twitter_handle = this.extractTwitterHandle(task.tweet_id)
+                        console.log(tweet_id, twitter_handle)
+                        return { tweet_id, twitter_handle }
                     });
                 } else {
                     sanitized_batch = this.batch;
