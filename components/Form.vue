@@ -390,12 +390,12 @@ export default Vue.extend({
         // Check that the link is valid.
         // users are instructed to pass in a url. but the template expects a tweet_id
         try {
-          if (this.newTask.tweet_id.includes('https://') || this.newTask.tweet_id.includes('http://')) {
+          if (this.newTask.tweet.includes('https://') || this.newTask.tweet.includes('http://')) {
             // console.debug('protocol already included  ')
-            url = new URL(this.newTask.tweet_id)
+            url = new URL(this.newTask.tweet)
           } else {
-            // console.debug('add protocol to tweet_id')
-            url = new URL(`https://${this.newTask.tweet_id}`)
+            // console.debug('add protocol to tweet')
+            url = new URL(`https://${this.newTask.tweet}`)
           }
         } catch (error) {
           console.error(error)
@@ -408,7 +408,7 @@ export default Vue.extend({
           setTimeout(() => this.placeholderError = null, 5e3)
           return
         } else {
-          this.newTask.tweet_id = `${url.hostname}${url.pathname}`
+          this.newTask.tweet = `${url.hostname}${url.pathname}`
           this.tasks.push(this.newTask)
         }
       }
