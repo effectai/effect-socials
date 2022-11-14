@@ -238,12 +238,12 @@ export default Vue.extend({
             } else if(this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID)) {
                 sanitized_batch = this.batch;
             } else {
-                if (this.batch[0] && this.batch[0].tweet_id) {
+                if (this.batch[0] && this.batch[0].tweet) {
                     sanitized_batch = this.batch.map((task) => {
-                        const tweet_id = this.extractTwitterId(task.tweet_id)
-                        const twitter_handle = this.extractTwitterHandle(task.tweet_id)
-                        console.log(tweet_id, twitter_handle)
-                        return { tweet_id, twitter_handle }
+                        const id = this.extractTwitterId(task.tweet)
+                        const handle = this.extractTwitterHandle(task.tweet)
+                        console.log(id, handle)
+                        return { tweet: `${handle}/${id}` }
                     });
                 } else {
                     sanitized_batch = this.batch;
