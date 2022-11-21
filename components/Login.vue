@@ -165,6 +165,7 @@ export default Vue.extend({
             message: null,
             accountConnected: false,
             paymentLoading: false,
+            sanitized_batch: null
         }
     },
   components: {},
@@ -214,6 +215,17 @@ export default Vue.extend({
         console.debug('twitterurl', twitter_url)
         return twitter_url.split('/')[1]
     },
+    extractTwitterIdRetweet (twitter_url) {
+        // batch.0.tweet_id
+        console.log('twitter_url', twitter_url)
+        if (twitter_url?.tweet_id !== "" && twitter_url?.tweet_id?.includes("/status/")) {
+            var re = new RegExp(/[/status/][0-9]+/g)
+            const id = twitter_url?.tweet_id?.match(re)
+            return id[0].replace("/", "")
+        } else {
+            return 'Invalid URL'
+        }
+    },
     extractInstagramID (instagramUrl) {
         try {
             const url = new URL(instagramUrl)
@@ -230,29 +242,37 @@ export default Vue.extend({
             this.loading = true
 
             // TODO: clean this up, this is getting confusing
-            let sanitized_batch
             if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID)) {
-                sanitized_batch = this.batch.map((item) => this.extractInstagramID(item.instagramLink))
+                this.sanitized_batch = this.batch.map((item) => this.extractInstagramID(item.instagramLink))
             } else if(this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID)) {
-                sanitized_batch = this.batch.map((item) => this.extractTwitterHandle(item.twitter_handle))
+                this.sanitized_batch = this.batch.map((item) => this.extractTwitterHandle(item.twitter_handle))
             } else if(this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID)) {
-                sanitized_batch = this.batch;
+                this.sanitized_batch = this.batch;
+            } else if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID)) {
+                console.log("Extracting twitter id from retweet")
+                this.sanitized_batch = this.batch.map((item) => {
+                    // const id = this.extractTwitterIdRetweet(item)
+                    const id = this.extractTwitterId(item.tweet_id)
+                    const handle = this.extractTwitterHandle(item.tweet_id)
+                    console.log(id, handle)
+                    return { tweet_id:id, twitter_handle:handle, tweet_instructions: item.tweet_instructions }
+                })
             } else {
                 if (this.batch[0] && this.batch[0].tweet) {
-                    sanitized_batch = this.batch.map((task) => {
+                    this.sanitized_batch = this.batch.map((task) => {
                         const id = this.extractTwitterId(task.tweet)
                         const handle = this.extractTwitterHandle(task.tweet)
                         console.log(id, handle)
                         return { tweet: `${handle}/${id}` }
                     });
                 } else {
-                    sanitized_batch = this.batch;
+                    this.sanitized_batch = this.batch;
                 }
             }
-            console.log('sanitized batch', sanitized_batch)
+            console.log('sanitized batch', this.sanitized_batch)
             
             const content = {
-                tasks: sanitized_batch
+                tasks: this.sanitized_batch
             }
 
             // const content = {
@@ -344,7 +364,7 @@ export default Vue.extend({
             console.log(`Logged in as`, account)
             this.connectAccount.provider = signatureProvider
             this.connectAccount.account = account
-            this.connectAccount.providerName = 'anchor'                
+            this.connectAccount.providerName = 'anchor'
         } catch (error) {
             this.$emit('error', error.message)
             console.error(error)

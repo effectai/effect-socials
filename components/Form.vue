@@ -385,7 +385,34 @@ export default Vue.extend({
 
       } else if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID) || this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_YOUTUBE_SUBSCRIBE_ID) || this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_YOUTUBE_LIKE_ID) ) {
         this.tasks.push(this.newTask)
-      } else {
+      } else if (this.campaign.id === parseInt(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID)) {
+        // Twitter campaignsfaw
+        // Check that the link is valid.
+        // users are instructed to pass in a url. but the template expects a tweet_id
+        try {
+          if (this.newTask.tweet_id.includes('https://') || this.newTask.tweet_id.includes('http://')) {
+            // console.debug('protocol already included  ')
+            url = new URL(this.newTask.tweet_id)
+          } else {
+            // console.debug('add protocol to tweet')
+            url = new URL(`https://${this.newTask.tweet_id}`)
+          }
+        } catch (error) {
+          console.error(error)
+          this.placeholderError = `Please enter a valid twitter.com url`
+          setTimeout(() => this.placeholderError = null, 5e3)
+          return
+        }
+        if (url.hostname !== 'twitter.com' || !url.pathname.includes('/status/') || url.pathname.split('/')[3].length === 0) {
+          this.placeholderError = `Please enter a valid tweet url: https://twitter.com/username/status/123456789`
+          setTimeout(() => this.placeholderError = null, 5e3)
+          return
+        } else {
+          this.newTask.tweet_id = `${url.hostname}${url.pathname}`
+          this.tasks.push(this.newTask)
+        }
+      }
+       else {
         // Twitter campaignsfaw
         // Check that the link is valid.
         // users are instructed to pass in a url. but the template expects a tweet_id
