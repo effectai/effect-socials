@@ -170,6 +170,7 @@
                             <th>ID</th>
                             <th>Tweet</th>
                             <th>Worker</th>
+                            <th>Quali-Value</th>
                             <th>Submitted on</th>
                           </tr>
                         </thead>
@@ -200,6 +201,9 @@
                               </a>
                             </td>
                             <td v-else>{{ r.account_id }}</td>
+                            <!-- results.0.account.quali.3.value -->
+                            <td v-if="r.account && r.account.quali_value">{{ r.account.quali_value }}</td>
+                            <td v-else>Loading</td>
                             <td>{{ r.submitted_on }}</td>
                           </tr>
                         </tbody>
@@ -311,6 +315,18 @@ export default {
           // const quali = await this.effectsdk.force.getAssignedQualifications(null, 100, true, result.account_id)
           const quali = await this.$effect.force.getAssignedQualifications(null, 100, true, result.account_id)
           result.account.quali = quali
+
+          console.log('quali', quali)
+
+          // results.0.account.quali.3.info.campaignid.id
+           const qualval = quali.map(x => {
+            // console.log('x', x); 
+            return x
+          }).filter(x => x.id === 37).pop().value
+
+          result.account.quali_value = String(qualval).replace(/"/g, '')
+          console.log('result.account.quali_value', result.account.quali_value)
+
         }
       }
       console.log('results', this.results)
