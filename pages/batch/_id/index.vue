@@ -316,16 +316,11 @@ export default {
           const quali = await this.$effect.force.getAssignedQualifications(null, 100, true, result.account_id)
           result.account.quali = quali
 
-          console.log('quali', quali)
-
-          // results.0.account.quali.3.info.campaignid.id
-           const qualval = quali.map(x => {
-            // console.log('x', x); 
-            return x
-          }).filter(x => x.id === 37).pop().value
-
+          // Retrieve worker qualis value
+          const twitter_quali_id = 37
+          const qualval = quali.filter(x => x.id === twitter_quali_id).pop().value
           result.account.quali_value = String(qualval).replace(/"/g, '')
-          console.log('result.account.quali_value', result.account.quali_value)
+
 
         }
       }
