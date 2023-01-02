@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prod": "APP_ENV=production nuxt",
     "dev": "nuxt",
     "prod": "APP_ENV=production nuxt",
     "build": "nuxt build",
