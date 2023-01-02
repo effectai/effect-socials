@@ -3,15 +3,15 @@ export default {
     modules: {},
     mutations: {
       ADD_TRANSACTION (state, transaction) {
-        if (state.transactions.list === null || state.transactions.list === undefined) { 
-            state.transactions = {} 
-            state.transactions.list = [] 
+        if (state.transactions.list === null || state.transactions.list === undefined) {
+            state.transactions = {}
+            state.transactions.list = []
         }
         if (transaction) {
             state.transactions.list.push(transaction)
         }
       },
-      REMOVE_TRANSACTION (state, transaction) {        
+      REMOVE_TRANSACTION (state, transaction) {
         if (state.transactions.list) {
             state.transactions.list.splice(state.transactions.list.indexOf(transaction), 1)
         }
@@ -22,7 +22,7 @@ export default {
         return id => state.transactions ? state.transactions.find(c => c.id === id) : null
       },
       transactionByBatchId (state) {
-        return batchId => state.transactions ? state.transactions.list.find(c => c.batchId === batchId) : null
+        return batchId => state.transactions ? state.transactions.list?.find(c => c.batchId === batchId) : null
       },
       allTransactions (state) {
         return state.transactions ? state.transactions.list : []
