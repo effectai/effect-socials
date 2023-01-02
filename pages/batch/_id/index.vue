@@ -26,7 +26,7 @@
                 </figure> -->
 
                 <div class="media-content">
-                  <div class="content">
+                  <div class="content has-text-centered">
                     <p class="subtitle">
                       <a :href="`https://app.effect.network/campaigns/${batch.campaign_id}`" target="_blank" rel="noopener noreferrer">
                         <span class="icon-text">
@@ -43,10 +43,10 @@
                       <progress class="progress is-info" :value="batchPercentageDone"></progress>
                     </div>
                     <br>
-                    <div class="px-6 is-centered table-container">
+                    <div class="mx-6 px-6 is-centered table-container">
                       <table class="table is-narrow is-centered px-6">
                           <thead></thead>
-                          <tbody>
+                          <tbody class="has-text-left">
                               <tr>
                                   <td>Order-ID</td>
                                   <td>
@@ -61,12 +61,13 @@
                               <tr>
                                 <td>BlockExplorer</td>
                                 <td>
-                                  <a :href="`https://bloks.io/transaction/${transaction.eos.transaction.transaction_id}`" class="" target="_blank" rel="noopener noreferrer">
-                                  <span class="icon-text">
-                                    <span>BlockExplorer</span>
-                                    <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
-                                  </span>
+                                  <a v-if="transaction" :href="`https://bloks.io/transaction/${transaction.eos.transaction.transaction_id}`" class="" target="_blank" rel="noopener noreferrer">
+                                    <span class="icon-text">
+                                      <span>BlockExplorer</span>
+                                      <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
+                                    </span>
                                   </a>
+                                  <span v-else>Not Available</span>
                                 </td>
                               </tr>
                               <tr>
@@ -83,7 +84,7 @@
                               </tr>
                           </tbody>
 
-                          <tfoot>
+                          <tfoot class="has-text-left">
                               <tr>
                                   <td>Total Cost</td>
                                   <td><strong>{{campaign.info.reward * batch.num_tasks * batch.repetitions}} EFX</strong> </td>
@@ -104,60 +105,62 @@
                     <hr>
 
                     <p class="subtitle has-text-black">Links</p>
-                    <div class="px-6 mx-auto is-centered">
-                      <vsa-list v-if="campaign.id === 14 || campaign.id === 16 || campaign.id === 17">
-                        <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
-                          <vsa-heading>
-                            <span class="icon-text">
-                              <span>{{ task.tweet }}</span>
-                              <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
-                            </span>
-                          </vsa-heading>
+                    <div class="columns is-centered">
+                      <div class="column is-three-fifths">
+                        <div class="container">
+                          <vsa-list v-if="campaign.id === 14 || campaign.id === 16 || campaign.id === 17" class="mx-auto is-centered">
+                            <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
+                            <vsa-heading>
+                              <span class="icon-text">
+                                <span>{{ task.tweet }}</span>
+                                <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
+                              </span>
+                            </vsa-heading>
 
-                          <vsa-content v-if="task.tweet" class="mx-auto">
-                            <Tweet class="mx-auto" :id="task.tweet.split('/')[1]" :options="{ cards: 'hidden' }" >
-                              <div class="mx-auto is-centered">
+                            <vsa-content v-if="task.tweet" class="mx-auto">
+                              <Tweet class="mx-auto" :id="task.tweet.split('/')[1]" :options="{ cards: 'hidden' }" >
+                                <div class="mx-auto is-centered">
+                                  <progress class="progress mx-auto is-info"></progress>
+                                </div>
+                              </Tweet>
+                            </vsa-content>
+
+                          </vsa-item>
+                        </vsa-list>
+
+                        <vsa-list v-else-if="campaign.id === 15">
+                          <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
+                            <vsa-heading>
+                              <span class="icon-text">
+                                <span>{{ task.twitter_handle }}</span>
+                                <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
+                              </span>
+                            </vsa-heading>
+
+                            <vsa-content class="mx-auto">
+                              <Timeline class="mx-auto" :id="task.twitter_handle" sourceType="profile" :options="{ tweetLimit: '1' }" >
                                 <progress class="progress mx-auto is-info"></progress>
-                              </div>
-                            </Tweet>
-                          </vsa-content>
+                              </Timeline>
+                            </vsa-content>
+                          </vsa-item>
+                        </vsa-list>
 
-                        </vsa-item>
-                      </vsa-list>
+                        <vsa-list v-else>
+                          <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
+                            <vsa-heading>
+                              <span class="icon-text">
+                                <span>{{ idx }}</span>
+                                <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
+                              </span>
+                            </vsa-heading>
 
-                      <vsa-list v-else-if="campaign.id === 15">
-                        <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
-                          <vsa-heading>
-                            <span class="icon-text">
-                              <span>{{ task.twitter_handle }}</span>
-                              <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
-                            </span>
-                          </vsa-heading>
-
-                          <vsa-content class="mx-auto">
-                            <Timeline class="mx-auto" :id="task.twitter_handle" sourceType="profile" :options="{ tweetLimit: '1' }" >
-                              <progress class="progress mx-auto is-info"></progress>
-                            </Timeline>
-                          </vsa-content>
-                        </vsa-item>
-                      </vsa-list>
-
-                      <vsa-list v-else>
-                        <vsa-item v-for="(task, idx) in batchIpfs.tasks" :key="idx">
-                          <vsa-heading>
-                            <span class="icon-text">
-                              <span>{{ idx }}</span>
-                              <!-- <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span> -->
-                            </span>
-                          </vsa-heading>
-
-                          <vsa-content>
-                            {{ task }}
-                          </vsa-content>
-                        </vsa-item>
-                      </vsa-list>
-
-
+                            <vsa-content>
+                              {{ task }}
+                            </vsa-content>
+                          </vsa-item>
+                        </vsa-list>                                       
+                        </div>
+                      </div>
                     </div>
 
                     <hr>
@@ -165,16 +168,16 @@
                     <p class="subtitle has-text-black">Results ({{ batch.tasks_done }}/{{ batch.num_tasks * batch.repetitions }})</p>
                     <div v-if="results && results.length > 0" class="table-container px-6">
                       <table class="table" style="width: 100%">
-                        <thead>
+                        <thead class="has-text-left">
                           <tr>
                             <th>ID</th>
                             <th>Tweet</th>
                             <th>Worker</th>
-                            <th>Quali-Value</th>
-                            <th>Submitted on</th>
+                            <th>Handle</th>
+                            <!-- <th>Submitted on</th> -->
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="has-text-left">
                           <tr
                             v-for="r in results"
                             :key="r.id"
@@ -202,9 +205,12 @@
                             </td>
                             <td v-else>{{ r.account_id }}</td>
                             <!-- results.0.account.quali.3.value -->
-                            <td v-if="r.account && r.account.quali_value">{{ r.account.quali_value }}</td>
+                            <td v-if="r.account && r.account.quali_value" class="has-text-left">
+                              <a v-if="batch.campaign_id === 14" :href="`https://twitter.com/${r.account.quali_value}`" target="_blank" rel="noopener noreferrer">{{ r.account.quali_value }}</a>
+                              <span v-else>{{ r.account.quali_value }}</span>
+                            </td>
                             <td v-else>Loading</td>
-                            <td>{{ r.submitted_on }}</td>
+                            <!-- <td>{{ r.submitted_on }}</td> -->
                           </tr>
                         </tbody>
                       </table>
