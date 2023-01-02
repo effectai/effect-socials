@@ -53,7 +53,7 @@
                           </span>
                         </span>
                       </nuxt-link>
-                      <button class="button is-small is-danger is-rounded" @click="removeOrder(tx)">
+                      <button class="button is-small is-danger is-rounded" @click.prevent="removeOrder(tx)">
                         <font-awesome-icon class="icon is-small" icon="fa-solid fa-trash-can" />
                       </button>
                     </div>
