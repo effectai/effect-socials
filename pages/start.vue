@@ -2,7 +2,7 @@
   <div class="section pt-6">
     <div class="container is-max-desktop">
       <div class="columns">
-        <div class="column is-three-fifths is-offset-one-fifth">
+        <div class="column">
           <div id="step-1" v-if="step === 1">
             <h2 class="title">1. Select Engagment</h2>
             <div class="control">
