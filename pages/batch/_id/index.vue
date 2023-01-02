@@ -292,45 +292,48 @@ export default {
       this.batchIpfs = await this.$effect.force.getIpfsContent(this.batch.content.field_1)
       this.campaign = await this.$effect.force.getCampaign(this.batch.campaign_id)
       this.loading = false
-      console.log('getBatch', this.batch, this.batchIpfs, this.campaign)
     },
     async getResults() {
-      console.log('getting results...')
-      let oldResultsLength = 0
 
+      // tmp tally to check if results have changed
+      let oldResultsLength = 0
       if (this.results){
         oldResultsLength = this.results.length
       }
-      // this.results = await this.effectsdk.force.getSubmissionsOfBatch(this.id)
+
+      // Retrieve results
       this.results = await this.$effect.force.getSubmissionsOfBatch(this.id)
 
-      // Retrieve worker vaccount profiles
-      for (const result of this.results) {
-        if (result.account === null || result.account === undefined) {
-          // const acc = await this.effectsdk.account.getVAccountById(result.account_id)
-          const acc = await this.$effect.account.getVAccountById(result.account_id)
-          result.account = acc.length > 0 ? acc[0] : null
+      // Make a unique list of account ids
+      const uniqueAccs = [...new Set(this.results.map(item => item.account_id))]
 
-          // Retrieve worker qualis
-          // const quali = await this.effectsdk.force.getAssignedQualifications(null, 100, true, result.account_id)
-          const quali = await this.$effect.force.getAssignedQualifications(null, 100, true, result.account_id)
-          result.account.quali = quali
+      // Retrieve qualifications and values (third param needs to be false) for all unique accounts
+      let accs = []
+      for (const acc of uniqueAccs) {
+        const res = await this.$effect.force.getAssignedQualifications(null, 100, false, acc)
+        accs.push(...res)
+      }
 
-          // Retrieve worker qualis value
-          const twitter_quali_id = 37
-          const qualval = quali.filter(x => x.id === twitter_quali_id).pop().value
-          result.account.quali_value = String(qualval).replace(/"/g, '')
+      // Filter out only twitter qualifications
+      const twitter_quali_id = 37
+      const filtered = accs.filter(acc => acc.quali_id === twitter_quali_id)
 
-
+      // Add quali value to results
+      for (const results of this.results) {
+        const acc = filtered.find(acc => acc.account_id === results.account_id)
+        if (acc) {
+          results.account = {}
+          results.account.quali_value = acc.value.replace(/"/g, '') // remove quotes
         }
       }
-      console.log('results', this.results)
+
       // check if results changed
       if (this.results.length !== oldResultsLength) {
         console.log('results changed')
         this.getBatch()
       }
 
+      // check if batch is done and clear interval timer
       if (this.batch.tasks_done === (this.batch.num_tasks * this.batch.repetitions)) {
         clearInterval(this.timer)
       }
