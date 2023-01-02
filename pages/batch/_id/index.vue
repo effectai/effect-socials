@@ -185,7 +185,7 @@
                             <!-- <td>{{r}}</td> -->
                             <td>{{ r.id }}</td>
                             <!-- Which campaign is the twitter like campaign?  -->
-                            <td v-if="r.data && batch.campaign_id === 14">
+                            <td v-if="r.data && (batch.campaign_id === like || batch.campaign_id === follow || batch.campaign_id === retweet || batch.campaign_id === reply)">
                               <a 
                                 :href="`https://twitter.com/${r.data.split('/')[0].slice(1)}/status/${r.data.split('/')[1].slice(0, -1)}`"
                                 target="_blank"
@@ -194,9 +194,9 @@
                               </a>
                             </td>
                             <td v-else>Loading</td>
-                            <td v-if="r.account && r.account.address">
-                              <!-- results.3.account.address.1 -->
-                              <a :href="`https://app.effect.network/profile/${r.account.address[1]}`" target="_blank" rel="noopener noreferrer">
+                            <!-- <td v-if="r.account && r.account_id"> -->
+                              <td v-if="false">
+                              <a :href="`https://app.effect.network/profile/${r.account_id}`" target="_blank" rel="noopener noreferrer">
                                 <span class="icon-text">
                                   <span>{{ r.account_id }}</span>
                                   <span><font-awesome-icon class="mx-1 icon is-small" icon="fa-solid fa-arrow-up-right-from-square" /></span>
@@ -206,7 +206,13 @@
                             <td v-else>{{ r.account_id }}</td>
                             <!-- results.0.account.quali.3.value -->
                             <td v-if="r.account && r.account.quali_value" class="has-text-left">
-                              <a v-if="batch.campaign_id === 14" :href="`https://twitter.com/${r.account.quali_value}`" target="_blank" rel="noopener noreferrer">{{ r.account.quali_value }}</a>
+                              <a 
+                                v-if="batch.campaign_id === like || batch.campaign_id === follow || batch.campaign_id === retweet || batch.campaign_id === reply" 
+                                :href="`https://twitter.com/${r.account.quali_value}`" 
+                                target="_blank" 
+                                rel="noopener noreferrer">
+                                {{ r.account.quali_value }}
+                              </a>
                               <span v-else>{{ r.account.quali_value }}</span>
                             </td>
                             <td v-else>Loading</td>
@@ -265,7 +271,13 @@ export default {
       batch: null,
       batchIpfs: null,
       campaign: null,
-      transaction: null
+      transaction: null,
+      like: Number(process.env.NUXT_ENV_CAMPAIGN_LIKE_ID),
+      retweet: Number(process.env.NUXT_ENV_CAMPAIGN_RETWEET_ID),
+      reply: Number(process.env.NUXT_ENV_CAMPAIGN_REPLY_ID),
+      follow: Number(process.env.NUXT_ENV_CAMPAIGN_FOLLOW_ID),
+      instagram: Number(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_ID),
+      instFollow: Number(process.env.NUXT_ENV_CAMPAIGN_INSTAGRAM_FOLLOW_ID)
     }
   },
   mounted () {
