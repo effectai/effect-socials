@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
+    "prod": "APP_ENV=production nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
