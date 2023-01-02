@@ -2,7 +2,7 @@
   <div class="section pt-6">
     <div class="container is-max-desktop">
       <div class="columns">
-        <div class="column is-three-fifths is-offset-one-fifth">
+        <div class="column">
           <h2 class="title">Order</h2>
           <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
@@ -114,7 +114,7 @@
                             </span>
                           </vsa-heading>
 
-                          <vsa-content class="mx-auto">
+                          <vsa-content v-if="task.tweet" class="mx-auto">
                             <Tweet class="mx-auto" :id="task.tweet.split('/')[1]" :options="{ cards: 'hidden' }" >
                               <div class="mx-auto is-centered">
                                 <progress class="progress mx-auto is-info"></progress>
